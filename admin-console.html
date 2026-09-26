@@ -1,6 +1,24 @@
 <!DOCTYPE html>
 
 <html class="dark" lang="en"><head>
+<script>
+  (function() {
+    try {
+      var session = localStorage.getItem('legends_auth_session');
+      if (!session) {
+        window.location.replace('login.html');
+        return;
+      }
+      var user = JSON.parse(session);
+      if (!user || !user.role || user.role === 'viewer') {
+        window.location.replace('login.html');
+        return;
+      }
+    } catch (e) {
+      window.location.replace('login.html');
+    }
+  })();
+</script>
 <title>Official Admin Scoring Engine | Legends Walk Off 2026</title>
 <meta name="description" content="Live referee and scorer scoring console for real-time match telemetry, ball-by-ball logging, and broadcast feeds."/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -50,7 +68,7 @@
     <span>About Arena &amp; Sponsors</span>
     <span class="material-symbols-outlined text-sm text-outline">chevron_right</span>
   </a>
-  <a class="px-space-md py-space-sm font-headline-sm uppercase tracking-wider text-on-surface hover:bg-surface-container-high rounded transition-all flex items-center justify-between" href="admin-console.html">
+  <a class="hidden px-space-md py-space-sm font-headline-sm uppercase tracking-wider text-on-surface hover:bg-surface-container-high rounded transition-all flex items-center justify-between" data-admin-only="true" style="display: none !important;" href="admin-console.html">
     <span>Official Admin Console</span>
     <span class="material-symbols-outlined text-sm text-outline">chevron_right</span>
   </a>

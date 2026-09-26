@@ -209,14 +209,15 @@
       const user = this.getCurrentUser();
       const roleConfig = user ? (ROLES[user.role] || ROLES.viewer) : ROLES.viewer;
 
-      // 1. PUBLIC VIEWERS: HIDE ALL "Admin Console" NAV AND FOOTER LINKS
-      document.querySelectorAll('[data-path="admin-console"]').forEach(el => {
+      // 1. PUBLIC VIEWERS: HIDE ALL "Admin Console" NAV, DRAWER, AND FOOTER LINKS
+      document.querySelectorAll('[data-admin-only="true"], [data-path="admin-console"], [data-path="admin-portal"]').forEach(el => {
         if (isAuthed) {
           el.classList.remove('hidden');
+          el.style.removeProperty('display');
           el.style.display = '';
         } else {
           el.classList.add('hidden');
-          el.style.display = 'none';
+          el.style.setProperty('display', 'none', 'important');
         }
       });
 
@@ -226,10 +227,11 @@
         mobileDrawer.querySelectorAll('a[href*="admin-console"]').forEach(el => {
           if (isAuthed) {
             el.classList.remove('hidden');
+            el.style.removeProperty('display');
             el.style.display = 'flex';
           } else {
             el.classList.add('hidden');
-            el.style.display = 'none';
+            el.style.setProperty('display', 'none', 'important');
           }
         });
       }
