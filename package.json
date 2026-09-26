@@ -1,0 +1,23 @@
+{
+  "name": "legends-walk-off",
+  "version": "1.0.0",
+  "description": "Legends Walk Off Tournament Portal - STME Impulse Committee, NMIMS Hyderabad",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve -l 3000 .",
+    "dev": "npx serve -l 3000 .",
+    "serve": "npx serve -l 3000 ."
+  },
+  "keywords": [
+    "legends-walk-off",
+    "tournament",
+    "cricket",
+    "football",
+    "nmims",
+    "impulse",
+    "stitch",
+    "sports-portal"
+  ],
+  "author": "STME Impulse Committee",
+  "license": "MIT"
+}

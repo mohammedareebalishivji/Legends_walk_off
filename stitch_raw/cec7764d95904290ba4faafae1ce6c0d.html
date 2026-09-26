@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Inter:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}.clip-angle{clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);}.clip-angle-r{clip-path:polygon(0 0,calc(100% - 12px) 0,100% 100%,0 100%);}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"tertiary-fixed":"#6ffbbe","surface-container-high":"#2a2a2a","surface-bright":"#3a3939","error":"#ffb4ab","on-error":"#690005","surface-tint":"#ffb4a8","inverse-on-surface":"#313030","on-surface":"#e5e2e1","on-surface-variant":"#e9bcb5","on-background":"#e5e2e1","on-tertiary":"#003824","surface-container-lowest":"#0e0e0e","primary-fixed-dim":"#ffb4a8","on-secondary":"#3b2f00","on-secondary-fixed":"#231b00","secondary-fixed":"#ffe177","surface-container-highest":"#353534","secondary":"#fff3d4","on-secondary-fixed-variant":"#554500","surface-dim":"#131313","outline":"#af8781","secondary-fixed-dim":"#ebc300","surface-variant":"#353534","error-container":"#93000a","on-primary-fixed":"#410100","surface":"#131313","surface-container-low":"#1c1b1b","tertiary-container":"#008058","primary-fixed":"#ffdad4","tertiary":"#4edea3","outline-variant":"#5e3f3a","inverse-primary":"#c00500","on-secondary-container":"#6f5c00","on-tertiary-fixed-variant":"#005236","primary-container":"#e10600","on-tertiary-container":"#d4ffe5","secondary-container":"#fed400","on-tertiary-fixed":"#002113","on-primary":"#680200","tertiary-fixed-dim":"#4edea3","on-primary-container":"#fff2f0","background":"#131313","primary":"#ffb4a8","on-primary-fixed-variant":"#930300","on-error-container":"#ffdad6","surface-container":"#201f1f","inverse-surface":"#e5e2e1"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"margin-mobile":"1rem","space-sm":"0.5rem","margin":"2.5rem","gutter":"1.5rem","gutter-mobile":"0.75rem","space-lg":"1.5rem","space-xxl":"4rem","space-md":"1rem","space-xs":"0.25rem","space-xl":"2.5rem"},fontFamily:{"body-lg":["Inter"],"title-lg":["Inter"],"label-numeric-lg":["JetBrains Mono"],"label-badge":["JetBrains Mono"],"headline-xl":["Anton"],"headline-md":["Anton"],"label-numeric-md":["JetBrains Mono"],"headline-lg":["Anton"],"headline-xl-mobile":["Anton"],"body-md":["Inter"],"display-hero-mobile":["Anton"],"title-md":["Inter"],"display-hero":["Anton"],"body-sm":["Inter"],"headline-sm":["Anton"]},fontSize:{"body-lg":["1.125rem",{"lineHeight":"1.625rem","letterSpacing":"0em","fontWeight":"400"}],"title-lg":["1.25rem",{"lineHeight":"1.5rem","letterSpacing":"-0.01em","fontWeight":"800"}],"label-numeric-lg":["1.75rem",{"lineHeight":"1.75rem","letterSpacing":"-0.04em","fontWeight":"700"}],"label-badge":["0.6875rem",{"lineHeight":"0.875rem","letterSpacing":"0.12em","fontWeight":"700"}],"headline-xl":["3rem",{"lineHeight":"3rem","letterSpacing":"0.05em","fontWeight":"400"}],"headline-md":["1.5rem",{"lineHeight":"1.625rem","letterSpacing":"0.04em","fontWeight":"400"}],"label-numeric-md":["1rem",{"lineHeight":"1.25rem","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["2rem",{"lineHeight":"2.125rem","letterSpacing":"0.05em","fontWeight":"400"}],"headline-xl-mobile":["2rem",{"lineHeight":"2.125rem","letterSpacing":"0.04em","fontWeight":"400"}],"body-md":["0.9375rem",{"lineHeight":"1.5rem","letterSpacing":"0em","fontWeight":"400"}],"display-hero-mobile":["2.75rem",{"lineHeight":"2.75rem","letterSpacing":"0.03em","fontWeight":"400"}],"title-md":["1rem",{"lineHeight":"1.375rem","letterSpacing":"0.01em","fontWeight":"700"}],"display-hero":["4.5rem",{"lineHeight":"4.25rem","letterSpacing":"0.04em","fontWeight":"400"}],"body-sm":["0.8125rem",{"lineHeight":"1.25rem","letterSpacing":"0.01em","fontWeight":"400"}],"headline-sm":["1.125rem",{"lineHeight":"1.25rem","letterSpacing":"0.03em","fontWeight":"400"}]}}}};</script></head><body class="bg-surface-container-lowest font-body-md text-on-surface antialiased min-h-screen"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_12px_24px_-6px_rgba(0,0,0,0.9),0_0_24px_-8px_rgba(225,6,0,0.3)]"><div class="h-20 w-full px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md shrink-0"><img alt="Legends Walk Off Championship Logo" class="h-10 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2galx7WljV6w1igXr8o3dLOgoDJjG8Kn73Y3ektTQeD1MJuoQ1q8t84byFJ5dK9bnOkDr23wGzjeaj-6TxnMjRhS-4QqmSxCMX995uthYCqOOpj_J4-bZGYoc-6ywwjXFTn4_W2OXETVDlpTxw9OJzcJM0XHb9iJpcC6_a1PVdK5rSVwo8sKOtKQ7nJVcGFlSsmPLb-HkDrfx9GpJwmc8EoydhgZctiY28L6yCiSAlVm0FXXnB9AC"/><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-md text-headline-md tracking-wider text-on-surface uppercase leading-none">Legends Walk Off</span></div><div class="flex items-center gap-space-xs mt-space-xs"><span class="bg-primary-container px-space-xs py-0.5 text-on-primary-container font-label-badge text-label-badge tracking-widest uppercase font-bold">Hyderabad 2026</span><span class="hidden lg:inline text-outline font-label-badge text-label-badge">|</span><span class="hidden lg:inline text-secondary-container font-label-badge text-label-badge uppercase tracking-wider font-bold">Cricket &amp; Football League</span></div></div></div><nav class="hidden xl:flex items-center gap-space-xs" data-active-classes="bg-surface-container-high text-secondary-container shadow-[inset_0_-2px_0_0_#fed400]"><a aria-current="page" class="px-space-md py-space-sm font-headline-sm uppercase tracking-wider transition-all bg-surface-container-high text-secondary-container shadow-[inset_0_-2px_0_0_#fed400]" data-path="home" href="#">Home</a><a class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="standings" href="#">Standings</a><a class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all flex items-center gap-space-xs" data-path="live-scores" href="#"><span class="relative flex h-2.5 w-2.5 mr-1"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-container opacity-75"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary-container"></span></span>Live Scores</a><a class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="about-sponsors" href="#">About &amp; Sponsors</a><a class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="admin-console" href="#">Admin Console</a></nav><div class="flex items-center gap-space-md shrink-0"><a class="hidden sm:inline-flex items-center gap-space-xs bg-primary-container hover:bg-primary-container/90 text-on-primary-container px-space-md py-space-sm font-headline-sm text-headline-sm tracking-wider uppercase transition-all clip-angle shadow-[0_0_20px_rgba(225,6,0,0.45)]" data-path="admin-login" href="#"><span class="material-symbols-outlined text-[18px]">lock</span>Admin Login</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface-container-lowest"><div class="flex flex-col w-full">
+<!-- HERO SECTION WITH BLEED EFFECT -->
+<section class="relative w-full -mt-20 pt-24 pb-space-xxl overflow-hidden bg-surface-container-lowest">
+<!-- Visual Clash Scrim & Background Image -->
+<div class="absolute inset-0 z-0">
+<img alt="Legends Walk Off Clash Arena" class="w-full h-full object-cover object-center opacity-40 mix-blend-luminosity scale-105 transform hover:scale-100 transition-transform duration-1000" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeqUb6YwulOxYUZP8KjZvVptlElNOI53ZR4W8yIXgDFbgaXd8dZ7YRbwh3G4J9APGuKBN_RGeU61GDVqb0lvsc3n2jw_M6LV1_FX5PCL3RWO-bmaYtJhjkETt8BINc3PFF5Y7weuuRw2xO7iCyvszC1XLH1LmPIwm0ha4ft8_hYSd0zzPgAzzeduhsRBnL12NZSgRZZTHnDWd7B6B21bL7se2jZBmU5D16Wj6JTMExbARlUF5S_vXI"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/80 to-surface-container-lowest/40"></div>
+<div class="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-transparent to-surface-container-lowest"></div>
+<!-- Tactical Lightning / Flare Glows -->
+<div class="absolute -top-24 left-1/4 w-96 h-96 bg-primary-container/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute top-1/3 right-1/4 w-[30rem] h-[30rem] bg-secondary-container/15 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute inset-0 bg-[radial-gradient(#353534_1px,transparent_1px)] [background-size:24px_24px] opacity-25 pointer-events-none"></div>
+</div>
+<div class="relative z-10 w-full px-gutter max-w-7xl mx-auto flex flex-col items-center text-center pt-space-lg">
+<!-- Tournament Entity Badge -->
+<div class="inline-flex items-center gap-space-xs bg-surface-container-high/90 px-space-md py-1.5 rounded clip-angle shadow-xl mb-space-md">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-ping"></span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-secondary-container">STME Impulse Committee Presents</span>
+<span class="text-outline-variant font-label-badge text-label-badge">•</span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-on-surface">NMIMS Hyderabad</span>
+</div>
+<!-- Main Slanted Stadium Title -->
+<div class="flex flex-col items-center select-none my-space-xs">
+<span class="font-headline-xl text-headline-xl md:text-[5.5rem] md:leading-[5rem] lg:text-[7rem] lg:leading-[6.5rem] uppercase italic tracking-wider text-on-surface transform -skew-x-6 drop-shadow-[0_12px_24px_rgba(0,0,0,0.9)]">
+          Legends <span class="text-primary-container drop-shadow-[0_0_35px_rgba(225,6,0,0.8)]">Walk Off</span>
+</span>
+<div class="w-full max-w-3xl flex items-center justify-center gap-space-md my-space-xs">
+<div class="h-0.5 flex-1 bg-gradient-to-r from-transparent via-primary-container to-secondary-container"></div>
+<span class="font-title-lg text-title-lg uppercase tracking-widest text-secondary-container italic font-extrabold px-space-sm whitespace-nowrap">
+            "Only Legends Walk Off The Field."
+          </span>
+<div class="h-0.5 flex-1 bg-gradient-to-l from-transparent via-primary-container to-secondary-container"></div>
+</div>
+</div>
+<!-- Institutional Subtitle -->
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl mt-space-xs mb-space-xl tracking-wide">
+        School of Technology Management &amp; Engineering • Inter-Collegiate Mega Battleground. High-voltage cricket blitz meets relentless turf football warfare.
+      </p>
+<!-- HUD Stadium Countdown Clock -->
+<div class="w-full max-w-4xl bg-surface-container/90 backdrop-blur-md p-space-md rounded-lg shadow-[0_12px_32px_rgba(0,0,0,0.9)] relative overflow-hidden mb-space-xl">
+<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-container via-secondary-container to-primary-container"></div>
+<div class="flex items-center justify-between px-space-sm pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary-container text-base">timer</span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-secondary-container">Tournament Kickoff Zero-Hour</span>
+</div>
+<span class="font-label-badge text-label-badge text-on-surface-variant uppercase tracking-wider">T-Minus Target: MAR 12, 2026</span>
+</div>
+<!-- Scoreboard Digits -->
+<div class="grid grid-cols-4 gap-space-xs md:gap-space-md mt-space-xs" id="tournament-timer">
+<div class="bg-surface-container-lowest p-space-sm md:p-space-md rounded flex flex-col items-center shadow-inner relative group">
+<span class="font-label-numeric-lg text-label-numeric-lg md:text-[2.75rem] md:leading-none text-secondary-container tracking-tighter" id="timer-days">04</span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-on-surface-variant mt-1">Days</span>
+</div>
+<div class="bg-surface-container-lowest p-space-sm md:p-space-md rounded flex flex-col items-center shadow-inner relative group">
+<span class="font-label-numeric-lg text-label-numeric-lg md:text-[2.75rem] md:leading-none text-on-surface tracking-tighter" id="timer-hours">14</span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-on-surface-variant mt-1">Hours</span>
+</div>
+<div class="bg-surface-container-lowest p-space-sm md:p-space-md rounded flex flex-col items-center shadow-inner relative group">
+<span class="font-label-numeric-lg text-label-numeric-lg md:text-[2.75rem] md:leading-none text-on-surface tracking-tighter" id="timer-mins">32</span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-on-surface-variant mt-1">Minutes</span>
+</div>
+<div class="bg-surface-container-lowest p-space-sm md:p-space-md rounded flex flex-col items-center shadow-inner relative group">
+<span class="font-label-numeric-lg text-label-numeric-lg md:text-[2.75rem] md:leading-none text-primary-container tracking-tighter" id="timer-secs">45</span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-primary-container mt-1">Seconds</span>
+</div>
+</div>
+</div>
+<!-- Action CTAs -->
+<div class="flex flex-wrap items-center justify-center gap-space-md">
+<a class="clip-angle bg-primary-container hover:bg-primary-container/90 text-on-primary-container px-space-xl py-space-md font-headline-md text-headline-md tracking-wider uppercase transition-all shadow-[0_0_28px_rgba(225,6,0,0.6)] flex items-center gap-space-sm transform hover:-translate-y-0.5" data-path="standings" href="#">
+<span class="material-symbols-outlined text-[22px]">leaderboard</span>
+          View Standings
+        </a>
+<a class="clip-angle bg-surface-container-high hover:bg-secondary-container hover:text-on-secondary-container text-secondary-container px-space-xl py-space-md font-headline-md text-headline-md tracking-wider uppercase transition-all shadow-[0_0_24px_rgba(254,212,0,0.3)] flex items-center gap-space-sm group transform hover:-translate-y-0.5" data-path="live-scores" href="#">
+<span class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-container opacity-90"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-primary-container"></span>
+</span>
+          Watch Live Feed
+        </a>
+</div>
+</div>
+</section>
+<!-- QUICK STATS STRIP -->
+<section class="w-full bg-surface-container-high py-space-md px-gutter relative z-20 shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+<div class="max-w-7xl mx-auto flex flex-wrap items-center justify-around gap-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="font-headline-lg text-headline-lg text-primary-container">16</span>
+<div class="flex flex-col">
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-on-surface">Collegiate Teams</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Top Tier Contenders</span>
+</div>
+</div>
+<div class="w-px h-8 bg-surface-bright hidden md:block"></div>
+<div class="flex items-center gap-space-sm">
+<span class="font-headline-lg text-headline-lg text-secondary-container">40+</span>
+<div class="flex flex-col">
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-on-surface">Matches Scheduled</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">High-Stakes Brackets</span>
+</div>
+</div>
+<div class="w-px h-8 bg-surface-bright hidden md:block"></div>
+<div class="flex items-center gap-space-sm">
+<span class="font-headline-lg text-headline-lg text-on-surface">02</span>
+<div class="flex flex-col">
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-on-surface">Titan Sports</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Cricket Blitz &amp; Turf Soccer</span>
+</div>
+</div>
+<div class="w-px h-8 bg-surface-bright hidden md:block"></div>
+<div class="flex items-center gap-space-sm">
+<span class="font-headline-lg text-headline-lg text-tertiary">01</span>
+<div class="flex flex-col">
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-on-surface">Undisputed Champion</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Only Legends Walk Off</span>
+</div>
+</div>
+</div>
+</section>
+<!-- TWO SPORTS. ONE CROWN. -->
+<section class="w-full py-space-xxl px-gutter max-w-7xl mx-auto">
+<div class="flex flex-col items-center text-center mb-space-xl">
+<div class="inline-flex items-center gap-space-xs text-primary-container mb-space-xs">
+<span class="material-symbols-outlined text-lg">sports_cricket</span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest">Dual Discipline Combat</span>
+<span class="material-symbols-outlined text-lg">sports_soccer</span>
+</div>
+<h2 class="font-headline-xl text-headline-xl uppercase tracking-wider text-on-surface">
+        Two Sports. <span class="text-secondary-container">One Crown.</span>
+</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xl mt-space-xs">
+        Select your field of conquest. Parallel championships colliding inside NMIMS Hyderabad stadium grounds.
+      </p>
+</div>
+<!-- Duel Cards Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-space-xl">
+<!-- CARD A: CRICKET LEAGUE -->
+<div class="bg-surface-container rounded-xl p-space-lg relative overflow-hidden shadow-[0_16px_36px_rgba(0,0,0,0.8)] group hover:shadow-[0_0_30px_rgba(225,6,0,0.25)] transition-all">
+<div class="absolute -right-16 -top-16 w-56 h-56 bg-primary-container/10 rounded-full blur-2xl group-hover:bg-primary-container/20 transition-all"></div>
+<div class="flex items-center justify-between mb-space-md">
+<div class="inline-flex items-center gap-space-xs bg-primary-container/20 px-space-sm py-1 rounded">
+<span class="material-symbols-outlined text-primary text-base">sports_cricket</span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-primary">T20 Knockout Blitz</span>
+</div>
+<span class="font-label-numeric-md text-label-numeric-md text-secondary-container">MAR 12 - 16, 2026</span>
+</div>
+<div class="h-44 w-full rounded-lg overflow-hidden relative mb-space-md bg-surface-container-high">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Intense cricket batsman in orange and blue collegiate jersey pulling a delivery under blazing stadium floodlights with red embers and dust exploding off the crease, high action sports photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBS1iOrcIx6ELOaa4r5UBH5jytW6huY2UT7QPGX5OWEy3lMUs00_4t7CkIYF9UbYvPXCo5m03sFvCKyuVR-cXzzuzSvQOJLHA-WMcNcv-tRIiV2Vp_MTEC2wSZ87MNinr8F5cCLoJjlIbBWvAk9Qx6AWZo-NlXLtg_tOQq3etYu4SBZh38YJMj1xqXXqGLTPv9bhIXQmpGCpNFe4Yj5ozwFtuTE7l-nxKG7aPrpjda54mAvsSQHQbBv"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-transparent to-transparent"></div>
+<div class="absolute bottom-space-sm left-space-sm">
+<span class="font-headline-lg text-headline-lg uppercase text-on-surface">Cricket League</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-space-sm mb-space-md">
+<div class="bg-surface-container-low p-space-sm rounded">
+<span class="font-label-badge text-label-badge uppercase tracking-wider text-on-surface-variant block">Format</span>
+<span class="font-title-md text-title-md text-on-surface">16 League Matches → Semis</span>
+</div>
+<div class="bg-surface-container-low p-space-sm rounded">
+<span class="font-label-badge text-label-badge uppercase tracking-wider text-on-surface-variant block">Squads</span>
+<span class="font-title-md text-title-md text-on-surface">8 College Franchises</span>
+</div>
+<div class="bg-surface-container-low p-space-sm rounded">
+<span class="font-label-badge text-label-badge uppercase tracking-wider text-on-surface-variant block">Prize Pool</span>
+<span class="font-label-numeric-lg text-label-numeric-lg text-secondary-container">₹1,00,000</span>
+</div>
+<div class="bg-surface-container-low p-space-sm rounded">
+<span class="font-label-badge text-label-badge uppercase tracking-wider text-on-surface-variant block">Match Ball</span>
+<span class="font-title-md text-title-md text-on-surface">SG White Turf Spec</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-base text-primary">stadium</span>
+<span>Main Stadium Oval</span>
+</div>
+<a class="font-headline-sm text-headline-sm uppercase tracking-wider text-primary hover:text-on-surface transition-colors flex items-center gap-1" data-path="standings" href="#">
+            Rules &amp; Fixtures <span class="material-symbols-outlined text-base">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- CARD B: FOOTBALL LEAGUE -->
+<div class="bg-surface-container rounded-xl p-space-lg relative overflow-hidden shadow-[0_16px_36px_rgba(0,0,0,0.8)] group hover:shadow-[0_0_30px_rgba(254,212,0,0.25)] transition-all">
+<div class="absolute -right-16 -top-16 w-56 h-56 bg-secondary-container/10 rounded-full blur-2xl group-hover:bg-secondary-container/20 transition-all"></div>
+<div class="flex items-center justify-between mb-space-md">
+<div class="inline-flex items-center gap-space-xs bg-secondary-container/20 px-space-sm py-1 rounded">
+<span class="material-symbols-outlined text-secondary-container text-base">sports_soccer</span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-secondary-container">7-a-Side Turf Clash</span>
+</div>
+<span class="font-label-numeric-md text-label-numeric-md text-secondary-container">MAR 14 - 18, 2026</span>
+</div>
+<div class="h-44 w-full rounded-lg overflow-hidden relative mb-space-md bg-surface-container-high">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Dynamic collegiate football player in red and green kit volleying ball with cyan and neon yellow electric trails over manicured dark evening turf under cinematic stadium beams." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZ1vBIGO8Ih0LeojZVi-WWRYQL6poTRzr73XLTNyO_jXzsOqIRFrU_tYqh2_Yk8wyZIVqoN1gJfkFvPx_CtspQBMBjsgqH8lusmpTDMGMMkZjYxQklMrDucb5pEdDV4iEezuaKHgDA2-kqGD_BGpn9u24XQP4jk8BA2eHEjL3bURTHOgKv_RhwXANAPu1onuXlbsz70Avhs5eTFN-joIXsH7OxaXydwCu6Bw8EtjNfEV62y8ggaJX4"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-transparent to-transparent"></div>
+<div class="absolute bottom-space-sm left-space-sm">
+<span class="font-headline-lg text-headline-lg uppercase text-on-surface">Football League</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-space-sm mb-space-md">
+<div class="bg-surface-container-low p-space-sm rounded">
+<span class="font-label-badge text-label-badge uppercase tracking-wider text-on-surface-variant block">Format</span>
+<span class="font-title-md text-title-md text-on-surface">Group Stage → Golden Goal</span>
+</div>
+<div class="bg-surface-container-low p-space-sm rounded">
+<span class="font-label-badge text-label-badge uppercase tracking-wider text-on-surface-variant block">Contenders</span>
+<span class="font-title-md text-title-md text-on-surface">8 College Squads</span>
+</div>
+<div class="bg-surface-container-low p-space-sm rounded">
+<span class="font-label-badge text-label-badge uppercase tracking-wider text-on-surface-variant block">Prize Pool</span>
+<span class="font-label-numeric-lg text-label-numeric-lg text-secondary-container">₹1,00,000</span>
+</div>
+<div class="bg-surface-container-low p-space-sm rounded">
+<span class="font-label-badge text-label-badge uppercase tracking-wider text-on-surface-variant block">Pitch Specs</span>
+<span class="font-title-md text-title-md text-on-surface">FIFA Pro Turf Arena</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-base text-secondary-container">stadium</span>
+<span>Sports Complex Turf-A</span>
+</div>
+<a class="font-headline-sm text-headline-sm uppercase tracking-wider text-secondary-container hover:text-on-surface transition-colors flex items-center gap-1" data-path="standings" href="#">
+            Rules &amp; Fixtures <span class="material-symbols-outlined text-base">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- LIVE NOW & UPCOMING CLASHES -->
+<section class="w-full py-space-xl px-gutter bg-surface-container-lowest">
+<div class="max-w-7xl mx-auto flex flex-col gap-space-lg">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-sm">
+<div>
+<span class="font-label-badge text-label-badge text-primary uppercase tracking-widest block mb-1">Broadcast Lower Third</span>
+<h2 class="font-headline-xl text-headline-xl uppercase tracking-wider text-on-surface">Live Now &amp; Upcoming Clashes</h2>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-on-surface-variant">Telemetry Synced Every 30s</span>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-space-md">
+<!-- MATCH CARD 1: LIVE CRICKET -->
+<div class="bg-surface-container rounded-xl p-space-md relative overflow-hidden shadow-[0_0_24px_-4px_rgba(225,6,0,0.45)] flex flex-col justify-between">
+<div class="absolute top-0 left-0 right-0 h-1 bg-primary-container"></div>
+<div class="flex items-center justify-between mb-space-sm">
+<div class="inline-flex items-center gap-1 bg-primary-container px-2 py-0.5 rounded clip-angle">
+<span class="relative flex h-2 w-2 mr-1">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-on-primary-container opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-on-primary-container"></span>
+</span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-on-primary-container">LIVE NOW</span>
+</div>
+<span class="font-label-badge text-label-badge text-secondary-container uppercase">Cricket • Match 04</span>
+</div>
+<!-- Teams and Scores -->
+<div class="flex flex-col gap-space-sm my-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="w-3 h-3 rounded-full bg-primary-container"></span>
+<span class="font-title-md text-title-md text-on-surface">NMIMS STME</span>
+</div>
+<span class="font-label-numeric-lg text-label-numeric-lg text-secondary-container">142/4 <span class="font-body-sm text-body-sm text-on-surface-variant">(16.2)</span></span>
+</div>
+<div class="flex items-center justify-center my-0.5">
+<span class="font-headline-sm text-headline-sm text-outline-variant italic">VS</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="w-3 h-3 rounded-full bg-surface-bright"></span>
+<span class="font-title-md text-title-md text-on-surface-variant">CBIT Hyderabad</span>
+</div>
+<span class="font-label-numeric-lg text-label-numeric-lg text-on-surface-variant">Yet to bat</span>
+</div>
+</div>
+<!-- Lower Third Match Details -->
+<div class="pt-space-sm mt-space-sm border-t border-surface-container-high flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-primary">location_on</span>
+              Main Cricket Arena
+            </span>
+<a class="bg-primary-container text-on-primary-container px-space-sm py-1 font-label-badge text-label-badge uppercase tracking-wider rounded hover:bg-primary-container/80 transition-colors" data-path="live-scores" href="#">
+              Stream Telemetry
+            </a>
+</div>
+</div>
+<!-- MATCH CARD 2: FOOTBALL UPCOMING -->
+<div class="bg-surface-container rounded-xl p-space-md relative overflow-hidden shadow-xl flex flex-col justify-between">
+<div class="absolute top-0 left-0 right-0 h-1 bg-secondary-container"></div>
+<div class="flex items-center justify-between mb-space-sm">
+<div class="inline-flex items-center gap-1 bg-surface-container-high px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-secondary-container text-xs">schedule</span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-secondary-container">TODAY 5:00 PM</span>
+</div>
+<span class="font-label-badge text-label-badge text-on-surface-variant uppercase">Football • Group B</span>
+</div>
+<!-- Teams and Scores -->
+<div class="flex flex-col gap-space-sm my-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="w-3 h-3 rounded-full bg-secondary-container"></span>
+<span class="font-title-md text-title-md text-on-surface">VNR Blitzers</span>
+</div>
+<span class="font-label-numeric-lg text-label-numeric-lg text-on-surface-variant">--</span>
+</div>
+<div class="flex items-center justify-center my-0.5">
+<span class="font-headline-sm text-headline-sm text-outline-variant italic">VS</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="w-3 h-3 rounded-full bg-surface-bright"></span>
+<span class="font-title-md text-title-md text-on-surface">BITS Titans</span>
+</div>
+<span class="font-label-numeric-lg text-label-numeric-lg text-on-surface-variant">--</span>
+</div>
+</div>
+<div class="pt-space-sm mt-space-sm border-t border-surface-container-high flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary-container">location_on</span>
+              Turf Arena A
+            </span>
+<span class="font-label-badge text-label-badge text-secondary-container uppercase">Starting in 2h 15m</span>
+</div>
+</div>
+<!-- MATCH CARD 3: CRICKET TOMORROW -->
+<div class="bg-surface-container rounded-xl p-space-md relative overflow-hidden shadow-xl flex flex-col justify-between">
+<div class="absolute top-0 left-0 right-0 h-1 bg-surface-bright"></div>
+<div class="flex items-center justify-between mb-space-sm">
+<div class="inline-flex items-center gap-1 bg-surface-container-high px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-outline text-xs">calendar_month</span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-outline">TOMORROW 10:00 AM</span>
+</div>
+<span class="font-label-badge text-label-badge text-on-surface-variant uppercase">Cricket • Quarter-Final</span>
+</div>
+<!-- Teams and Scores -->
+<div class="flex flex-col gap-space-sm my-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="w-3 h-3 rounded-full bg-outline"></span>
+<span class="font-title-md text-title-md text-on-surface">JNTU Rhinos</span>
+</div>
+<span class="font-label-numeric-lg text-label-numeric-lg text-on-surface-variant">--</span>
+</div>
+<div class="flex items-center justify-center my-0.5">
+<span class="font-headline-sm text-headline-sm text-outline-variant italic">VS</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="w-3 h-3 rounded-full bg-surface-bright"></span>
+<span class="font-title-md text-title-md text-on-surface">Osmania Gladiators</span>
+</div>
+<span class="font-label-numeric-lg text-label-numeric-lg text-on-surface-variant">--</span>
+</div>
+</div>
+<div class="pt-space-sm mt-space-sm border-t border-surface-container-high flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline">location_on</span>
+              Cricket Ground South
+            </span>
+<span class="font-label-badge text-label-badge text-outline uppercase">Fixture Locked</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- EVENT DETAILS & ARENA SPECS BENTO -->
+<section class="w-full py-space-xxl px-gutter max-w-7xl mx-auto">
+<div class="flex flex-col items-center text-center mb-space-xl">
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-secondary-container">Tactical Briefing</span>
+<h2 class="font-headline-xl text-headline-xl uppercase tracking-wider text-on-surface">Event Details &amp; Arena Specs</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xl mt-space-xs">
+        Everything collegiate squads and visiting spectators need to conquer the STME Impulse battle zone.
+      </p>
+</div>
+<!-- Bento Grid Structure -->
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-space-md">
+<!-- Venue & Location Map Card -->
+<div class="md:col-span-2 bg-surface-container rounded-xl p-space-lg flex flex-col justify-between relative overflow-hidden shadow-xl">
+<div>
+<div class="flex items-center gap-space-xs mb-space-sm">
+<span class="material-symbols-outlined text-primary-container">near_me</span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-primary-container">Arena Location</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg uppercase text-on-surface">NMIMS Hyderabad Campus</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+            School of Technology Management &amp; Engineering (STME), Jadcherla Sports Complex, Mahabubnagar / Hyderabad highway corridor.
+          </p>
+</div>
+<div class="w-full h-48 rounded-lg overflow-hidden my-space-md relative" data-location="NMIMS Hyderabad, Jadcherla, Telangana" style="">
+<div class="absolute inset-0 bg-surface-container-high flex flex-col items-center justify-center text-center p-space-md">
+<span class="material-symbols-outlined text-4xl text-secondary-container mb-2">map</span>
+<span class="font-title-md text-title-md text-on-surface">STME Campus Sports Complex</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Jadcherla, Telangana 509301</span>
+</div>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-label-badge text-label-badge">
+<span>PARKING: ARENA GATE 3</span>
+<span class="text-secondary-container">SHUTTLE TRANSIT ACTIVE</span>
+</div>
+</div>
+<!-- Championship Trophy Card -->
+<div class="bg-surface-container rounded-xl p-space-lg flex flex-col justify-between shadow-xl relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary-container/10 rounded-full blur-xl group-hover:bg-secondary-container/20 transition-all"></div>
+<div>
+<div class="flex items-center gap-space-xs mb-space-sm">
+<span class="material-symbols-outlined text-secondary-container">emoji_events</span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-secondary-container">Grand Prize</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg uppercase text-on-surface">The Walk Off Cup</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+            Custom engineered titanium-finished championship cup with ₹2,00,000 consolidated collegiate cash purse.
+          </p>
+</div>
+<div class="my-space-md flex flex-col items-center justify-center p-space-md bg-surface-container-low rounded-lg">
+<span class="font-label-numeric-lg text-label-numeric-lg text-secondary-container">₹2,00,000</span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-on-surface-variant mt-1">Total Tournament Purse</span>
+</div>
+<span class="font-label-badge text-label-badge text-outline uppercase tracking-wider text-center">Certified by STME Impulse</span>
+</div>
+<!-- Registration & Desk Status -->
+<div class="bg-surface-container rounded-xl p-space-lg flex flex-col justify-between shadow-xl relative overflow-hidden">
+<div>
+<div class="flex items-center gap-space-xs mb-space-sm">
+<span class="material-symbols-outlined text-tertiary">how_to_reg</span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-tertiary">Verification Desk</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg uppercase text-on-surface">Roster Status</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+            Team ID cards and medical clearances mandatory at the sports pavilion desk.
+          </p>
+</div>
+<div class="space-y-space-xs my-space-md">
+<div class="flex items-center justify-between p-2 bg-surface-container-low rounded">
+<span class="font-body-sm text-body-sm text-on-surface">Cricket Franchises</span>
+<span class="font-label-badge text-label-badge bg-tertiary/20 text-tertiary px-2 py-0.5 rounded">LOCKED (8/8)</span>
+</div>
+<div class="flex items-center justify-between p-2 bg-surface-container-low rounded">
+<span class="font-body-sm text-body-sm text-on-surface">Football Squads</span>
+<span class="font-label-badge text-label-badge bg-tertiary/20 text-tertiary px-2 py-0.5 rounded">LOCKED (8/8)</span>
+</div>
+<div class="flex items-center justify-between p-2 bg-surface-container-low rounded">
+<span class="font-body-sm text-body-sm text-on-surface">VIP Spectator Passes</span>
+<span class="font-label-badge text-label-badge bg-secondary-container/20 text-secondary-container px-2 py-0.5 rounded">OPEN</span>
+</div>
+</div>
+<a class="font-label-badge text-label-badge uppercase tracking-wider text-center text-primary-container hover:text-on-surface transition-colors" data-path="about-sponsors" href="#">
+          Download Rulebook PDF →
+        </a>
+</div>
+</div>
+</section>
+<!-- OFFICIAL SPONSOR REEL -->
+<section class="w-full py-space-xl bg-surface-dim overflow-hidden">
+<div class="max-w-7xl mx-auto px-gutter flex flex-col items-center">
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-outline mb-space-md text-center">
+        Powered by Official Arena Sponsors &amp; Athletics Partners
+      </span>
+<!-- Infinite Marquee Track -->
+<div class="w-full flex items-center justify-between flex-wrap gap-space-xl opacity-75 grayscale hover:grayscale-0 transition-all duration-300">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-headline-md tracking-widest uppercase text-on-surface">MONSTER</span>
+<span class="font-label-badge text-label-badge text-primary-container">ENERGY</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-headline-md tracking-widest uppercase text-on-surface">RED BULL</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-headline-md tracking-widest uppercase text-on-surface">DECATHLON</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-headline-md tracking-widest uppercase text-on-surface">SG CRICKET</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-headline-md tracking-widest uppercase text-on-surface">NIVIA SPORTS</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-headline-md tracking-widest uppercase text-on-surface">PUMA ATHLETICS</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-headline-md tracking-widest uppercase text-secondary-container">STME IMPULSE</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<script>
+  (function initCountdown() {
+    let days = 4;
+    let hours = 14;
+    let mins = 32;
+    let secs = 45;
+
+    const daysEl = document.getElementById('timer-days');
+    const hoursEl = document.getElementById('timer-hours');
+    const minsEl = document.getElementById('timer-mins');
+    const secsEl = document.getElementById('timer-secs');
+
+    if (!daysEl || !hoursEl || !minsEl || !secsEl) return;
+
+    setInterval(() => {
+      if (secs > 0) {
+        secs--;
+      } else {
+        secs = 59;
+        if (mins > 0) {
+          mins--;
+        } else {
+          mins = 59;
+          if (hours > 0) {
+            hours--;
+          } else {
+            hours = 23;
+            if (days > 0) {
+              days--;
+            }
+          }
+        }
+      }
+
+      daysEl.innerText = days < 10 ? '0' + days : days;
+      hoursEl.innerText = hours < 10 ? '0' + hours : hours;
+      minsEl.innerText = mins < 10 ? '0' + mins : mins;
+      secsEl.innerText = secs < 10 ? '0' + secs : secs;
+    }, 1000);
+  })();
+</script></main><footer class="w-full bg-surface-dim pt-space-xxl pb-space-xl shadow-[0_-8px_32px_rgba(0,0,0,0.8)]"><div class="w-full px-gutter max-w-7xl mx-auto flex flex-col gap-space-xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-xl"><div class="flex flex-col gap-space-md"><div class="flex items-center gap-space-sm"><span class="font-headline-lg text-headline-lg uppercase text-on-surface tracking-wide">Legends Walk Off</span></div><p class="font-title-md text-title-md text-secondary-container tracking-wider uppercase">'Only Legends Walk Off the Field.'</p><p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">Presented by STME Impulse Committee, NMIMS Hyderabad (School of Technology Management &amp; Engineering). High-voltage inter-collegiate sports arena.</p></div><div class="flex flex-col gap-space-sm"><span class="font-headline-sm text-headline-sm uppercase tracking-widest text-primary font-bold">Quick Navigation</span><div class="flex flex-col gap-space-xs"><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="home" href="#">Tournament Home</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="standings" href="#">Points &amp; Standings</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="live-scores" href="#">Broadcast Live Telemetry</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="about-sponsors" href="#">Sponsors &amp; Partners</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="admin-console" href="#">Admin Console Portal</a></div></div><div class="flex flex-col gap-space-sm"><span class="font-headline-sm text-headline-sm uppercase tracking-widest text-primary font-bold">Official Contact</span><div class="flex flex-col gap-space-xs font-body-sm text-body-sm text-on-surface-variant"><div class="flex items-start gap-space-xs"><span class="material-symbols-outlined text-[18px] text-secondary-container shrink-0 mt-0.5">mail</span><span class="font-label-numeric-md text-label-numeric-md text-on-surface">impulse.stme@nmims.edu.in</span></div><div class="flex items-start gap-space-xs mt-space-xs"><span class="material-symbols-outlined text-[18px] text-secondary-container shrink-0 mt-0.5">location_on</span><span>STME Campus, Jadcherla, Hyderabad, Telangana - 509301</span></div></div></div><div class="flex flex-col gap-space-sm"><span class="font-headline-sm text-headline-sm uppercase tracking-widest text-primary font-bold">Arena Broadcasts</span><p class="font-body-sm text-body-sm text-on-surface-variant">Follow official match highlights, instant VAR telemetry, and stream drops:</p><div class="flex items-center gap-space-sm mt-space-xs"><a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_0_12px_rgba(0,0,0,0.5)]" href="#"><span class="material-symbols-outlined text-[20px]">photo_camera</span></a><a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_0_12px_rgba(0,0,0,0.5)]" href="#"><span class="material-symbols-outlined text-[20px]">play_circle</span></a><a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_0_12px_rgba(0,0,0,0.5)]" href="#"><span class="material-symbols-outlined text-[20px]">forum</span></a><a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_0_12px_rgba(0,0,0,0.5)]" href="#"><span class="material-symbols-outlined text-[20px]">tag</span></a></div></div></div><div class="pt-space-lg flex flex-col md:flex-row items-center justify-between gap-space-md font-body-sm text-body-sm text-on-surface-variant"><p class="text-center md:text-left">© 2026 Legends Walk Off. All Rights Reserved. STME Impulse Sports Committee.</p><div class="flex items-center gap-space-md font-label-badge text-label-badge uppercase tracking-widest text-outline"><span class="hover:text-on-surface transition-colors cursor-pointer">Privacy Policy</span><span class="hover:text-on-surface transition-colors cursor-pointer">Rulebook &amp; Code</span><span class="hover:text-on-surface transition-colors cursor-pointer">Anti-Doping Policy</span></div></div></div></footer></body></html>

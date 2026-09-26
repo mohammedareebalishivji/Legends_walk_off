@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Inter:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}.clip-angle{clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);}.clip-angle-r{clip-path:polygon(0 0,calc(100% - 12px) 0,100% 100%,0 100%);}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"tertiary-fixed":"#6ffbbe","surface-container-high":"#2a2a2a","surface-bright":"#3a3939","error":"#ffb4ab","on-error":"#690005","surface-tint":"#ffb4a8","inverse-on-surface":"#313030","on-surface":"#e5e2e1","on-surface-variant":"#e9bcb5","on-background":"#e5e2e1","on-tertiary":"#003824","surface-container-lowest":"#0e0e0e","primary-fixed-dim":"#ffb4a8","on-secondary":"#3b2f00","on-secondary-fixed":"#231b00","secondary-fixed":"#ffe177","surface-container-highest":"#353534","secondary":"#fff3d4","on-secondary-fixed-variant":"#554500","surface-dim":"#131313","outline":"#af8781","secondary-fixed-dim":"#ebc300","surface-variant":"#353534","error-container":"#93000a","on-primary-fixed":"#410100","surface":"#131313","surface-container-low":"#1c1b1b","tertiary-container":"#008058","primary-fixed":"#ffdad4","tertiary":"#4edea3","outline-variant":"#5e3f3a","inverse-primary":"#c00500","on-secondary-container":"#6f5c00","on-tertiary-fixed-variant":"#005236","primary-container":"#e10600","on-tertiary-container":"#d4ffe5","secondary-container":"#fed400","on-tertiary-fixed":"#002113","on-primary":"#680200","tertiary-fixed-dim":"#4edea3","on-primary-container":"#fff2f0","background":"#131313","primary":"#ffb4a8","on-primary-fixed-variant":"#930300","on-error-container":"#ffdad6","surface-container":"#201f1f","inverse-surface":"#e5e2e1"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"margin-mobile":"1rem","space-sm":"0.5rem","margin":"2.5rem","gutter":"1.5rem","gutter-mobile":"0.75rem","space-lg":"1.5rem","space-xxl":"4rem","space-md":"1rem","space-xs":"0.25rem","space-xl":"2.5rem"},fontFamily:{"body-lg":["Inter"],"title-lg":["Inter"],"label-numeric-lg":["JetBrains Mono"],"label-badge":["JetBrains Mono"],"headline-xl":["Anton"],"headline-md":["Anton"],"label-numeric-md":["JetBrains Mono"],"headline-lg":["Anton"],"headline-xl-mobile":["Anton"],"body-md":["Inter"],"display-hero-mobile":["Anton"],"title-md":["Inter"],"display-hero":["Anton"],"body-sm":["Inter"],"headline-sm":["Anton"]},fontSize:{"body-lg":["1.125rem",{"lineHeight":"1.625rem","letterSpacing":"0em","fontWeight":"400"}],"title-lg":["1.25rem",{"lineHeight":"1.5rem","letterSpacing":"-0.01em","fontWeight":"800"}],"label-numeric-lg":["1.75rem",{"lineHeight":"1.75rem","letterSpacing":"-0.04em","fontWeight":"700"}],"label-badge":["0.6875rem",{"lineHeight":"0.875rem","letterSpacing":"0.12em","fontWeight":"700"}],"headline-xl":["3rem",{"lineHeight":"3rem","letterSpacing":"0.05em","fontWeight":"400"}],"headline-md":["1.5rem",{"lineHeight":"1.625rem","letterSpacing":"0.04em","fontWeight":"400"}],"label-numeric-md":["1rem",{"lineHeight":"1.25rem","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["2rem",{"lineHeight":"2.125rem","letterSpacing":"0.05em","fontWeight":"400"}],"headline-xl-mobile":["2rem",{"lineHeight":"2.125rem","letterSpacing":"0.04em","fontWeight":"400"}],"body-md":["0.9375rem",{"lineHeight":"1.5rem","letterSpacing":"0em","fontWeight":"400"}],"display-hero-mobile":["2.75rem",{"lineHeight":"2.75rem","letterSpacing":"0.03em","fontWeight":"400"}],"title-md":["1rem",{"lineHeight":"1.375rem","letterSpacing":"0.01em","fontWeight":"700"}],"display-hero":["4.5rem",{"lineHeight":"4.25rem","letterSpacing":"0.04em","fontWeight":"400"}],"body-sm":["0.8125rem",{"lineHeight":"1.25rem","letterSpacing":"0.01em","fontWeight":"400"}],"headline-sm":["1.125rem",{"lineHeight":"1.25rem","letterSpacing":"0.03em","fontWeight":"400"}]}}}};</script></head><body class="bg-surface-container-lowest font-body-md text-on-surface antialiased min-h-screen"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_12px_24px_-6px_rgba(0,0,0,0.9),0_0_24px_-8px_rgba(225,6,0,0.3)]"><div class="h-20 w-full px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md shrink-0"><img alt="Legends Walk Off Championship Logo" class="h-10 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2galx7WljV6w1igXr8o3dLOgoDJjG8Kn73Y3ektTQeD1MJuoQ1q8t84byFJ5dK9bnOkDr23wGzjeaj-6TxnMjRhS-4QqmSxCMX995uthYCqOOpj_J4-bZGYoc-6ywwjXFTn4_W2OXETVDlpTxw9OJzcJM0XHb9iJpcC6_a1PVdK5rSVwo8sKOtKQ7nJVcGFlSsmPLb-HkDrfx9GpJwmc8EoydhgZctiY28L6yCiSAlVm0FXXnB9AC"/><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-md text-headline-md tracking-wider text-on-surface uppercase leading-none">Legends Walk Off</span></div><div class="flex items-center gap-space-xs mt-space-xs"><span class="bg-primary-container px-space-xs py-0.5 text-on-primary-container font-label-badge text-label-badge tracking-widest uppercase font-bold">Hyderabad 2026</span><span class="hidden lg:inline text-outline font-label-badge text-label-badge">|</span><span class="hidden lg:inline text-secondary-container font-label-badge text-label-badge uppercase tracking-wider font-bold">Cricket &amp; Football League</span></div></div></div><nav class="hidden xl:flex items-center gap-space-xs" data-active-classes="bg-surface-container-high text-secondary-container shadow-[inset_0_-2px_0_0_#fed400]"><a class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="home" href="#">Home</a><a class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="standings" href="#">Standings</a><a class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all flex items-center gap-space-xs" data-path="live-scores" href="#"><span class="relative flex h-2.5 w-2.5 mr-1"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-container opacity-75"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary-container"></span></span>Live Scores</a><a class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="about-sponsors" href="#">About &amp; Sponsors</a><a class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="admin-console" href="#">Admin Console</a></nav><div class="flex items-center gap-space-md shrink-0"><a class="hidden sm:inline-flex items-center gap-space-xs bg-primary-container hover:bg-primary-container/90 text-on-primary-container px-space-md py-space-sm font-headline-sm text-headline-sm tracking-wider uppercase transition-all clip-angle shadow-[0_0_20px_rgba(225,6,0,0.45)]" data-path="admin-login" href="#"><span class="material-symbols-outlined text-[18px]">lock</span>Admin Login</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface-container-lowest"><div class="flex flex-col w-full">
+<!-- TOURNAMENT ATMOSPHERE SUB-HEADER & ADMIN TOGGLE STRIP -->
+<div class="w-full bg-surface-container-low px-gutter py-space-sm flex flex-wrap items-center justify-between gap-space-md shadow-md relative z-20">
+<div class="flex items-center gap-space-md flex-wrap">
+<div class="flex items-center gap-space-xs text-secondary-container">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span class="font-label-badge text-label-badge tracking-widest uppercase">NMIMS HYDERABAD OFFICIAL ARENA</span>
+</div>
+<span class="text-surface-container-highest">/</span>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-numeric-md text-label-numeric-md">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span>JADCHERLA STADIUM HUB • SEASON 2026</span>
+</div>
+</div>
+<!-- Admin State Control -->
+<div class="flex items-center gap-space-sm bg-surface-container px-space-md py-space-xs shadow-sm">
+<span class="material-symbols-outlined text-outline text-[18px]">admin_panel_settings</span>
+<span class="font-label-badge text-label-badge uppercase tracking-wider text-on-surface-variant">Admin Edit Overlays</span>
+<button class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full bg-surface-container-highest transition-colors duration-200 ease-in-out focus:outline-none" id="adminToggleBtn" onclick="toggleAdminMode()">
+<span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-outline shadow ring-0 transition duration-200 ease-in-out translate-x-0.5 mt-0.5" id="adminToggleThumb"></span>
+</button>
+<span class="font-label-badge text-label-badge text-outline font-bold tracking-widest uppercase" id="adminStatusText">OFF</span>
+</div>
+</div>
+<!-- SECTION 1: THE ARENA AWAITS - TOURNAMENT STORY -->
+<section class="w-full px-gutter py-space-xl relative overflow-hidden bg-surface-container-lowest">
+<!-- Ambient stadium lighting flare -->
+<div class="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-primary-container/10 blur-3xl pointer-events-none"></div>
+<div class="absolute top-1/2 -right-32 w-96 h-96 rounded-full bg-secondary-container/10 blur-3xl pointer-events-none"></div>
+<div class="max-w-7xl mx-auto flex flex-col gap-space-xl relative z-10">
+<!-- Section Tag & Admin Edit -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="bg-primary-container px-space-xs py-0.5 text-on-primary-container font-label-badge text-label-badge tracking-widest uppercase">THE ORIGIN &amp; ETHOS</span>
+<span class="font-label-badge text-label-badge text-secondary-container tracking-widest uppercase">// CHAPTER 01</span>
+</div>
+<button class="admin-control hidden items-center gap-space-xs bg-surface-container-high hover:bg-surface-bright text-secondary-container px-space-sm py-1 font-label-badge text-label-badge tracking-wider uppercase transition-all shadow-sm">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+<span>Edit About Story</span>
+</button>
+</div>
+<!-- Heroic Story Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-center">
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm uppercase tracking-widest text-primary">STME Impulse Committee Presents</span>
+<h1 class="font-headline-xl text-headline-xl uppercase tracking-wide text-on-surface mt-space-xs leading-none">
+              The Arena Awaits: <br/>
+<span class="text-secondary-container">Legends Walk Off</span>
+</h1>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+            Forged in the heart of NMIMS Hyderabad by the <strong class="text-on-surface">School of Technology Management &amp; Engineering (STME) Impulse Sports Committee</strong>, Legends Walk Off is not simply a collegiate tournament. It is a crucible where raw varsity rivalry transforms ordinary student athletes into immortal legends under blinding floodlights.
+          </p>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+            Spanning both floodlit T20-style cricket battles and aggressive full-pitch 11-a-side football clashes, the Jadcherla campus grounds host the fiercest tactical minds and stamina powerhouses across India. There are no draws. There is no retreat. Only legends walk off victorious.
+          </p>
+<!-- Arena Specs Counter Matrix -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-sm pt-space-md">
+<div class="bg-surface-container p-space-md flex flex-col shadow-md">
+<span class="font-headline-md text-headline-md text-primary leading-none">32+</span>
+<span class="font-label-badge text-label-badge text-on-surface-variant tracking-wider uppercase mt-1">Collegiate Squads</span>
+</div>
+<div class="bg-surface-container p-space-md flex flex-col shadow-md">
+<span class="font-headline-md text-headline-md text-secondary-container leading-none">850+</span>
+<span class="font-label-badge text-label-badge text-on-surface-variant tracking-wider uppercase mt-1">Athletes Competing</span>
+</div>
+<div class="bg-surface-container p-space-md flex flex-col shadow-md">
+<span class="font-headline-md text-headline-md text-tertiary leading-none">65K</span>
+<span class="font-label-badge text-label-badge text-on-surface-variant tracking-wider uppercase mt-1">Broadcast Views</span>
+</div>
+<div class="bg-surface-container p-space-md flex flex-col shadow-md">
+<span class="font-headline-md text-headline-md text-on-surface leading-none">₹5L+</span>
+<span class="font-label-badge text-label-badge text-on-surface-variant tracking-wider uppercase mt-1">Total Prize Pool</span>
+</div>
+</div>
+</div>
+<!-- Venue Spotlight Card with Overlapping Image -->
+<div class="lg:col-span-5 flex flex-col gap-space-md relative">
+<div class="relative bg-surface-container-high p-space-sm shadow-xl">
+<div class="relative overflow-hidden w-full h-80">
+<img class="w-full h-full object-cover" data-alt="Dynamic night aerial shot of NMIMS Hyderabad illuminated sports complex featuring a vibrant green turf football pitch and floodlit international standard cricket oval packed with energetic cheering student crowds under dark dramatic stormy sky with atmospheric red and gold stadium lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiWnk1iAHg73AE-vorCtVa1jIY7Ced2l4LksjsMdwTlMUOEuKeNuQyhM9Ne2zcAoVbhXSzKbv3JBnLHpaT8Ad3f5PHovc5ee6DaYt2iE7LZ3joBIe_rQZIHKN60rsF7rb2xC0YmHPLrnItiB910xMNlCzrKEN0ZwCuRJVJY2mxdhPOknlxy7uP9spiXJcULBDQQbZxJLyZR1aXyWbvCQTZz9vuFE8nIWLB6kSHoZoF_vT47qI6tDvD"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent"></div>
+<div class="absolute top-space-md right-space-md bg-primary-container px-space-sm py-1 font-label-badge text-label-badge text-on-primary-container uppercase font-bold tracking-widest shadow-md">
+                Jadcherla Turf Complex
+              </div>
+</div>
+<div class="p-space-md bg-surface-container flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-title-md uppercase text-on-surface">Main Battle Stadium</span>
+<span class="font-label-numeric-md text-label-numeric-md text-secondary-container">FIFA &amp; ICC SPECS</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Equipped with 2000-lux LED match towers, precision synthetic drainage turf, and automated VAR tracking cameras.
+              </p>
+</div>
+</div>
+<!-- Quick Telemetry Strip -->
+<div class="bg-surface-container-low p-space-sm flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary text-[18px]">stadium</span>
+<span class="font-label-badge text-label-badge uppercase tracking-wider text-on-surface">Campus Capacity: 3,500 Spectators</span>
+</div>
+<span class="font-label-badge text-label-badge text-secondary-container uppercase">Tier 1 Certified</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 2: THE SQUAD BEHIND THE SHOWDOWN (STME Impulse Committee) -->
+<section class="w-full px-gutter py-space-xl bg-surface-container-low relative">
+<div class="max-w-7xl mx-auto flex flex-col gap-space-xl">
+<!-- Header Module -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="bg-secondary-container text-on-secondary-container px-space-xs py-0.5 font-label-badge text-label-badge uppercase font-bold">ORGANIZING BOARD</span>
+<span class="font-label-badge text-label-badge text-outline uppercase tracking-widest">// IMPULSE CORE 2026</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg uppercase tracking-wider text-on-surface leading-none mt-space-xs">
+            The Squad Behind The Showdown
+          </h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+            Meet the strategists, operations chiefs, and engineering architects bringing the high-octane 2026 championship to life.
+          </p>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<span class="font-label-numeric-md text-label-numeric-md text-outline">COMM_MEMBERS: 05</span>
+</div>
+</div>
+<!-- Committee Cards Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-space-md">
+<!-- Leader 1: Dr. Siddhartha Ghosh -->
+<div class="bg-surface-container flex flex-col shadow-lg group hover:bg-surface-container-high transition-all relative">
+<div class="relative w-full h-64 overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Distinguished academic director Dr. Siddhartha Ghosh in formal dark blazer with deep navy and red sports arena backdrop, confident professional stance, sharp cinematic studio key lighting with high-contrast shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBV3ndmH9ntSoVq7hTWOXRyQ3m7ToNHLRtX3o5ak8XVeoQynZ1dXyq4hJatchQ11MUKNwRal9AUInIqf6BobiE1fftLs8PKTjUiYQan-y8qL3Pk3jXFiQy6bGM2c5kgiZ-MKE3D8f49Sk696vlOnvaSbHc_YC6P6XKB6yOn2oBQG7_lfTyXvyhZ6c4K8APC3F8ufslOkFzpHqpvkVE-4IdxYKtZDHj-78ScnNHQhVpo2KShqrTTKwiT"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-transparent to-transparent"></div>
+<span class="absolute top-space-xs left-space-xs bg-primary-container text-on-primary-container px-space-xs py-0.5 font-label-badge text-label-badge font-bold uppercase tracking-widest">PATRON</span>
+<button class="admin-control hidden absolute top-space-xs right-space-xs bg-surface-container-highest text-secondary-container p-1 shadow-md">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1 gap-space-sm">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm uppercase tracking-wide text-on-surface">Dr. Siddhartha Ghosh</span>
+<span class="font-body-sm text-body-sm text-secondary-container font-semibold uppercase mt-0.5">Faculty Patron &amp; Director</span>
+<span class="font-label-badge text-label-badge text-outline tracking-wider uppercase mt-1">NMIMS Hyderabad</span>
+</div>
+<div class="pt-space-xs flex items-center justify-between">
+<span class="font-label-badge text-label-badge text-on-surface-variant">MENTORSHIP</span>
+<div class="flex items-center gap-space-xs text-outline">
+<a class="hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-[18px]">mail</span></a>
+<a class="hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-[18px]">share</span></a>
+</div>
+</div>
+</div>
+</div>
+<!-- Leader 2: Kabir Varma -->
+<div class="bg-surface-container flex flex-col shadow-lg group hover:bg-surface-container-high transition-all relative">
+<div class="relative w-full h-64 overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Athletic young collegiate male sports secretary Kabir Varma in tournament branded black and red track jacket, intense determined gaze, high contrast sports stadium rim lighting with dramatic shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6x1diVUMEG_ORcKAZ0RlfK3pQsfVxIwmO8T-agF2cuEFn0epATnyfLWRk2cokYw9Ow9PICh7lxynkQG9iWkPc_DB9PZpvbY7ML7gZ0RcQVVFNwqMgFcTu1L1plD-GIThG50Nx6aDXhsdmsVB2eIqr_ZkqNPSEFLSxpxMQhw_uk-fbuQkEkjfzOV-3_sSjj9lxDrWf3zxoq2P9gFzNIHFZqx8s9yyE705vPZJB1hBrJxupFlxaoFyu"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-transparent to-transparent"></div>
+<span class="absolute top-space-xs left-space-xs bg-secondary-container text-on-secondary-container px-space-xs py-0.5 font-label-badge text-label-badge font-bold uppercase tracking-widest">LEAD</span>
+<button class="admin-control hidden absolute top-space-xs right-space-xs bg-surface-container-highest text-secondary-container p-1 shadow-md">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1 gap-space-sm">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm uppercase tracking-wide text-on-surface">Kabir Varma</span>
+<span class="font-body-sm text-body-sm text-secondary-container font-semibold uppercase mt-0.5">Sports Secretary</span>
+<span class="font-label-badge text-label-badge text-outline tracking-wider uppercase mt-1">STME Impulse Committee</span>
+</div>
+<div class="pt-space-xs flex items-center justify-between">
+<span class="font-label-badge text-label-badge text-on-surface-variant">EXP: CRICKET CAPTAIN</span>
+<div class="flex items-center gap-space-xs text-outline">
+<a class="hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-[18px]">alternate_email</span></a>
+<a class="hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-[18px]">share</span></a>
+</div>
+</div>
+</div>
+</div>
+<!-- Leader 3: Ananya Rao -->
+<div class="bg-surface-container flex flex-col shadow-lg group hover:bg-surface-container-high transition-all relative">
+<div class="relative w-full h-64 overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Dynamic collegiate female lead Ananya Rao holding tournament logistics clipboard wearing branded red and gold sports staff polo, confident and focused expression against moody floodlit arena background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9C_iba2utNtQAmJ2ulK7-WpwLlYsuoHj_NZ5hCSgtRaboqfW7Q0aS8fPIc2_BgYx0fWgdGGGgQ60bFlwKPUQE7na6NQJEPwhr6cIsri_0SLOXw1NTOPGyJOenx1IfjD9xFb2rocQ8NIAipYen5m9UFKx_142uiQd1McnQuQr49dhpZ62BZpLqidfPLAdG41msbOlWXVMnOxxBlvxbiUuSAIXmwMIhQ-Ln1_SOkfqF_pm2K1SAqWke"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-transparent to-transparent"></div>
+<span class="absolute top-space-xs left-space-xs bg-surface-container-highest text-on-surface px-space-xs py-0.5 font-label-badge text-label-badge font-bold uppercase tracking-widest">OPS CHIEF</span>
+<button class="admin-control hidden absolute top-space-xs right-space-xs bg-surface-container-highest text-secondary-container p-1 shadow-md">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1 gap-space-sm">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm uppercase tracking-wide text-on-surface">Ananya Rao</span>
+<span class="font-body-sm text-body-sm text-secondary-container font-semibold uppercase mt-0.5">Head of Operations</span>
+<span class="font-label-badge text-label-badge text-outline tracking-wider uppercase mt-1">Hospitality &amp; Venue Grid</span>
+</div>
+<div class="pt-space-xs flex items-center justify-between">
+<span class="font-label-badge text-label-badge text-on-surface-variant">LOGISTICS LEAD</span>
+<div class="flex items-center gap-space-xs text-outline">
+<a class="hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-[18px]">alternate_email</span></a>
+<a class="hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-[18px]">share</span></a>
+</div>
+</div>
+</div>
+</div>
+<!-- Leader 4: Devansh Mehta -->
+<div class="bg-surface-container flex flex-col shadow-lg group hover:bg-surface-container-high transition-all relative">
+<div class="relative w-full h-64 overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Tech broadcast coordinator Devansh Mehta wearing audio production headset and varsity dark techwear jersey, sitting at broadcast video switcher desk with telemetry screens glowing in dark room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyHSL49wIzRpu_YmxCRdQDuhSAa-SgyiEPKNFxYTY_KI8vA74wAx2FfcCVlvPiBy1SGPQXdr05gNdhPCiDf-ysR8Y6-ytBb7SUTI9GFqFHyocxxzOK0EZzLBKXp7a-jFy9sQOLX2Q9v8YQE3yHjljkZosyiRKBzV6IJIjw6fHjNzNvX5g6dl55t-x0K2FzXX1AG1imadeKo88f-usEE1pNrj1n4AvNICeBKYpWrTZ6N6ZxYPlvotpv"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-transparent to-transparent"></div>
+<span class="absolute top-space-xs left-space-xs bg-tertiary-container text-on-tertiary-container px-space-xs py-0.5 font-label-badge text-label-badge font-bold uppercase tracking-widest">TECH HUD</span>
+<button class="admin-control hidden absolute top-space-xs right-space-xs bg-surface-container-highest text-secondary-container p-1 shadow-md">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1 gap-space-sm">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm uppercase tracking-wide text-on-surface">Devansh Mehta</span>
+<span class="font-body-sm text-body-sm text-secondary-container font-semibold uppercase mt-0.5">Head of Tech &amp; Stream</span>
+<span class="font-label-badge text-label-badge text-outline tracking-wider uppercase mt-1">Live Telemetry &amp; VAR</span>
+</div>
+<div class="pt-space-xs flex items-center justify-between">
+<span class="font-label-badge text-label-badge text-on-surface-variant">AV BROADCAST</span>
+<div class="flex items-center gap-space-xs text-outline">
+<a class="hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-[18px]">alternate_email</span></a>
+<a class="hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-[18px]">share</span></a>
+</div>
+</div>
+</div>
+</div>
+<!-- Leader 5: Riya Sen -->
+<div class="bg-surface-container flex flex-col shadow-lg group hover:bg-surface-container-high transition-all relative">
+<div class="relative w-full h-64 overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Energetic collegiate sports referee liaison Riya Sen wearing official black tournament jersey with stopwatch lanyard, focused gaze on sports arena sideline with atmospheric stadium floodlights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyi3nUPB1jw-oHhfxc3so9GwNeGPrVXHVUSVdiRVckTAZxKinaPNyPmSnBnP7KtJlPViPcAqbSuuVy49gmDTBvmHVgq2ID0vN7bUTpBGkliVCxX2ZLIeFdY_0ppRQ85C8uwEOsT-ILV5t7eogyHAIFfl-1JEMNveb8W-MUqJkDi974p3mahv1_XaG_u8YDxt03Z6i83uVDmQByYYEQUM_c3uXjg_plFrf1_kGk3BI02ZrQSjwC0Ll2"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-transparent to-transparent"></div>
+<span class="absolute top-space-xs left-space-xs bg-primary-container text-on-primary-container px-space-xs py-0.5 font-label-badge text-label-badge font-bold uppercase tracking-widest">OFFICIALS</span>
+<button class="admin-control hidden absolute top-space-xs right-space-xs bg-surface-container-highest text-secondary-container p-1 shadow-md">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1 gap-space-sm">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm uppercase tracking-wide text-on-surface">Riya Sen</span>
+<span class="font-body-sm text-body-sm text-secondary-container font-semibold uppercase mt-0.5">Lead Coordinator</span>
+<span class="font-label-badge text-label-badge text-outline tracking-wider uppercase mt-1">Match Officials &amp; Umpires</span>
+</div>
+<div class="pt-space-xs flex items-center justify-between">
+<span class="font-label-badge text-label-badge text-on-surface-variant">RULES CHIEF</span>
+<div class="flex items-center gap-space-xs text-outline">
+<a class="hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-[18px]">alternate_email</span></a>
+<a class="hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-[18px]">share</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 3: TOURNAMENT SPONSORS (TIERED SHOWCASE) -->
+<section class="w-full px-gutter py-space-xl bg-surface-container-lowest relative">
+<div class="max-w-7xl mx-auto flex flex-col gap-space-xl">
+<!-- Section Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="bg-primary-container text-on-primary-container px-space-xs py-0.5 font-label-badge text-label-badge uppercase font-bold">POWERING THE CLASH</span>
+<span class="font-label-badge text-label-badge text-secondary-container uppercase tracking-widest">// OFFICIAL PARTNERS</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg uppercase tracking-wider text-on-surface leading-none mt-space-xs">
+            Tournament Sponsors &amp; Alliances
+          </h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+            Backed by international heavyweights committed to fostering the apex of student athletic power and broadcast excellence.
+          </p>
+</div>
+<!-- Add Sponsor Admin Action (shown in admin mode) -->
+<button class="admin-control hidden items-center gap-space-xs bg-primary-container text-on-primary-container px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider shadow-md hover:bg-primary-container/90 transition-all clip-angle">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>+ Add New Sponsor</span>
+</button>
+</div>
+<!-- TIER 1: TITLE SPONSOR (MEGA HERO CARD) -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary-container text-[18px]">military_tech</span>
+<span class="font-label-badge text-label-badge text-secondary-container uppercase font-bold tracking-widest">TITLE SPONSOR TIER</span>
+</div>
+<div class="relative bg-surface-container p-space-lg lg:p-space-xl shadow-2xl overflow-hidden group">
+<!-- Background radial glow -->
+<div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-secondary-container/15 blur-3xl pointer-events-none"></div>
+<div class="absolute -left-20 -top-20 w-80 h-80 rounded-full bg-primary-container/20 blur-3xl pointer-events-none"></div>
+<div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
+<div class="lg:col-span-8 flex flex-col gap-space-md">
+<div class="flex items-center gap-space-sm flex-wrap">
+<span class="bg-secondary-container text-on-secondary-container px-space-sm py-1 font-label-badge text-label-badge font-bold uppercase tracking-widest shadow-sm">GLOBAL TITLE PARTNER</span>
+<span class="font-label-badge text-label-badge text-outline uppercase tracking-wider">OFFICIAL ENERGY PROVIDER</span>
+</div>
+<h3 class="font-headline-xl text-headline-xl uppercase tracking-wide text-on-surface leading-none">
+                Red Bull Energy
+              </h3>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl leading-relaxed">
+                Fueling the stamina, velocity, and unyielding focus of every cricket over and 90-minute football war. Red Bull powers the athlete hydration zones, player recovery hubs, and the signature 'Player of the Tournament' trophy walk.
+              </p>
+<div class="flex items-center gap-space-md pt-space-xs flex-wrap">
+<div class="flex items-center gap-space-xs text-secondary-container font-label-numeric-md text-label-numeric-md">
+<span class="material-symbols-outlined text-[20px]">bolt</span>
+<span>RED BULL PLAYER LOUNGE LIVE</span>
+</div>
+<span class="text-surface-container-highest">•</span>
+<span class="font-label-badge text-label-badge text-on-surface-variant uppercase">EXCLUSIVE ARENA RIGHTS 2026</span>
+</div>
+</div>
+<!-- Sponsor Brand Emblem Pod -->
+<div class="lg:col-span-4 flex flex-col items-center justify-center p-space-lg bg-surface-container-low shadow-inner relative">
+<div class="w-full flex items-center justify-center py-space-lg">
+<!-- High-impact typographic badge simulating Red Bull emblem -->
+<div class="flex flex-col items-center text-center">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-xl text-headline-xl text-primary leading-none tracking-tighter">RED</span>
+<span class="font-headline-xl text-headline-xl text-secondary-container leading-none tracking-tighter">BULL</span>
+</div>
+<span class="font-label-badge text-label-badge tracking-[0.3em] uppercase text-on-surface font-bold mt-1">GIVES YOU WINGS</span>
+</div>
+</div>
+<button class="admin-control hidden absolute top-2 right-2 bg-surface-container-high text-secondary-container p-1 shadow-md">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- TIER 2: POWERED BY (DUAL CARDS) -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">bolt</span>
+<span class="font-label-badge text-label-badge text-primary uppercase font-bold tracking-widest">POWERED BY TIER</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- Card 1: Decathlon Sports -->
+<div class="bg-surface-container p-space-lg flex flex-col justify-between gap-space-md shadow-lg relative group">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-badge text-label-badge text-tertiary uppercase font-bold tracking-widest">OFFICIAL GEAR &amp; MATCH EQUIPMENT</span>
+<h4 class="font-headline-md text-headline-md uppercase text-on-surface mt-space-xs leading-none">Decathlon Sports India</h4>
+</div>
+<button class="admin-control hidden bg-surface-container-high text-secondary-container p-1 shadow-md">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Equipping both the football championship pitches and match-day technical staff with match-spec balls, performance cones, agility grids, and official game gear.
+            </p>
+<div class="pt-space-xs flex items-center justify-between text-outline font-label-badge text-label-badge">
+<span class="uppercase">ON-GROUND EQUIPMENT PARTNER</span>
+<span class="text-tertiary uppercase font-bold">VERIFIED</span>
+</div>
+</div>
+<!-- Card 2: Monster Beverages -->
+<div class="bg-surface-container p-space-lg flex flex-col justify-between gap-space-md shadow-lg relative group">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-badge text-label-badge text-secondary-container uppercase font-bold tracking-widest">OFFICIAL HYDRATION &amp; FAN ZONE</span>
+<h4 class="font-headline-md text-headline-md uppercase text-on-surface mt-space-xs leading-none">Monster Energy</h4>
+</div>
+<button class="admin-control hidden bg-surface-container-high text-secondary-container p-1 shadow-md">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Powering the grandstand soundstages, half-time audience contests, and high-velocity energy refresh stations along the stadium concourses.
+            </p>
+<div class="pt-space-xs flex items-center justify-between text-outline font-label-badge text-label-badge">
+<span class="uppercase">FAN ZONE EXPERIENCE</span>
+<span class="text-secondary-container uppercase font-bold">VERIFIED</span>
+</div>
+</div>
+</div>
+</div>
+<!-- TIER 3: ASSOCIATE SPONSORS (4-COLUMN GRID) -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-outline text-[18px]">handshake</span>
+<span class="font-label-badge text-label-badge text-outline uppercase font-bold tracking-widest">ASSOCIATE SPONSORS TIER</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Associate 1: SG Cricket -->
+<div class="bg-surface-container p-space-md flex flex-col justify-between gap-space-sm shadow-md relative">
+<div class="flex items-center justify-between">
+<span class="bg-surface-container-high text-on-surface-variant px-space-xs py-0.5 font-label-badge text-label-badge font-bold uppercase">CRICKET</span>
+<button class="admin-control hidden bg-surface-container-high text-secondary-container p-1 shadow-sm">
+<span class="material-symbols-outlined text-[14px]">edit</span>
+</button>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface">SG Cricket</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Official Match Balls &amp; Safety Equipment</span>
+</div>
+<span class="font-label-badge text-label-badge text-outline uppercase">OFFICIAL BALL SUPPLIER</span>
+</div>
+<!-- Associate 2: Nivia Football -->
+<div class="bg-surface-container p-space-md flex flex-col justify-between gap-space-sm shadow-md relative">
+<div class="flex items-center justify-between">
+<span class="bg-surface-container-high text-on-surface-variant px-space-xs py-0.5 font-label-badge text-label-badge font-bold uppercase">FOOTBALL</span>
+<button class="admin-control hidden bg-surface-container-high text-secondary-container p-1 shadow-sm">
+<span class="material-symbols-outlined text-[14px]">edit</span>
+</button>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface">Nivia Football</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">FIFA Pro Certified Match Match Balls</span>
+</div>
+<span class="font-label-badge text-label-badge text-outline uppercase">PRO MATCH SPONSOR</span>
+</div>
+<!-- Associate 3: Fastrack -->
+<div class="bg-surface-container p-space-md flex flex-col justify-between gap-space-sm shadow-md relative">
+<div class="flex items-center justify-between">
+<span class="bg-surface-container-high text-on-surface-variant px-space-xs py-0.5 font-label-badge text-label-badge font-bold uppercase">TIMEKEEPER</span>
+<button class="admin-control hidden bg-surface-container-high text-secondary-container p-1 shadow-sm">
+<span class="material-symbols-outlined text-[14px]">edit</span>
+</button>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface">Fastrack</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Official Clock &amp; Telemetry Timing</span>
+</div>
+<span class="font-label-badge text-label-badge text-outline uppercase">BROADCAST STOPWATCH</span>
+</div>
+<!-- Associate 4: Hyderabad Sports Hub -->
+<div class="bg-surface-container p-space-md flex flex-col justify-between gap-space-sm shadow-md relative">
+<div class="flex items-center justify-between">
+<span class="bg-surface-container-high text-on-surface-variant px-space-xs py-0.5 font-label-badge text-label-badge font-bold uppercase">COMMUNITY</span>
+<button class="admin-control hidden bg-surface-container-high text-secondary-container p-1 shadow-sm">
+<span class="material-symbols-outlined text-[14px]">edit</span>
+</button>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface">Hyderabad Sports Hub</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Regional Scouting &amp; Grassroots Outreach</span>
+</div>
+<span class="font-label-badge text-label-badge text-outline uppercase">COMMUNITY NETWORK</span>
+</div>
+</div>
+</div>
+<!-- ADMIN ONLY DASHED INSERTION CARD (Visible only when Admin Mode = ON) -->
+<div class="admin-control hidden w-full bg-surface-container-low p-space-lg flex flex-col sm:flex-row items-center justify-between gap-space-md shadow-inner" id="adminAddSponsorCard">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 bg-surface-container-high flex items-center justify-center text-secondary-container">
+<span class="material-symbols-outlined text-[24px]">post_add</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface">[+ Add New Sponsor Card]</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Inject sponsor logo, select partnership tier, and set live arena branding assets.</span>
+</div>
+</div>
+<button class="bg-secondary-container hover:bg-secondary-container/90 text-on-secondary-container px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider transition-all shadow-md">
+          Configure Partner Slot
+        </button>
+</div>
+</div>
+</section>
+<!-- SECTION 4: INTERACTIVE CAMPUS VENUE, ROUTING & CONTACT -->
+<section class="w-full px-gutter py-space-xl bg-surface-container-low relative">
+<div class="max-w-7xl mx-auto flex flex-col gap-space-xl">
+<!-- Section Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="bg-tertiary-container text-on-tertiary-container px-space-xs py-0.5 font-label-badge text-label-badge uppercase font-bold">CAMPUS ARENA ACCESS</span>
+<span class="font-label-badge text-label-badge text-outline uppercase tracking-widest">// VENUE &amp; DIRECTIVES</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg uppercase tracking-wider text-on-surface leading-none mt-space-xs">
+            Visit NMIMS Jadcherla Arena
+          </h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+            Tournament access gates open 90 minutes prior to first delivery / kick-off. Verified collegiate identity pass required for entry.
+          </p>
+</div>
+<div class="flex items-center gap-space-xs text-secondary-container font-label-numeric-md text-label-numeric-md">
+<span class="material-symbols-outlined text-[20px]">near_me</span>
+<span>GPS: 16.7629° N, 78.1408° E</span>
+</div>
+</div>
+<!-- Split Layout: Venue Map & Telemetry Directives + Contact Desk -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- Interactive Map Embed Frame -->
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<div class="w-full h-80 bg-cover bg-center shadow-xl relative overflow-hidden flex items-end p-space-md" data-location="NMIMS Hyderabad, Jadcherla, Telangana, India" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDiSmPqEJaQIF963zcMntInCbtKfIFN0wuhcRq7nfXeUMl-uH0ZvzI4hiHT2op-pwD18Vwh617C2nq1YogzdLC55Mx1k4tt14vMUoFvs0omF_I5bHUcq9BNIjBF7akASgrIBNdoWrQ5ysLEMdSsWtVfCI1dZRJ-qF9WZsFwCVUQLT0e28-PkTC7iogVQ4JtztLey4FlmMVyoiKQ4GZeWf8-0pKD0kA6MnyMePiJHUOFFMsgDX67JD7-')">
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/30 to-transparent"></div>
+<div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm w-full bg-surface-container/90 backdrop-blur-md p-space-md shadow-md">
+<div class="flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-primary-container text-[24px] mt-0.5 shrink-0">pin_drop</span>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md uppercase text-on-surface leading-none">STME Campus Grounds</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Tirupati Highway, Jadcherla, Mahabubnagar District - 509301</span>
+</div>
+</div>
+<a class="bg-surface-container-high hover:bg-surface-bright text-secondary-container px-space-sm py-1 font-label-badge text-label-badge tracking-wider uppercase flex items-center gap-space-xs self-start sm:self-auto shrink-0 transition-colors" href="https://maps.google.com" rel="noopener noreferrer" target="_blank">
+<span>Open GPS Route</span>
+<span class="material-symbols-outlined text-[14px]">open_in_new</span>
+</a>
+</div>
+</div>
+<!-- Parking & Gate Telemetry Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-sm">
+<div class="bg-surface-container p-space-md flex flex-col gap-space-xs shadow-md">
+<div class="flex items-center gap-space-xs text-primary">
+<span class="material-symbols-outlined text-[20px]">local_parking</span>
+<span class="font-headline-sm text-headline-sm uppercase">Parking Lot P1</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Reserved for team buses, officials, and press media vans with RFID access.</p>
+</div>
+<div class="bg-surface-container p-space-md flex flex-col gap-space-xs shadow-md">
+<div class="flex items-center gap-space-xs text-secondary-container">
+<span class="material-symbols-outlined text-[20px]">door_front</span>
+<span class="font-headline-sm text-headline-sm uppercase">Gate 3 (South)</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">General public and collegiate spectator stands entry checkpoint.</p>
+</div>
+<div class="bg-surface-container p-space-md flex flex-col gap-space-xs shadow-md">
+<div class="flex items-center gap-space-xs text-tertiary">
+<span class="material-symbols-outlined text-[20px]">medical_services</span>
+<span class="font-headline-sm text-headline-sm uppercase">Medical Care Bay</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">24/7 on-site sports physiotherapy, trauma care, and dedicated ambulances.</p>
+</div>
+</div>
+</div>
+<!-- Official Inquiry & Team Registration Form -->
+<div class="lg:col-span-5 bg-surface-container p-space-lg flex flex-col gap-space-md shadow-xl">
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-badge text-label-badge text-primary uppercase font-bold tracking-widest">DISPATCH TERMINAL</span>
+<h3 class="font-headline-md text-headline-md uppercase text-on-surface leading-none">Inquiries &amp; Team Support</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Have questions regarding team draws, player hospitality, or sponsor activations? Reach the committee desk directly.
+            </p>
+</div>
+<form class="flex flex-col gap-space-sm" onsubmit="handleInquirySubmit(event)">
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-badge text-label-badge text-on-surface-variant uppercase tracking-wider">Representative Name</label>
+<input class="w-full bg-surface-container-low text-on-surface p-space-sm font-body-md text-body-md focus:outline-none focus:bg-surface-container-high transition-colors" placeholder="e.g. Capt. Arjun Sharma" required="" type="text"/>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm">
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-badge text-label-badge text-on-surface-variant uppercase tracking-wider">College / Institution</label>
+<input class="w-full bg-surface-container-low text-on-surface p-space-sm font-body-md text-body-md focus:outline-none focus:bg-surface-container-high transition-colors" placeholder="University Name" required="" type="text"/>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-badge text-label-badge text-on-surface-variant uppercase tracking-wider">Contact Phone</label>
+<input class="w-full bg-surface-container-low text-on-surface p-space-sm font-body-md text-body-md focus:outline-none focus:bg-surface-container-high transition-colors" placeholder="+91 98765 43210" required="" type="tel"/>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-badge text-label-badge text-on-surface-variant uppercase tracking-wider">Department / Subject</label>
+<select class="w-full bg-surface-container-low text-on-surface p-space-sm font-body-md text-body-md focus:outline-none focus:bg-surface-container-high transition-colors">
+<option value="sponsorship">Sponsorship &amp; Brand Opportunities</option>
+<option value="registration">Team Fixture &amp; Registration Inquiry</option>
+<option value="media">Media &amp; Broadcast Accreditation</option>
+<option value="general">General Tournament Operations</option>
+</select>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-badge text-label-badge text-on-surface-variant uppercase tracking-wider">Directive Transmission</label>
+<textarea class="w-full bg-surface-container-low text-on-surface p-space-sm font-body-md text-body-md focus:outline-none focus:bg-surface-container-high transition-colors resize-none" placeholder="Specify your squad details or sponsor inquiry..." required="" rows="3"></textarea>
+</div>
+<button class="w-full bg-primary-container hover:bg-primary-container/90 text-on-primary-container py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider transition-all clip-angle shadow-lg mt-space-xs flex items-center justify-center gap-space-xs" type="submit">
+<span class="material-symbols-outlined text-[18px]">send</span>
+<span>Transmit Message to Impulse Board</span>
+</button>
+</form>
+<div class="hidden bg-tertiary-container text-on-tertiary-container p-space-sm font-label-badge text-label-badge uppercase tracking-wider items-center gap-space-xs" id="formSuccessToast">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+<span>Transmission received. Impulse coordinator will respond within 4 hours.</span>
+</div>
+<!-- Direct Hotline Telemetry Footer -->
+<div class="pt-space-xs flex items-center justify-between text-on-surface-variant font-label-numeric-md text-label-numeric-md">
+<span class="text-secondary-container">HOTLINE: +91 40 2345 6789</span>
+<span>DESK 09:00 - 21:00 IST</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- QUICK ANNOUNCEMENT BROADCAST BANNER -->
+<section class="w-full bg-primary-container text-on-primary-container py-space-sm px-gutter">
+<div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs text-center sm:text-left">
+<span class="material-symbols-outlined text-[20px]">campaign</span>
+<span class="font-headline-sm text-headline-sm uppercase tracking-wider">Tournament Entry Phase 2 Closes March 15 • Football &amp; Cricket Team Slates Finalizing</span>
+</div>
+<a class="bg-surface-container-lowest text-on-surface px-space-md py-1 font-label-badge text-label-badge font-bold uppercase tracking-widest hover:bg-surface-container-high transition-colors shrink-0" href="#">
+        Download Match Manual (PDF)
+      </a>
+</div>
+</section>
+</div>
+<script>
+  let adminModeActive = false;
+
+  function toggleAdminMode() {
+    adminModeActive = !adminModeActive;
+    const thumb = document.getElementById('adminToggleThumb');
+    const statusText = document.getElementById('adminStatusText');
+    const toggleBtn = document.getElementById('adminToggleBtn');
+    const adminControls = document.querySelectorAll('.admin-control');
+
+    if (adminModeActive) {
+      thumb.classList.remove('translate-x-0.5', 'bg-outline');
+      thumb.classList.add('translate-x-5', 'bg-on-primary-container');
+      toggleBtn.classList.remove('bg-surface-container-highest');
+      toggleBtn.classList.add('bg-primary-container');
+      statusText.textContent = 'ON';
+      statusText.classList.remove('text-outline');
+      statusText.classList.add('text-primary');
+
+      adminControls.forEach(el => {
+        el.classList.remove('hidden');
+        if (el.tagName === 'BUTTON' || el.tagName === 'DIV') {
+          el.classList.add('flex');
+        }
+      });
+    } else {
+      thumb.classList.add('translate-x-0.5', 'bg-outline');
+      thumb.classList.remove('translate-x-5', 'bg-on-primary-container');
+      toggleBtn.classList.add('bg-surface-container-highest');
+      toggleBtn.classList.remove('bg-primary-container');
+      statusText.textContent = 'OFF';
+      statusText.classList.add('text-outline');
+      statusText.classList.remove('text-primary');
+
+      adminControls.forEach(el => {
+        el.classList.add('hidden');
+        el.classList.remove('flex');
+      });
+    }
+  }
+
+  function handleInquirySubmit(event) {
+    event.preventDefault();
+    const toast = document.getElementById('formSuccessToast');
+    if (toast) {
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+      event.target.reset();
+      setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }, 5000);
+    }
+  }
+</script></main><footer class="w-full bg-surface-dim pt-space-xxl pb-space-xl shadow-[0_-8px_32px_rgba(0,0,0,0.8)]"><div class="w-full px-gutter max-w-7xl mx-auto flex flex-col gap-space-xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-xl"><div class="flex flex-col gap-space-md"><div class="flex items-center gap-space-sm"><span class="font-headline-lg text-headline-lg uppercase text-on-surface tracking-wide">Legends Walk Off</span></div><p class="font-title-md text-title-md text-secondary-container tracking-wider uppercase">'Only Legends Walk Off the Field.'</p><p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">Presented by STME Impulse Committee, NMIMS Hyderabad (School of Technology Management &amp; Engineering). High-voltage inter-collegiate sports arena.</p></div><div class="flex flex-col gap-space-sm"><span class="font-headline-sm text-headline-sm uppercase tracking-widest text-primary font-bold">Quick Navigation</span><div class="flex flex-col gap-space-xs"><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="home" href="#">Tournament Home</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="standings" href="#">Points &amp; Standings</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="live-scores" href="#">Broadcast Live Telemetry</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="about-sponsors" href="#">Sponsors &amp; Partners</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="admin-console" href="#">Admin Console Portal</a></div></div><div class="flex flex-col gap-space-sm"><span class="font-headline-sm text-headline-sm uppercase tracking-widest text-primary font-bold">Official Contact</span><div class="flex flex-col gap-space-xs font-body-sm text-body-sm text-on-surface-variant"><div class="flex items-start gap-space-xs"><span class="material-symbols-outlined text-[18px] text-secondary-container shrink-0 mt-0.5">mail</span><span class="font-label-numeric-md text-label-numeric-md text-on-surface">impulse.stme@nmims.edu.in</span></div><div class="flex items-start gap-space-xs mt-space-xs"><span class="material-symbols-outlined text-[18px] text-secondary-container shrink-0 mt-0.5">location_on</span><span>STME Campus, Jadcherla, Hyderabad, Telangana - 509301</span></div></div></div><div class="flex flex-col gap-space-sm"><span class="font-headline-sm text-headline-sm uppercase tracking-widest text-primary font-bold">Arena Broadcasts</span><p class="font-body-sm text-body-sm text-on-surface-variant">Follow official match highlights, instant VAR telemetry, and stream drops:</p><div class="flex items-center gap-space-sm mt-space-xs"><a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_0_12px_rgba(0,0,0,0.5)]" href="#"><span class="material-symbols-outlined text-[20px]">photo_camera</span></a><a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_0_12px_rgba(0,0,0,0.5)]" href="#"><span class="material-symbols-outlined text-[20px]">play_circle</span></a><a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_0_12px_rgba(0,0,0,0.5)]" href="#"><span class="material-symbols-outlined text-[20px]">forum</span></a><a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_0_12px_rgba(0,0,0,0.5)]" href="#"><span class="material-symbols-outlined text-[20px]">tag</span></a></div></div></div><div class="pt-space-lg flex flex-col md:flex-row items-center justify-between gap-space-md font-body-sm text-body-sm text-on-surface-variant"><p class="text-center md:text-left">© 2026 Legends Walk Off. All Rights Reserved. STME Impulse Sports Committee.</p><div class="flex items-center gap-space-md font-label-badge text-label-badge uppercase tracking-widest text-outline"><span class="hover:text-on-surface transition-colors cursor-pointer">Privacy Policy</span><span class="hover:text-on-surface transition-colors cursor-pointer">Rulebook &amp; Code</span><span class="hover:text-on-surface transition-colors cursor-pointer">Anti-Doping Policy</span></div></div></div></footer></body></html>

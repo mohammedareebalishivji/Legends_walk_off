@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Inter:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}.clip-angle{clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);}.clip-angle-r{clip-path:polygon(0 0,calc(100% - 12px) 0,100% 100%,0 100%);}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"tertiary-fixed":"#6ffbbe","surface-container-high":"#2a2a2a","surface-bright":"#3a3939","error":"#ffb4ab","on-error":"#690005","surface-tint":"#ffb4a8","inverse-on-surface":"#313030","on-surface":"#e5e2e1","on-surface-variant":"#e9bcb5","on-background":"#e5e2e1","on-tertiary":"#003824","surface-container-lowest":"#0e0e0e","primary-fixed-dim":"#ffb4a8","on-secondary":"#3b2f00","on-secondary-fixed":"#231b00","secondary-fixed":"#ffe177","surface-container-highest":"#353534","secondary":"#fff3d4","on-secondary-fixed-variant":"#554500","surface-dim":"#131313","outline":"#af8781","secondary-fixed-dim":"#ebc300","surface-variant":"#353534","error-container":"#93000a","on-primary-fixed":"#410100","surface":"#131313","surface-container-low":"#1c1b1b","tertiary-container":"#008058","primary-fixed":"#ffdad4","tertiary":"#4edea3","outline-variant":"#5e3f3a","inverse-primary":"#c00500","on-secondary-container":"#6f5c00","on-tertiary-fixed-variant":"#005236","primary-container":"#e10600","on-tertiary-container":"#d4ffe5","secondary-container":"#fed400","on-tertiary-fixed":"#002113","on-primary":"#680200","tertiary-fixed-dim":"#4edea3","on-primary-container":"#fff2f0","background":"#131313","primary":"#ffb4a8","on-primary-fixed-variant":"#930300","on-error-container":"#ffdad6","surface-container":"#201f1f","inverse-surface":"#e5e2e1"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"margin-mobile":"1rem","space-sm":"0.5rem","margin":"2.5rem","gutter":"1.5rem","gutter-mobile":"0.75rem","space-lg":"1.5rem","space-xxl":"4rem","space-md":"1rem","space-xs":"0.25rem","space-xl":"2.5rem"},fontFamily:{"body-lg":["Inter"],"title-lg":["Inter"],"label-numeric-lg":["JetBrains Mono"],"label-badge":["JetBrains Mono"],"headline-xl":["Anton"],"headline-md":["Anton"],"label-numeric-md":["JetBrains Mono"],"headline-lg":["Anton"],"headline-xl-mobile":["Anton"],"body-md":["Inter"],"display-hero-mobile":["Anton"],"title-md":["Inter"],"display-hero":["Anton"],"body-sm":["Inter"],"headline-sm":["Anton"]},fontSize:{"body-lg":["1.125rem",{"lineHeight":"1.625rem","letterSpacing":"0em","fontWeight":"400"}],"title-lg":["1.25rem",{"lineHeight":"1.5rem","letterSpacing":"-0.01em","fontWeight":"800"}],"label-numeric-lg":["1.75rem",{"lineHeight":"1.75rem","letterSpacing":"-0.04em","fontWeight":"700"}],"label-badge":["0.6875rem",{"lineHeight":"0.875rem","letterSpacing":"0.12em","fontWeight":"700"}],"headline-xl":["3rem",{"lineHeight":"3rem","letterSpacing":"0.05em","fontWeight":"400"}],"headline-md":["1.5rem",{"lineHeight":"1.625rem","letterSpacing":"0.04em","fontWeight":"400"}],"label-numeric-md":["1rem",{"lineHeight":"1.25rem","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["2rem",{"lineHeight":"2.125rem","letterSpacing":"0.05em","fontWeight":"400"}],"headline-xl-mobile":["2rem",{"lineHeight":"2.125rem","letterSpacing":"0.04em","fontWeight":"400"}],"body-md":["0.9375rem",{"lineHeight":"1.5rem","letterSpacing":"0em","fontWeight":"400"}],"display-hero-mobile":["2.75rem",{"lineHeight":"2.75rem","letterSpacing":"0.03em","fontWeight":"400"}],"title-md":["1rem",{"lineHeight":"1.375rem","letterSpacing":"0.01em","fontWeight":"700"}],"display-hero":["4.5rem",{"lineHeight":"4.25rem","letterSpacing":"0.04em","fontWeight":"400"}],"body-sm":["0.8125rem",{"lineHeight":"1.25rem","letterSpacing":"0.01em","fontWeight":"400"}],"headline-sm":["1.125rem",{"lineHeight":"1.25rem","letterSpacing":"0.03em","fontWeight":"400"}]}}}};</script></head><body class="bg-surface-container-lowest font-body-md text-on-surface antialiased min-h-screen"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_12px_24px_-6px_rgba(0,0,0,0.9),0_0_24px_-8px_rgba(225,6,0,0.3)]"><div class="h-20 w-full px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md shrink-0"><img alt="Legends Walk Off Championship Logo" class="h-10 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2galx7WljV6w1igXr8o3dLOgoDJjG8Kn73Y3ektTQeD1MJuoQ1q8t84byFJ5dK9bnOkDr23wGzjeaj-6TxnMjRhS-4QqmSxCMX995uthYCqOOpj_J4-bZGYoc-6ywwjXFTn4_W2OXETVDlpTxw9OJzcJM0XHb9iJpcC6_a1PVdK5rSVwo8sKOtKQ7nJVcGFlSsmPLb-HkDrfx9GpJwmc8EoydhgZctiY28L6yCiSAlVm0FXXnB9AC"/><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-md text-headline-md tracking-wider text-on-surface uppercase leading-none">Legends Walk Off</span></div><div class="flex items-center gap-space-xs mt-space-xs"><span class="bg-primary-container px-space-xs py-0.5 text-on-primary-container font-label-badge text-label-badge tracking-widest uppercase font-bold">Hyderabad 2026</span><span class="hidden lg:inline text-outline font-label-badge text-label-badge">|</span><span class="hidden lg:inline text-secondary-container font-label-badge text-label-badge uppercase tracking-wider font-bold">Cricket &amp; Football League</span></div></div></div><nav class="hidden xl:flex items-center gap-space-xs" data-active-classes="bg-surface-container-high text-secondary-container shadow-[inset_0_-2px_0_0_#fed400]"><a class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="home" href="#">Home</a><a aria-current="page" class="px-space-md py-space-sm font-headline-sm uppercase tracking-wider transition-all bg-surface-container-high text-secondary-container shadow-[inset_0_-2px_0_0_#fed400]" data-path="standings" href="#">Standings</a><a class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all flex items-center gap-space-xs" data-path="live-scores" href="#"><span class="relative flex h-2.5 w-2.5 mr-1"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-container opacity-75"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary-container"></span></span>Live Scores</a><a class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="about-sponsors" href="#">About &amp; Sponsors</a><a class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="admin-console" href="#">Admin Console</a></nav><div class="flex items-center gap-space-md shrink-0"><a class="hidden sm:inline-flex items-center gap-space-xs bg-primary-container hover:bg-primary-container/90 text-on-primary-container px-space-md py-space-sm font-headline-sm text-headline-sm tracking-wider uppercase transition-all clip-angle shadow-[0_0_20px_rgba(225,6,0,0.45)]" data-path="admin-login" href="#"><span class="material-symbols-outlined text-[18px]">lock</span>Admin Login</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface-container-lowest"><div class="flex flex-col w-full">
+<!-- Sub-Header / Tournament Broadcast Ticker Bar -->
+<section class="relative w-full bg-surface-container-low px-gutter py-space-sm shadow-md overflow-hidden">
+<div class="absolute inset-y-0 left-0 w-2 bg-primary-container"></div>
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm flex-wrap">
+<span class="bg-primary-container px-space-xs py-0.5 text-on-primary-container font-label-badge text-label-badge uppercase tracking-widest font-bold">OFFICIAL TELEMETRY</span>
+<span class="font-headline-sm text-headline-sm tracking-wider uppercase text-on-surface">LEAGUE PHASE REACHES ROUND 6</span>
+<span class="hidden lg:inline text-outline font-label-badge text-label-badge">•</span>
+<span class="text-secondary-container font-label-badge text-label-badge uppercase tracking-widest font-bold">CUTOFF: TOP 4 ADVANCE TO ELIMINATORS</span>
+</div>
+<div class="flex items-center gap-space-md">
+<span class="font-label-numeric-md text-label-numeric-md text-tertiary flex items-center gap-space-xs">
+<span class="h-2 w-2 rounded-full bg-tertiary animate-pulse"></span> SYNCED: MATCHDAY 06 18:45 IST
+        </span>
+<span class="bg-surface-container-high px-space-xs py-0.5 text-on-surface-variant font-label-badge text-label-badge uppercase">VENUE: STME ARENA 1 &amp; 2</span>
+</div>
+</div>
+</section>
+<!-- Main Hero Title & High-Intensity Filter Bar -->
+<section class="relative w-full px-gutter pt-space-xl pb-space-lg bg-surface-container-lowest overflow-hidden">
+<!-- Ambient stadium flare glow -->
+<div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-64 bg-primary-container/20 blur-[130px] pointer-events-none"></div>
+<div class="absolute top-1/4 right-10 w-96 h-96 bg-secondary-container/10 blur-[120px] pointer-events-none"></div>
+<div class="max-w-7xl mx-auto flex flex-col gap-space-lg relative z-10">
+<!-- Title & Branding -->
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs mb-space-xs">
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-secondary-container bg-surface-container px-space-xs py-0.5 font-bold">HYDERABAD CLASH 2026</span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-on-surface-variant">• STME IMPULSE SPORTS COMMITTEE</span>
+</div>
+<h1 class="font-display-hero text-display-hero uppercase tracking-wide text-on-surface drop-shadow-md leading-none">
+            WHO RULES <span class="text-primary-container">THE LEAGUE?</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-space-xs max-w-2xl">
+            Official Table &amp; Tournament Stat Kings. Precision NRR calculations, goal differentials, and the individual titan leaderboards battle-tested for playoff seeding.
+          </p>
+</div>
+<!-- Sport Switcher Tabs -->
+<div class="flex items-center bg-surface-container p-1.5 shadow-xl shrink-0 self-start lg:self-auto">
+<button class="px-space-lg py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider transition-all bg-primary-container text-on-primary-container shadow-[0_0_16px_rgba(225,6,0,0.5)] flex items-center gap-space-xs" id="cricket-tab-btn" onclick="switchSport('cricket')">
+<span class="material-symbols-outlined text-[20px]">sports_cricket</span>
+            CRICKET LEAGUE
+          </button>
+<button class="px-space-lg py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider transition-all text-on-surface-variant hover:text-on-surface flex items-center gap-space-xs" id="football-tab-btn" onclick="switchSport('football')">
+<span class="material-symbols-outlined text-[20px]">sports_soccer</span>
+            FOOTBALL LEAGUE
+          </button>
+</div>
+</div>
+<!-- Tactical HUD Control Toolbar -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-space-md p-space-md bg-surface-container-low shadow-lg">
+<!-- Search bar -->
+<div class="md:col-span-6 lg:col-span-5 flex items-center bg-surface-container-lowest px-space-md py-space-xs">
+<span class="material-symbols-outlined text-outline text-[20px] mr-space-xs">search</span>
+<input class="w-full bg-transparent text-on-surface font-body-md text-body-md focus:outline-none placeholder:text-outline-variant uppercase" id="team-search-input" onkeyup="filterTeams()" placeholder="SEARCH SQUAD OR ATHLETE..." type="text"/>
+</div>
+<!-- Group Selector Dropdown -->
+<div class="md:col-span-3 lg:col-span-3 flex items-center bg-surface-container-lowest px-space-md py-space-xs">
+<span class="material-symbols-outlined text-secondary-container text-[18px] mr-space-xs">tune</span>
+<select class="w-full bg-transparent text-on-surface font-body-sm text-body-sm font-bold uppercase tracking-wider focus:outline-none cursor-pointer" id="group-filter" onchange="filterTeams()">
+<option class="bg-surface-container-lowest text-on-surface" value="all">POOL: ALL SQUADS</option>
+<option class="bg-surface-container-lowest text-on-surface" value="alpha">POOL: GROUP ALPHA</option>
+<option class="bg-surface-container-lowest text-on-surface" value="bravo">POOL: GROUP BRAVO</option>
+</select>
+</div>
+<!-- Telemetry Status pill / Legend indicator -->
+<div class="md:col-span-3 lg:col-span-4 flex items-center justify-between md:justify-end gap-space-md px-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="w-3 h-3 bg-primary-container"></span>
+<span class="font-label-badge text-label-badge text-on-surface-variant uppercase">QUALIFIED CUTOFF</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="w-3 h-3 bg-secondary-container"></span>
+<span class="font-label-badge text-label-badge text-on-surface-variant uppercase">TABLE TITAN (#1)</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- TABLE CONTAINER SECTION -->
+<section class="w-full px-gutter py-space-md bg-surface-container-lowest">
+<div class="max-w-7xl mx-auto flex flex-col gap-space-lg">
+<!-- ==================== CRICKET VIEW TABLE ==================== -->
+<div class="flex flex-col w-full shadow-2xl overflow-hidden" id="cricket-table-container">
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high text-on-surface-variant font-headline-sm text-headline-sm uppercase tracking-wider text-xs sm:text-sm">
+<th class="py-space-md px-space-md w-16 text-center">RANK</th>
+<th class="py-space-md px-space-md min-w-[220px]">TEAM NAME</th>
+<th class="py-space-md px-space-sm text-center">P</th>
+<th class="py-space-md px-space-sm text-center">W</th>
+<th class="py-space-md px-space-sm text-center">L</th>
+<th class="py-space-md px-space-sm text-center">NR</th>
+<th class="py-space-md px-space-md text-right">NET RUN RATE</th>
+<th class="py-space-md px-space-md text-right">TOTAL PTS</th>
+<th class="py-space-md px-space-md text-center hidden md:table-cell">STATUS</th>
+</tr>
+</thead>
+<tbody class="divide-y-0" id="cricket-tbody">
+<!-- #1 NMIMS STME Strikers (Gold Glowing Table Leader) -->
+<tr class="team-row group bg-surface-container relative transition-colors hover:bg-surface-container-high shadow-[0_0_24px_-4px_rgba(254,212,0,0.35)]" data-group="alpha">
+<td class="py-space-md px-space-md text-center font-headline-md text-headline-md text-secondary-container relative">
+<div class="absolute left-0 inset-y-0 w-1.5 bg-secondary-container"></div>
+<div class="flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-secondary-container text-[20px]" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
+<span>1</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 bg-secondary-container/20 flex items-center justify-center text-secondary-container font-headline-sm text-headline-sm shrink-0">
+                      NM
+                    </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-title-lg text-title-lg text-on-surface uppercase group-hover:text-secondary-container transition-colors">NMIMS STME STRIKERS</span>
+<span class="bg-secondary-container text-on-secondary px-space-xs py-0.5 font-label-badge text-label-badge font-bold uppercase">HOST / SEED 1</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Group Alpha • Jadcherla Home Ground</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface">5</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-tertiary font-bold">5</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">0</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">0</td>
+<td class="py-space-md px-space-md text-right font-label-numeric-md text-label-numeric-md text-tertiary font-bold">+1.842</td>
+<td class="py-space-md px-space-md text-right font-label-numeric-lg text-label-numeric-lg text-secondary-container font-bold">10</td>
+<td class="py-space-md px-space-md text-center hidden md:table-cell">
+<span class="bg-primary-container px-space-sm py-1 text-on-primary-container font-label-badge text-label-badge font-bold tracking-widest uppercase shadow-[0_0_12px_rgba(225,6,0,0.4)] inline-block">
+                    QUALIFIED FOR PLAYOFFS
+                  </span>
+</td>
+</tr>
+<!-- #2 CBIT Thunder -->
+<tr class="team-row group bg-surface-container-low transition-colors hover:bg-surface-container-high relative" data-group="alpha">
+<td class="py-space-md px-space-md text-center font-headline-md text-headline-md text-on-surface relative">
+<div class="absolute left-0 inset-y-0 w-1.5 bg-primary-container"></div>
+                  2
+                </td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 bg-surface-container-highest flex items-center justify-center text-on-surface font-headline-sm text-headline-sm shrink-0">
+                      CB
+                    </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-lg text-title-lg text-on-surface uppercase group-hover:text-primary transition-colors">CBIT THUNDER</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Group Alpha • Gandipet</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface">5</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-tertiary font-bold">4</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">1</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">0</td>
+<td class="py-space-md px-space-md text-right font-label-numeric-md text-label-numeric-md text-tertiary font-bold">+0.920</td>
+<td class="py-space-md px-space-md text-right font-label-numeric-lg text-label-numeric-lg text-on-surface font-bold">8</td>
+<td class="py-space-md px-space-md text-center hidden md:table-cell">
+<span class="bg-primary-container px-space-sm py-1 text-on-primary-container font-label-badge text-label-badge font-bold tracking-widest uppercase inline-block">
+                    QUALIFIED FOR PLAYOFFS
+                  </span>
+</td>
+</tr>
+<!-- #3 VNR VJIET Warriors -->
+<tr class="team-row group bg-surface-container transition-colors hover:bg-surface-container-high relative" data-group="bravo">
+<td class="py-space-md px-space-md text-center font-headline-md text-headline-md text-on-surface relative">
+<div class="absolute left-0 inset-y-0 w-1.5 bg-primary-container"></div>
+                  3
+                </td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 bg-surface-container-highest flex items-center justify-center text-on-surface font-headline-sm text-headline-sm shrink-0">
+                      VN
+                    </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-lg text-title-lg text-on-surface uppercase group-hover:text-primary transition-colors">VNR VJIET WARRIORS</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Group Bravo • Bachupally</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface">5</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-tertiary font-bold">3</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">2</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">0</td>
+<td class="py-space-md px-space-md text-right font-label-numeric-md text-label-numeric-md text-tertiary font-bold">+0.412</td>
+<td class="py-space-md px-space-md text-right font-label-numeric-lg text-label-numeric-lg text-on-surface font-bold">6</td>
+<td class="py-space-md px-space-md text-center hidden md:table-cell">
+<span class="bg-primary-container px-space-sm py-1 text-on-primary-container font-label-badge text-label-badge font-bold tracking-widest uppercase inline-block">
+                    QUALIFIED FOR PLAYOFFS
+                  </span>
+</td>
+</tr>
+<!-- #4 BITS Hyderabad Titans -->
+<tr class="team-row group bg-surface-container-low transition-colors hover:bg-surface-container-high relative" data-group="bravo">
+<td class="py-space-md px-space-md text-center font-headline-md text-headline-md text-on-surface relative">
+<div class="absolute left-0 inset-y-0 w-1.5 bg-primary-container"></div>
+                  4
+                </td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 bg-surface-container-highest flex items-center justify-center text-on-surface font-headline-sm text-headline-sm shrink-0">
+                      BT
+                    </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-lg text-title-lg text-on-surface uppercase group-hover:text-primary transition-colors">BITS HYDERABAD TITANS</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Group Bravo • Shamirpet</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface">5</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-tertiary font-bold">3</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">2</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">0</td>
+<td class="py-space-md px-space-md text-right font-label-numeric-md text-label-numeric-md text-tertiary font-bold">+0.120</td>
+<td class="py-space-md px-space-md text-right font-label-numeric-lg text-label-numeric-lg text-on-surface font-bold">6</td>
+<td class="py-space-md px-space-md text-center hidden md:table-cell">
+<span class="bg-primary-container px-space-sm py-1 text-on-primary-container font-label-badge text-label-badge font-bold tracking-widest uppercase inline-block">
+                    QUALIFIED FOR PLAYOFFS
+                  </span>
+</td>
+</tr>
+<!-- #5 Osmania Spartans (Elimination zone starts) -->
+<tr class="team-row group bg-surface-container transition-colors hover:bg-surface-container-high opacity-85 hover:opacity-100" data-group="alpha">
+<td class="py-space-md px-space-md text-center font-headline-md text-headline-md text-outline">5</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 bg-surface-container-highest flex items-center justify-center text-outline font-headline-sm text-headline-sm shrink-0">
+                      OS
+                    </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-lg text-title-lg text-on-surface uppercase">OSMANIA SPARTANS</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Group Alpha • Tarnaka</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface">5</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">2</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">3</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">0</td>
+<td class="py-space-md px-space-md text-right font-label-numeric-md text-label-numeric-md text-error">-0.210</td>
+<td class="py-space-md px-space-md text-right font-label-numeric-lg text-label-numeric-lg text-on-surface">4</td>
+<td class="py-space-md px-space-md text-center hidden md:table-cell">
+<span class="bg-surface-container-high text-outline px-space-xs py-0.5 font-label-badge text-label-badge uppercase">IN CONTENTION</span>
+</td>
+</tr>
+<!-- #6 JNTU Phoenix -->
+<tr class="team-row group bg-surface-container-low transition-colors hover:bg-surface-container-high opacity-80 hover:opacity-100" data-group="bravo">
+<td class="py-space-md px-space-md text-center font-headline-md text-headline-md text-outline">6</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 bg-surface-container-highest flex items-center justify-center text-outline font-headline-sm text-headline-sm shrink-0">
+                      JN
+                    </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-lg text-title-lg text-on-surface uppercase">JNTU PHOENIX</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Group Bravo • Kukatpally</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface">5</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">1</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">4</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">0</td>
+<td class="py-space-md px-space-md text-right font-label-numeric-md text-label-numeric-md text-error">-0.890</td>
+<td class="py-space-md px-space-md text-right font-label-numeric-lg text-label-numeric-lg text-on-surface">2</td>
+<td class="py-space-md px-space-md text-center hidden md:table-cell">
+<span class="bg-surface-container-high text-outline px-space-xs py-0.5 font-label-badge text-label-badge uppercase">ELIMINATED</span>
+</td>
+</tr>
+<!-- #7 Vasavi Knights -->
+<tr class="team-row group bg-surface-container transition-colors hover:bg-surface-container-high opacity-80 hover:opacity-100" data-group="alpha">
+<td class="py-space-md px-space-md text-center font-headline-md text-headline-md text-outline">7</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 bg-surface-container-highest flex items-center justify-center text-outline font-headline-sm text-headline-sm shrink-0">
+                      VK
+                    </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-lg text-title-lg text-on-surface uppercase">VASAVI KNIGHTS</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Group Alpha • Ibrahimbagh</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface">5</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">1</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">4</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">0</td>
+<td class="py-space-md px-space-md text-right font-label-numeric-md text-label-numeric-md text-error">-1.100</td>
+<td class="py-space-md px-space-md text-right font-label-numeric-lg text-label-numeric-lg text-on-surface">2</td>
+<td class="py-space-md px-space-md text-center hidden md:table-cell">
+<span class="bg-surface-container-high text-outline px-space-xs py-0.5 font-label-badge text-label-badge uppercase">ELIMINATED</span>
+</td>
+</tr>
+<!-- #8 Mahindra Éclat -->
+<tr class="team-row group bg-surface-container-low transition-colors hover:bg-surface-container-high opacity-80 hover:opacity-100" data-group="bravo">
+<td class="py-space-md px-space-md text-center font-headline-md text-headline-md text-outline">8</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 bg-surface-container-highest flex items-center justify-center text-outline font-headline-sm text-headline-sm shrink-0">
+                      ME
+                    </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-lg text-title-lg text-on-surface uppercase">MAHINDRA ÉCLAT</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Group Bravo • Bahadurpally</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface">5</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">1</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">4</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">0</td>
+<td class="py-space-md px-space-md text-right font-label-numeric-md text-label-numeric-md text-error">-1.350</td>
+<td class="py-space-md px-space-md text-right font-label-numeric-lg text-label-numeric-lg text-on-surface">2</td>
+<td class="py-space-md px-space-md text-center hidden md:table-cell">
+<span class="bg-surface-container-high text-outline px-space-xs py-0.5 font-label-badge text-label-badge uppercase">ELIMINATED</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- ==================== FOOTBALL VIEW TABLE (TOGGLED) ==================== -->
+<div class="hidden flex flex-col w-full shadow-2xl overflow-hidden" id="football-table-container">
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high text-on-surface-variant font-headline-sm text-headline-sm uppercase tracking-wider text-xs sm:text-sm">
+<th class="py-space-md px-space-md w-16 text-center">RANK</th>
+<th class="py-space-md px-space-md min-w-[220px]">TEAM NAME</th>
+<th class="py-space-md px-space-sm text-center">P</th>
+<th class="py-space-md px-space-sm text-center">W</th>
+<th class="py-space-md px-space-sm text-center">D</th>
+<th class="py-space-md px-space-sm text-center">L</th>
+<th class="py-space-md px-space-xs text-center">GF</th>
+<th class="py-space-md px-space-xs text-center">GA</th>
+<th class="py-space-md px-space-sm text-center">GD</th>
+<th class="py-space-md px-space-md text-right">PTS</th>
+<th class="py-space-md px-space-md text-center">LAST 5 FORM</th>
+</tr>
+</thead>
+<tbody>
+<!-- Football #1 STME Wolves -->
+<tr class="bg-surface-container relative hover:bg-surface-container-high transition-colors shadow-[0_0_24px_-4px_rgba(254,212,0,0.3)]">
+<td class="py-space-md px-space-md text-center font-headline-md text-headline-md text-secondary-container relative">
+<div class="absolute left-0 inset-y-0 w-1.5 bg-secondary-container"></div>
+                  1
+                </td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 bg-secondary-container/20 flex items-center justify-center text-secondary-container font-headline-sm text-headline-sm shrink-0">
+                      SW
+                    </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-lg text-title-lg text-on-surface uppercase">NMIMS WOLVES FC</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Jadcherla Dome</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface">5</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-tertiary font-bold">4</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">1</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">0</td>
+<td class="py-space-md px-space-xs text-center font-label-numeric-md text-label-numeric-md text-on-surface">14</td>
+<td class="py-space-md px-space-xs text-center font-label-numeric-md text-label-numeric-md text-on-surface">3</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-tertiary font-bold">+11</td>
+<td class="py-space-md px-space-md text-right font-label-numeric-lg text-label-numeric-lg text-secondary-container font-bold">13</td>
+<td class="py-space-md px-space-md text-center">
+<div class="flex items-center justify-center gap-1">
+<span class="w-5 h-5 bg-tertiary text-on-tertiary font-label-badge text-[10px] font-bold flex items-center justify-center">W</span>
+<span class="w-5 h-5 bg-tertiary text-on-tertiary font-label-badge text-[10px] font-bold flex items-center justify-center">W</span>
+<span class="w-5 h-5 bg-secondary-container text-on-secondary font-label-badge text-[10px] font-bold flex items-center justify-center">D</span>
+<span class="w-5 h-5 bg-tertiary text-on-tertiary font-label-badge text-[10px] font-bold flex items-center justify-center">W</span>
+<span class="w-5 h-5 bg-tertiary text-on-tertiary font-label-badge text-[10px] font-bold flex items-center justify-center">W</span>
+</div>
+</td>
+</tr>
+<!-- Football #2 BITS United -->
+<tr class="bg-surface-container-low hover:bg-surface-container-high transition-colors relative">
+<td class="py-space-md px-space-md text-center font-headline-md text-headline-md text-on-surface relative">
+<div class="absolute left-0 inset-y-0 w-1.5 bg-primary-container"></div>
+                  2
+                </td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 bg-surface-container-highest flex items-center justify-center text-on-surface font-headline-sm text-headline-sm shrink-0">
+                      BU
+                    </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-lg text-title-lg text-on-surface uppercase">BITS UNITED</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">North Arena</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface">5</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-tertiary font-bold">4</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">0</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">1</td>
+<td class="py-space-md px-space-xs text-center font-label-numeric-md text-label-numeric-md text-on-surface">11</td>
+<td class="py-space-md px-space-xs text-center font-label-numeric-md text-label-numeric-md text-on-surface">5</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-tertiary font-bold">+6</td>
+<td class="py-space-md px-space-md text-right font-label-numeric-lg text-label-numeric-lg text-on-surface font-bold">12</td>
+<td class="py-space-md px-space-md text-center">
+<div class="flex items-center justify-center gap-1">
+<span class="w-5 h-5 bg-tertiary text-on-tertiary font-label-badge text-[10px] font-bold flex items-center justify-center">W</span>
+<span class="w-5 h-5 bg-tertiary text-on-tertiary font-label-badge text-[10px] font-bold flex items-center justify-center">W</span>
+<span class="w-5 h-5 bg-primary-container text-on-primary-container font-label-badge text-[10px] font-bold flex items-center justify-center">L</span>
+<span class="w-5 h-5 bg-tertiary text-on-tertiary font-label-badge text-[10px] font-bold flex items-center justify-center">W</span>
+<span class="w-5 h-5 bg-tertiary text-on-tertiary font-label-badge text-[10px] font-bold flex items-center justify-center">W</span>
+</div>
+</td>
+</tr>
+<!-- Football #3 CBIT Dynamo -->
+<tr class="bg-surface-container hover:bg-surface-container-high transition-colors relative">
+<td class="py-space-md px-space-md text-center font-headline-md text-headline-md text-on-surface relative">
+<div class="absolute left-0 inset-y-0 w-1.5 bg-primary-container"></div>
+                  3
+                </td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 bg-surface-container-highest flex items-center justify-center text-on-surface font-headline-sm text-headline-sm shrink-0">
+                      CD
+                    </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-lg text-title-lg text-on-surface uppercase">CBIT DYNAMO</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Gandipet Field</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface">5</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-tertiary font-bold">3</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">1</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">1</td>
+<td class="py-space-md px-space-xs text-center font-label-numeric-md text-label-numeric-md text-on-surface">9</td>
+<td class="py-space-md px-space-xs text-center font-label-numeric-md text-label-numeric-md text-on-surface">6</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-tertiary font-bold">+3</td>
+<td class="py-space-md px-space-md text-right font-label-numeric-lg text-label-numeric-lg text-on-surface font-bold">10</td>
+<td class="py-space-md px-space-md text-center">
+<div class="flex items-center justify-center gap-1">
+<span class="w-5 h-5 bg-secondary-container text-on-secondary font-label-badge text-[10px] font-bold flex items-center justify-center">D</span>
+<span class="w-5 h-5 bg-tertiary text-on-tertiary font-label-badge text-[10px] font-bold flex items-center justify-center">W</span>
+<span class="w-5 h-5 bg-tertiary text-on-tertiary font-label-badge text-[10px] font-bold flex items-center justify-center">W</span>
+<span class="w-5 h-5 bg-primary-container text-on-primary-container font-label-badge text-[10px] font-bold flex items-center justify-center">L</span>
+<span class="w-5 h-5 bg-tertiary text-on-tertiary font-label-badge text-[10px] font-bold flex items-center justify-center">W</span>
+</div>
+</td>
+</tr>
+<!-- Football #4 VNR Strikers -->
+<tr class="bg-surface-container-low hover:bg-surface-container-high transition-colors relative">
+<td class="py-space-md px-space-md text-center font-headline-md text-headline-md text-on-surface relative">
+<div class="absolute left-0 inset-y-0 w-1.5 bg-primary-container"></div>
+                  4
+                </td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 bg-surface-container-highest flex items-center justify-center text-on-surface font-headline-sm text-headline-sm shrink-0">
+                      VS
+                    </div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-lg text-title-lg text-on-surface uppercase">VNR STRIKERS</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Pragati Complex</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface">5</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-tertiary font-bold">2</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">2</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-on-surface-variant">1</td>
+<td class="py-space-md px-space-xs text-center font-label-numeric-md text-label-numeric-md text-on-surface">7</td>
+<td class="py-space-md px-space-xs text-center font-label-numeric-md text-label-numeric-md text-on-surface">5</td>
+<td class="py-space-md px-space-sm text-center font-label-numeric-md text-label-numeric-md text-tertiary font-bold">+2</td>
+<td class="py-space-md px-space-md text-right font-label-numeric-lg text-label-numeric-lg text-on-surface font-bold">8</td>
+<td class="py-space-md px-space-md text-center">
+<div class="flex items-center justify-center gap-1">
+<span class="w-5 h-5 bg-tertiary text-on-tertiary font-label-badge text-[10px] font-bold flex items-center justify-center">W</span>
+<span class="w-5 h-5 bg-secondary-container text-on-secondary font-label-badge text-[10px] font-bold flex items-center justify-center">D</span>
+<span class="w-5 h-5 bg-secondary-container text-on-secondary font-label-badge text-[10px] font-bold flex items-center justify-center">D</span>
+<span class="w-5 h-5 bg-tertiary text-on-tertiary font-label-badge text-[10px] font-bold flex items-center justify-center">W</span>
+<span class="w-5 h-5 bg-primary-container text-on-primary-container font-label-badge text-[10px] font-bold flex items-center justify-center">L</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== PLAYER STAT KINGS & 3D PODIUM SECTION ==================== -->
+<section class="relative w-full px-gutter py-space-xxl bg-surface-dim overflow-hidden shadow-[0_-8px_32px_rgba(0,0,0,0.7)]">
+<!-- Backlighting & Stadium laser effects -->
+<div class="absolute -top-24 left-1/3 w-[500px] h-[500px] bg-secondary-container/10 rounded-full blur-[140px] pointer-events-none"></div>
+<div class="absolute top-1/2 right-10 w-[400px] h-[400px] bg-primary-container/15 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="max-w-7xl mx-auto flex flex-col gap-space-xl relative z-10">
+<!-- Header & Category Switcher -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs mb-space-xs">
+<span class="material-symbols-outlined text-secondary-container text-[20px]" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-secondary-container font-bold">BATTLEFIELD INDIVIDUAL MERIT</span>
+</div>
+<h2 class="font-headline-xl text-headline-xl uppercase text-on-surface tracking-wide leading-none">
+            PLAYER STAT <span class="text-secondary-container">KINGS</span>
+</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs">
+            Calculated telemetry through 20 total championship fixtures. Only legends stand atop the arena floor.
+          </p>
+</div>
+<!-- Metric Category Selectors -->
+<div class="flex flex-wrap gap-space-xs bg-surface-container-lowest p-1.5 shadow-lg">
+<button class="px-space-md py-space-xs font-headline-sm text-headline-sm uppercase tracking-wider bg-primary-container text-on-primary-container shadow-[0_0_12px_rgba(225,6,0,0.5)]" id="cat-runs" onclick="switchCategory('runs')">
+            MOST RUNS
+          </button>
+<button class="px-space-md py-space-xs font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface" id="cat-wickets" onclick="switchCategory('wickets')">
+            MOST WICKETS
+          </button>
+<button class="px-space-md py-space-xs font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface" id="cat-sr" onclick="switchCategory('sr')">
+            BEST STRIKE RATE
+          </button>
+<button class="px-space-md py-space-xs font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface" id="cat-goals" onclick="switchCategory('goals')">
+            TOP SCORERS (FB)
+          </button>
+</div>
+</div>
+<!-- 3D Stadium Podium Display (Top 3) -->
+<div class="w-full pt-space-xl pb-space-lg flex flex-col md:flex-row items-end justify-center gap-space-md md:gap-space-lg">
+<!-- 2nd Place: Left Podium (Silver) -->
+<div class="w-full md:w-1/3 flex flex-col items-center order-2 md:order-1">
+<!-- Player Avatar / Badge -->
+<div class="relative flex flex-col items-center -mb-4 z-20">
+<div class="relative w-28 h-28 bg-surface-container-high overflow-hidden shadow-[0_0_20px_rgba(255,255,255,0.15)] flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="High intensity athletic sports portrait of Rohan Reddy, top cricket batsman wearing CBIT athletic squad jersey, dark dramatic arena lighting with neon silver rim lights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuATRyzSchCTGzeZoPeggPQ7aOrT4OcNTv1QGGuwX9mZkAAbJevCOiD3eR6xbNJwzWEZIJDTk1oXWvYPfUbtJfLnR6qbEMBDGznGxymXpZgsdtDEZcTtKg16JTEsKauqwDMBLudOU2vpcrRle2grlEHfgy2iBrYmY-CoM8KN4V3qZLUFz59brgf8HA6aNmzXWqM4thOdHhD47XFvBLlYXgNhWlRtHgHyFy-TP_7IRjDdpSFqKkc0RHLK"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-dim via-transparent to-transparent"></div>
+</div>
+<!-- Medal Icon -->
+<div class="absolute -bottom-3 bg-surface-bright text-on-surface px-space-sm py-0.5 shadow-md flex items-center gap-1 font-label-badge text-label-badge font-bold uppercase">
+<span class="material-symbols-outlined text-[16px] text-on-surface" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+              #2 SILVER
+            </div>
+</div>
+<!-- Podium Block -->
+<div class="w-full bg-surface-container p-space-lg flex flex-col items-center text-center shadow-2xl pt-8">
+<span class="font-headline-md text-headline-md uppercase text-on-surface">ROHAN REDDY</span>
+<span class="font-label-badge text-label-badge uppercase tracking-wider text-primary font-bold">CBIT THUNDER</span>
+<div class="w-full my-space-md h-0.5 bg-surface-container-highest"></div>
+<div class="flex items-baseline gap-space-xs">
+<span class="font-label-numeric-lg text-label-numeric-lg text-on-surface">245</span>
+<span class="font-label-badge text-label-badge uppercase text-outline">TOTAL RUNS</span>
+</div>
+<div class="grid grid-cols-2 gap-space-sm w-full mt-space-sm font-label-numeric-md text-label-numeric-md bg-surface-container-lowest p-space-xs">
+<div class="flex flex-col">
+<span class="text-on-surface-variant text-xs">SR</span>
+<span class="text-on-surface font-bold">162.0</span>
+</div>
+<div class="flex flex-col">
+<span class="text-on-surface-variant text-xs">BOUNDARIES</span>
+<span class="text-on-surface font-bold">22x 4s, 11x 6s</span>
+</div>
+</div>
+</div>
+</div>
+<!-- 1st Place: Elevated Center Podium (Gold Champion) -->
+<div class="w-full md:w-5/12 flex flex-col items-center order-1 md:order-2 -mt-8">
+<!-- Crown Icon & Player Avatar -->
+<div class="relative flex flex-col items-center -mb-6 z-20">
+<div class="mb-1 flex items-center justify-center animate-bounce">
+<span class="material-symbols-outlined text-secondary-container text-[32px] drop-shadow-[0_0_12px_rgba(254,212,0,0.8)]" style="font-variation-settings: 'FILL' 1;">crown</span>
+</div>
+<div class="relative w-36 h-36 bg-surface-container-high overflow-hidden shadow-[0_0_36px_rgba(254,212,0,0.5)] flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="Dramatic esports championship athlete portrait of Aarav Sharma, wearing NMIMS STME gold and red cricket jersey, intense stare, stadium smoke and golden backlighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6_RfREzv6G6Vl8G9jw1AnLypI74D_LiQs-XTOpkSftFlZO4h5uHuspZSB7MS--9bVvMWGmOqII8uDoErOJIXRy3U_UcNItDYx7_S70H7k6Ex0ZU6Id1YJze77Xnc6w4nA-b7kWbKQUuqouHtW2T2lK6kTjqMOx67f5pDPoHv0K6X2rEizCMBDNJRecCIXTiGr8zmMAONJMc14YZECYeS1Mjwji_vF4nqxCnrf7-p-A4y22UoEkti_"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-dim via-transparent to-transparent"></div>
+</div>
+<!-- Gold Rank Pill -->
+<div class="absolute -bottom-3 bg-secondary-container text-on-secondary px-space-md py-1 shadow-lg flex items-center gap-1 font-headline-sm text-headline-sm uppercase font-bold tracking-wider">
+<span class="material-symbols-outlined text-[18px]">trophy</span>
+              #1 ORANGE CAP
+            </div>
+</div>
+<!-- Podium Block (Tallest) -->
+<div class="w-full bg-surface-container-high p-space-xl flex flex-col items-center text-center shadow-[0_0_32px_rgba(0,0,0,0.9)] pt-10 relative">
+<div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-secondary-container to-transparent"></div>
+<span class="font-headline-lg text-headline-lg uppercase text-secondary-container tracking-wide">AARAV SHARMA</span>
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-on-surface-variant font-bold">NMIMS STME STRIKERS</span>
+<div class="w-full my-space-md h-0.5 bg-surface-container-highest"></div>
+<div class="flex items-baseline gap-space-xs">
+<span class="font-display-hero text-headline-xl text-secondary-container leading-none">284</span>
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface">RUNS IN 5 INNINGS</span>
+</div>
+<div class="grid grid-cols-3 gap-space-xs w-full mt-space-md font-label-numeric-md text-label-numeric-md bg-surface-container-lowest p-space-sm shadow-inner">
+<div class="flex flex-col">
+<span class="text-on-surface-variant text-xs">STRIKE RATE</span>
+<span class="text-tertiary font-bold">178.6</span>
+</div>
+<div class="flex flex-col">
+<span class="text-on-surface-variant text-xs">HALF CENTURIES</span>
+<span class="text-on-surface font-bold">2x 50s</span>
+</div>
+<div class="flex flex-col">
+<span class="text-on-surface-variant text-xs">HIGH SCORE</span>
+<span class="text-secondary-container font-bold">89*</span>
+</div>
+</div>
+</div>
+</div>
+<!-- 3rd Place: Right Podium (Bronze) -->
+<div class="w-full md:w-1/3 flex flex-col items-center order-3">
+<!-- Player Avatar / Badge -->
+<div class="relative flex flex-col items-center -mb-4 z-20">
+<div class="relative w-28 h-28 bg-surface-container-high overflow-hidden shadow-[0_0_20px_rgba(175,135,129,0.25)] flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="Action portrait of Vikram Singh, aggressive BITS Hyderabad batsman holding a cricket bat, dark moody stadium background with neon bronze red flares." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI8ecPG_IbU8LAOB8nBE-zJnz4QvF0EKGSl4H8KQAWPkYul7XTQbnLBrpUmbVB0jAYMDQJ_RT-3wHRLZo0d-auT4pvWAGedzle-EEPavjBBUCzO2FpeJhRu4zGn2ypUwyERfyQLhaEDSNCn6Kl4FzPMHCPfjt2FbHJyD8diOSbIrQRD5yqDo7eZ7j-PIr0XXYwCJx0LX4Odo2SirG7eHBKifLoPOj0DU8m20jzILP8sDAi9zGJqlhZ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-dim via-transparent to-transparent"></div>
+</div>
+<!-- Medal Icon -->
+<div class="absolute -bottom-3 bg-surface-container-highest text-on-surface px-space-sm py-0.5 shadow-md flex items-center gap-1 font-label-badge text-label-badge font-bold uppercase">
+<span class="material-symbols-outlined text-[16px] text-outline" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+              #3 BRONZE
+            </div>
+</div>
+<!-- Podium Block -->
+<div class="w-full bg-surface-container p-space-lg flex flex-col items-center text-center shadow-2xl pt-8">
+<span class="font-headline-md text-headline-md uppercase text-on-surface">VIKRAM SINGH</span>
+<span class="font-label-badge text-label-badge uppercase tracking-wider text-primary font-bold">BITS HYDERABAD</span>
+<div class="w-full my-space-md h-0.5 bg-surface-container-highest"></div>
+<div class="flex items-baseline gap-space-xs">
+<span class="font-label-numeric-lg text-label-numeric-lg text-on-surface">218</span>
+<span class="font-label-badge text-label-badge uppercase text-outline">TOTAL RUNS</span>
+</div>
+<div class="grid grid-cols-2 gap-space-sm w-full mt-space-sm font-label-numeric-md text-label-numeric-md bg-surface-container-lowest p-space-xs">
+<div class="flex flex-col">
+<span class="text-on-surface-variant text-xs">SR</span>
+<span class="text-on-surface font-bold">154.2</span>
+</div>
+<div class="flex flex-col">
+<span class="text-on-surface-variant text-xs">BOUNDARIES</span>
+<span class="text-on-surface font-bold">18x 4s, 9x 6s</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Ranked List (Positions 4 through 10) -->
+<div class="flex flex-col gap-space-sm mt-space-md">
+<div class="flex items-center justify-between pb-space-xs border-none">
+<span class="font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant">CONTENDERS: RANKS 4 THROUGH 10</span>
+<span class="font-label-badge text-label-badge text-outline uppercase">LIVE TELEMETRY HUD</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-sm">
+<!-- Rank 4 -->
+<div class="flex items-center justify-between bg-surface-container-low p-space-md shadow-md hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-space-md">
+<span class="font-headline-md text-headline-md text-outline w-6 text-center">4</span>
+<div class="w-10 h-10 bg-surface-container-highest flex items-center justify-center font-headline-sm text-headline-sm text-on-surface shrink-0">
+                KA
+              </div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface uppercase">KARTHIK ANAND</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">VNR VJIET • 4 Innings</span>
+</div>
+</div>
+<div class="flex items-center gap-space-lg text-right">
+<div class="flex flex-col">
+<span class="font-label-numeric-lg text-label-numeric-lg text-on-surface font-bold">192</span>
+<span class="font-label-badge text-label-badge text-outline uppercase">RUNS</span>
+</div>
+<div class="hidden sm:flex flex-col">
+<span class="font-label-numeric-md text-label-numeric-md text-tertiary">148.8</span>
+<span class="font-label-badge text-label-badge text-outline uppercase">SR</span>
+</div>
+</div>
+</div>
+<!-- Rank 5 -->
+<div class="flex items-center justify-between bg-surface-container-low p-space-md shadow-md hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-space-md">
+<span class="font-headline-md text-headline-md text-outline w-6 text-center">5</span>
+<div class="w-10 h-10 bg-surface-container-highest flex items-center justify-center font-headline-sm text-headline-sm text-on-surface shrink-0">
+                SV
+              </div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface uppercase">SAI VARUN TEJA</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">OSMANIA SPARTANS • 5 Innings</span>
+</div>
+</div>
+<div class="flex items-center gap-space-lg text-right">
+<div class="flex flex-col">
+<span class="font-label-numeric-lg text-label-numeric-lg text-on-surface font-bold">186</span>
+<span class="font-label-badge text-label-badge text-outline uppercase">RUNS</span>
+</div>
+<div class="hidden sm:flex flex-col">
+<span class="font-label-numeric-md text-label-numeric-md text-tertiary">142.0</span>
+<span class="font-label-badge text-label-badge text-outline uppercase">SR</span>
+</div>
+</div>
+</div>
+<!-- Rank 6 -->
+<div class="flex items-center justify-between bg-surface-container-low p-space-md shadow-md hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-space-md">
+<span class="font-headline-md text-headline-md text-outline w-6 text-center">6</span>
+<div class="w-10 h-10 bg-surface-container-highest flex items-center justify-center font-headline-sm text-headline-sm text-on-surface shrink-0">
+                NP
+              </div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface uppercase">NEEL PATEL</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">NMIMS STME STRIKERS • 4 Innings</span>
+</div>
+</div>
+<div class="flex items-center gap-space-lg text-right">
+<div class="flex flex-col">
+<span class="font-label-numeric-lg text-label-numeric-lg text-on-surface font-bold">174</span>
+<span class="font-label-badge text-label-badge text-outline uppercase">RUNS</span>
+</div>
+<div class="hidden sm:flex flex-col">
+<span class="font-label-numeric-md text-label-numeric-md text-tertiary">165.7</span>
+<span class="font-label-badge text-label-badge text-outline uppercase">SR</span>
+</div>
+</div>
+</div>
+<!-- Rank 7 -->
+<div class="flex items-center justify-between bg-surface-container-low p-space-md shadow-md hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-space-md">
+<span class="font-headline-md text-headline-md text-outline w-6 text-center">7</span>
+<div class="w-10 h-10 bg-surface-container-highest flex items-center justify-center font-headline-sm text-headline-sm text-on-surface shrink-0">
+                DK
+              </div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface uppercase">DINESH KUMAR</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">JNTU PHOENIX • 5 Innings</span>
+</div>
+</div>
+<div class="flex items-center gap-space-lg text-right">
+<div class="flex flex-col">
+<span class="font-label-numeric-lg text-label-numeric-lg text-on-surface font-bold">155</span>
+<span class="font-label-badge text-label-badge text-outline uppercase">RUNS</span>
+</div>
+<div class="hidden sm:flex flex-col">
+<span class="font-label-numeric-md text-label-numeric-md text-tertiary">132.4</span>
+<span class="font-label-badge text-label-badge text-outline uppercase">SR</span>
+</div>
+</div>
+</div>
+<!-- Rank 8 -->
+<div class="flex items-center justify-between bg-surface-container-low p-space-md shadow-md hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-space-md">
+<span class="font-headline-md text-headline-md text-outline w-6 text-center">8</span>
+<div class="w-10 h-10 bg-surface-container-highest flex items-center justify-center font-headline-sm text-headline-sm text-on-surface shrink-0">
+                AM
+              </div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface uppercase">ANIRUDH MADHAV</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">VASAVI KNIGHTS • 4 Innings</span>
+</div>
+</div>
+<div class="flex items-center gap-space-lg text-right">
+<div class="flex flex-col">
+<span class="font-label-numeric-lg text-label-numeric-lg text-on-surface font-bold">142</span>
+<span class="font-label-badge text-label-badge text-outline uppercase">RUNS</span>
+</div>
+<div class="hidden sm:flex flex-col">
+<span class="font-label-numeric-md text-label-numeric-md text-tertiary">129.0</span>
+<span class="font-label-badge text-label-badge text-outline uppercase">SR</span>
+</div>
+</div>
+</div>
+<!-- Rank 9 -->
+<div class="flex items-center justify-between bg-surface-container-low p-space-md shadow-md hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-space-md">
+<span class="font-headline-md text-headline-md text-outline w-6 text-center">9</span>
+<div class="w-10 h-10 bg-surface-container-highest flex items-center justify-center font-headline-sm text-headline-sm text-on-surface shrink-0">
+                RR
+              </div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface uppercase">RISHABH RAY</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">MAHINDRA ÉCLAT • 4 Innings</span>
+</div>
+</div>
+<div class="flex items-center gap-space-lg text-right">
+<div class="flex flex-col">
+<span class="font-label-numeric-lg text-label-numeric-lg text-on-surface font-bold">138</span>
+<span class="font-label-badge text-label-badge text-outline uppercase">RUNS</span>
+</div>
+<div class="hidden sm:flex flex-col">
+<span class="font-label-numeric-md text-label-numeric-md text-tertiary">134.5</span>
+<span class="font-label-badge text-label-badge text-outline uppercase">SR</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Playoff Schedule CTA Strip -->
+<section class="w-full bg-primary-container px-gutter py-space-lg relative overflow-hidden shadow-2xl">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<span class="material-symbols-outlined text-[36px] text-on-primary-container">sports_score</span>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md uppercase text-on-primary-container tracking-wide">PLAYOFF SEEDINGS LOCK IN 48 HOURS</span>
+<span class="font-body-sm text-body-sm text-on-primary-container/85">Review official rulebook regarding tie-breakers, super overs, and extra-time penalties.</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<a class="px-space-lg py-space-sm bg-surface-container-lowest text-on-surface hover:text-secondary-container font-headline-sm text-headline-sm uppercase tracking-wider transition-all shadow-lg" href="#">
+          VIEW PLAYOFF BRACKET
+        </a>
+</div>
+</div>
+</section>
+<!-- Interactive Filter & Switcher Script -->
+<script>
+    function switchSport(sport) {
+      const cricketBtn = document.getElementById('cricket-tab-btn');
+      const footballBtn = document.getElementById('football-tab-btn');
+      const cricketTable = document.getElementById('cricket-table-container');
+      const footballTable = document.getElementById('football-table-container');
+
+      if (sport === 'cricket') {
+        cricketBtn.className = 'px-space-lg py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider transition-all bg-primary-container text-on-primary-container shadow-[0_0_16px_rgba(225,6,0,0.5)] flex items-center gap-space-xs';
+        footballBtn.className = 'px-space-lg py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider transition-all text-on-surface-variant hover:text-on-surface flex items-center gap-space-xs';
+        cricketTable.classList.remove('hidden');
+        footballTable.classList.add('hidden');
+      } else {
+        footballBtn.className = 'px-space-lg py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider transition-all bg-primary-container text-on-primary-container shadow-[0_0_16px_rgba(225,6,0,0.5)] flex items-center gap-space-xs';
+        cricketBtn.className = 'px-space-lg py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider transition-all text-on-surface-variant hover:text-on-surface flex items-center gap-space-xs';
+        footballTable.classList.remove('hidden');
+        cricketTable.classList.add('hidden');
+      }
+    }
+
+    function filterTeams() {
+      const searchVal = document.getElementById('team-search-input').value.toLowerCase().trim();
+      const groupVal = document.getElementById('group-filter').value;
+      const rows = document.querySelectorAll('.team-row');
+
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        const rowGroup = row.getAttribute('data-group');
+        const matchesSearch = text.includes(searchVal);
+        const matchesGroup = (groupVal === 'all') || (rowGroup === groupVal);
+
+        if (matchesSearch && matchesGroup) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+
+    function switchCategory(cat) {
+      const btns = ['cat-runs', 'cat-wickets', 'cat-sr', 'cat-goals'];
+      btns.forEach(bId => {
+        const el = document.getElementById(bId);
+        if (el) {
+          el.className = 'px-space-md py-space-xs font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface';
+        }
+      });
+      const activeEl = document.getElementById('cat-' + cat);
+      if (activeEl) {
+        activeEl.className = 'px-space-md py-space-xs font-headline-sm text-headline-sm uppercase tracking-wider bg-primary-container text-on-primary-container shadow-[0_0_12px_rgba(225,6,0,0.5)]';
+      }
+    }
+  </script>
+</div></main><footer class="w-full bg-surface-dim pt-space-xxl pb-space-xl shadow-[0_-8px_32px_rgba(0,0,0,0.8)]"><div class="w-full px-gutter max-w-7xl mx-auto flex flex-col gap-space-xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-xl"><div class="flex flex-col gap-space-md"><div class="flex items-center gap-space-sm"><span class="font-headline-lg text-headline-lg uppercase text-on-surface tracking-wide">Legends Walk Off</span></div><p class="font-title-md text-title-md text-secondary-container tracking-wider uppercase">'Only Legends Walk Off the Field.'</p><p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">Presented by STME Impulse Committee, NMIMS Hyderabad (School of Technology Management &amp; Engineering). High-voltage inter-collegiate sports arena.</p></div><div class="flex flex-col gap-space-sm"><span class="font-headline-sm text-headline-sm uppercase tracking-widest text-primary font-bold">Quick Navigation</span><div class="flex flex-col gap-space-xs"><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="home" href="#">Tournament Home</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="standings" href="#">Points &amp; Standings</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="live-scores" href="#">Broadcast Live Telemetry</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="about-sponsors" href="#">Sponsors &amp; Partners</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="admin-console" href="#">Admin Console Portal</a></div></div><div class="flex flex-col gap-space-sm"><span class="font-headline-sm text-headline-sm uppercase tracking-widest text-primary font-bold">Official Contact</span><div class="flex flex-col gap-space-xs font-body-sm text-body-sm text-on-surface-variant"><div class="flex items-start gap-space-xs"><span class="material-symbols-outlined text-[18px] text-secondary-container shrink-0 mt-0.5">mail</span><span class="font-label-numeric-md text-label-numeric-md text-on-surface">impulse.stme@nmims.edu.in</span></div><div class="flex items-start gap-space-xs mt-space-xs"><span class="material-symbols-outlined text-[18px] text-secondary-container shrink-0 mt-0.5">location_on</span><span>STME Campus, Jadcherla, Hyderabad, Telangana - 509301</span></div></div></div><div class="flex flex-col gap-space-sm"><span class="font-headline-sm text-headline-sm uppercase tracking-widest text-primary font-bold">Arena Broadcasts</span><p class="font-body-sm text-body-sm text-on-surface-variant">Follow official match highlights, instant VAR telemetry, and stream drops:</p><div class="flex items-center gap-space-sm mt-space-xs"><a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_0_12px_rgba(0,0,0,0.5)]" href="#"><span class="material-symbols-outlined text-[20px]">photo_camera</span></a><a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_0_12px_rgba(0,0,0,0.5)]" href="#"><span class="material-symbols-outlined text-[20px]">play_circle</span></a><a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_0_12px_rgba(0,0,0,0.5)]" href="#"><span class="material-symbols-outlined text-[20px]">forum</span></a><a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_0_12px_rgba(0,0,0,0.5)]" href="#"><span class="material-symbols-outlined text-[20px]">tag</span></a></div></div></div><div class="pt-space-lg flex flex-col md:flex-row items-center justify-between gap-space-md font-body-sm text-body-sm text-on-surface-variant"><p class="text-center md:text-left">© 2026 Legends Walk Off. All Rights Reserved. STME Impulse Sports Committee.</p><div class="flex items-center gap-space-md font-label-badge text-label-badge uppercase tracking-widest text-outline"><span class="hover:text-on-surface transition-colors cursor-pointer">Privacy Policy</span><span class="hover:text-on-surface transition-colors cursor-pointer">Rulebook &amp; Code</span><span class="hover:text-on-surface transition-colors cursor-pointer">Anti-Doping Policy</span></div></div></div></footer></body></html>

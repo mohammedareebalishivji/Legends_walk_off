@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Inter:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}.clip-angle{clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);}.clip-angle-r{clip-path:polygon(0 0,calc(100% - 12px) 0,100% 100%,0 100%);}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"tertiary-fixed":"#6ffbbe","surface-container-high":"#2a2a2a","surface-bright":"#3a3939","error":"#ffb4ab","on-error":"#690005","surface-tint":"#ffb4a8","inverse-on-surface":"#313030","on-surface":"#e5e2e1","on-surface-variant":"#e9bcb5","on-background":"#e5e2e1","on-tertiary":"#003824","surface-container-lowest":"#0e0e0e","primary-fixed-dim":"#ffb4a8","on-secondary":"#3b2f00","on-secondary-fixed":"#231b00","secondary-fixed":"#ffe177","surface-container-highest":"#353534","secondary":"#fff3d4","on-secondary-fixed-variant":"#554500","surface-dim":"#131313","outline":"#af8781","secondary-fixed-dim":"#ebc300","surface-variant":"#353534","error-container":"#93000a","on-primary-fixed":"#410100","surface":"#131313","surface-container-low":"#1c1b1b","tertiary-container":"#008058","primary-fixed":"#ffdad4","tertiary":"#4edea3","outline-variant":"#5e3f3a","inverse-primary":"#c00500","on-secondary-container":"#6f5c00","on-tertiary-fixed-variant":"#005236","primary-container":"#e10600","on-tertiary-container":"#d4ffe5","secondary-container":"#fed400","on-tertiary-fixed":"#002113","on-primary":"#680200","tertiary-fixed-dim":"#4edea3","on-primary-container":"#fff2f0","background":"#131313","primary":"#ffb4a8","on-primary-fixed-variant":"#930300","on-error-container":"#ffdad6","surface-container":"#201f1f","inverse-surface":"#e5e2e1"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"margin-mobile":"1rem","space-sm":"0.5rem","margin":"2.5rem","gutter":"1.5rem","gutter-mobile":"0.75rem","space-lg":"1.5rem","space-xxl":"4rem","space-md":"1rem","space-xs":"0.25rem","space-xl":"2.5rem"},fontFamily:{"body-lg":["Inter"],"title-lg":["Inter"],"label-numeric-lg":["JetBrains Mono"],"label-badge":["JetBrains Mono"],"headline-xl":["Anton"],"headline-md":["Anton"],"label-numeric-md":["JetBrains Mono"],"headline-lg":["Anton"],"headline-xl-mobile":["Anton"],"body-md":["Inter"],"display-hero-mobile":["Anton"],"title-md":["Inter"],"display-hero":["Anton"],"body-sm":["Inter"],"headline-sm":["Anton"]},fontSize:{"body-lg":["1.125rem",{"lineHeight":"1.625rem","letterSpacing":"0em","fontWeight":"400"}],"title-lg":["1.25rem",{"lineHeight":"1.5rem","letterSpacing":"-0.01em","fontWeight":"800"}],"label-numeric-lg":["1.75rem",{"lineHeight":"1.75rem","letterSpacing":"-0.04em","fontWeight":"700"}],"label-badge":["0.6875rem",{"lineHeight":"0.875rem","letterSpacing":"0.12em","fontWeight":"700"}],"headline-xl":["3rem",{"lineHeight":"3rem","letterSpacing":"0.05em","fontWeight":"400"}],"headline-md":["1.5rem",{"lineHeight":"1.625rem","letterSpacing":"0.04em","fontWeight":"400"}],"label-numeric-md":["1rem",{"lineHeight":"1.25rem","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["2rem",{"lineHeight":"2.125rem","letterSpacing":"0.05em","fontWeight":"400"}],"headline-xl-mobile":["2rem",{"lineHeight":"2.125rem","letterSpacing":"0.04em","fontWeight":"400"}],"body-md":["0.9375rem",{"lineHeight":"1.5rem","letterSpacing":"0em","fontWeight":"400"}],"display-hero-mobile":["2.75rem",{"lineHeight":"2.75rem","letterSpacing":"0.03em","fontWeight":"400"}],"title-md":["1rem",{"lineHeight":"1.375rem","letterSpacing":"0.01em","fontWeight":"700"}],"display-hero":["4.5rem",{"lineHeight":"4.25rem","letterSpacing":"0.04em","fontWeight":"400"}],"body-sm":["0.8125rem",{"lineHeight":"1.25rem","letterSpacing":"0.01em","fontWeight":"400"}],"headline-sm":["1.125rem",{"lineHeight":"1.25rem","letterSpacing":"0.03em","fontWeight":"400"}]}}}};</script></head><body class="bg-surface-container-lowest font-body-md text-on-surface antialiased min-h-screen"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_12px_24px_-6px_rgba(0,0,0,0.9),0_0_24px_-8px_rgba(225,6,0,0.3)]"><div class="h-20 w-full px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md shrink-0"><img alt="Legends Walk Off Championship Logo" class="h-10 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2galx7WljV6w1igXr8o3dLOgoDJjG8Kn73Y3ektTQeD1MJuoQ1q8t84byFJ5dK9bnOkDr23wGzjeaj-6TxnMjRhS-4QqmSxCMX995uthYCqOOpj_J4-bZGYoc-6ywwjXFTn4_W2OXETVDlpTxw9OJzcJM0XHb9iJpcC6_a1PVdK5rSVwo8sKOtKQ7nJVcGFlSsmPLb-HkDrfx9GpJwmc8EoydhgZctiY28L6yCiSAlVm0FXXnB9AC"/><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-md text-headline-md tracking-wider text-on-surface uppercase leading-none">Legends Walk Off</span></div><div class="flex items-center gap-space-xs mt-space-xs"><span class="bg-primary-container px-space-xs py-0.5 text-on-primary-container font-label-badge text-label-badge tracking-widest uppercase font-bold">Hyderabad 2026</span><span class="hidden lg:inline text-outline font-label-badge text-label-badge">|</span><span class="hidden lg:inline text-secondary-container font-label-badge text-label-badge uppercase tracking-wider font-bold">Cricket &amp; Football League</span></div></div></div><nav class="hidden xl:flex items-center gap-space-xs" data-active-classes="bg-surface-container-high text-secondary-container shadow-[inset_0_-2px_0_0_#fed400]"><a class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="home" href="#">Home</a><a class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="standings" href="#">Standings</a><a class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all flex items-center gap-space-xs" data-path="live-scores" href="#"><span class="relative flex h-2.5 w-2.5 mr-1"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-container opacity-75"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary-container"></span></span>Live Scores</a><a class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="about-sponsors" href="#">About &amp; Sponsors</a><a aria-current="page" class="px-space-md py-space-sm font-headline-sm uppercase tracking-wider transition-all bg-surface-container-high text-secondary-container shadow-[inset_0_-2px_0_0_#fed400]" data-path="admin-console" href="#">Admin Console</a></nav><div class="flex items-center gap-space-md shrink-0"><a class="hidden sm:inline-flex items-center gap-space-xs bg-primary-container hover:bg-primary-container/90 text-on-primary-container px-space-md py-space-sm font-headline-sm text-headline-sm tracking-wider uppercase transition-all clip-angle shadow-[0_0_20px_rgba(225,6,0,0.45)]" data-path="admin-login" href="#"><span class="material-symbols-outlined text-[18px]">lock</span>Admin Login</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface-container-lowest"><div class="flex flex-col w-full">
+<!-- Top Tactical Admin Authorization Ribbon -->
+<div class="w-full bg-primary-container text-on-primary-container px-gutter py-space-sm shadow-[0_4px_24px_rgba(225,6,0,0.45)]">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-space-sm text-center md:text-left">
+<div class="flex items-center gap-space-xs font-label-badge text-label-badge tracking-widest uppercase font-bold">
+<span class="material-symbols-outlined text-[18px] animate-pulse">warning</span>
+<span>Admin Scoring Mode • Official Scorer: <span class="text-white underline decoration-white underline-offset-2">Rajesh K. (NMIMS STME Impulse)</span></span>
+</div>
+<div class="flex items-center gap-space-md">
+<span class="font-label-badge text-label-badge tracking-widest uppercase bg-surface-container-lowest/40 px-space-xs py-0.5 rounded text-white flex items-center gap-1">
+<span class="h-2 w-2 rounded-full bg-tertiary animate-ping"></span>
+          Telemetry Engine v4.2 • Sync Active
+        </span>
+<span class="font-label-numeric-md text-label-numeric-md text-white">ID: SCORER-NMIMS-088</span>
+</div>
+</div>
+</div>
+<!-- Match Selector & Live Flow Status Control Bar -->
+<div class="w-full bg-surface-container-low py-space-md px-gutter shadow-xl">
+<div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-space-md">
+<!-- Match Selector Dropdown -->
+<div class="flex flex-col sm:flex-row items-start sm:items-center gap-space-sm grow">
+<span class="font-headline-sm text-headline-sm uppercase text-secondary-container tracking-wider flex items-center gap-1 shrink-0">
+<span class="material-symbols-outlined text-[20px]">tune</span> Target Fixture:
+        </span>
+<div class="relative w-full sm:max-w-lg">
+<select class="w-full bg-surface-container-high text-on-surface font-title-md text-title-md px-space-md py-space-sm rounded-none appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-secondary-container shadow-inner" id="match-selector">
+<option selected="" value="cricket-14">Match #14 • NMIMS Strikers vs CBIT Warriors (Cricket • T20 Super-8)</option>
+<option value="football-08">Match #08 • VNR VJIET FC vs OU Titans (Football • Quarter-Final)</option>
+<option value="cricket-15">Match #15 • Vasavi Titans vs GRIET Stallions (Cricket • Group A)</option>
+<option value="football-09">Match #09 • NMIMS Wolves vs CBIT Thunder (Football • Semi-Final)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">arrow_drop_down</span>
+</div>
+</div>
+<!-- Match State Controller Buttons -->
+<div class="flex items-center gap-space-xs shrink-0 flex-wrap sm:flex-nowrap">
+<button class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider bg-tertiary-container text-on-tertiary-container hover:bg-tertiary hover:text-on-tertiary transition-all shadow-md flex items-center gap-1 clip-angle" id="btn-start-match" onclick="updateMatchStatus('IN PROGRESS (LIVE)', 'bg-tertiary-container text-on-tertiary-container')">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span> Start Match
+        </button>
+<button class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider bg-secondary-container text-on-secondary-container hover:bg-secondary transition-all shadow-md flex items-center gap-1 clip-angle" id="btn-pause-match" onclick="updateMatchStatus('PAUSED / TIMEOUT', 'bg-secondary-container text-on-secondary-container')">
+<span class="material-symbols-outlined text-[18px]">pause</span> Pause / Timeout
+        </button>
+<button class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider bg-primary-container text-on-primary-container hover:bg-inverse-primary transition-all shadow-md flex items-center gap-1 clip-angle" id="btn-finalize-match" onclick="openEndMatchModal()">
+<span class="material-symbols-outlined text-[18px]">flag</span> Finalize Match
+        </button>
+</div>
+</div>
+</div>
+<!-- Sport Switcher HUD -->
+<div class="w-full bg-surface-container-lowest px-gutter pt-space-lg pb-space-sm">
+<div class="max-w-7xl mx-auto flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<button class="px-space-lg py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider bg-primary-container text-on-primary-container shadow-[0_0_16px_rgba(225,6,0,0.5)] transition-all flex items-center gap-space-xs clip-angle" id="tab-cricket" onclick="switchSportConsole('cricket')">
+<span class="material-symbols-outlined text-[20px]">sports_cricket</span> Cricket Console
+        </button>
+<button class="px-space-lg py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider bg-surface-container-high text-on-surface-variant hover:text-on-surface shadow-md transition-all flex items-center gap-space-xs clip-angle" id="tab-football" onclick="switchSportConsole('football')">
+<span class="material-symbols-outlined text-[20px]">sports_soccer</span> Football Console
+        </button>
+</div>
+<div class="hidden md:flex items-center gap-space-sm font-label-badge text-label-badge uppercase tracking-wider text-outline">
+<span class="h-2 w-2 rounded-full bg-tertiary inline-block"></span>
+        Socket ID: <span class="text-on-surface font-label-numeric-md">#LWO-HYD-509</span>
+</div>
+</div>
+</div>
+<!-- Main Split Console Area: Tactical Control Board vs Live Broadcast Preview -->
+<div class="w-full px-gutter py-space-md">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- LEFT 7 COLS: TACTICAL CONTROL BOARDS -->
+<div class="lg:col-span-7 flex flex-col gap-space-lg">
+<!-- CRICKET SCORER CONSOLE -->
+<div class="flex flex-col gap-space-md bg-surface-container-low p-space-md shadow-2xl" id="cricket-panel">
+<div class="flex items-center justify-between bg-surface-container p-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary-container text-[24px]">sports_cricket</span>
+<span class="font-headline-md text-headline-md uppercase text-on-surface tracking-wider">Cricket Match Operations</span>
+</div>
+<span class="font-label-badge text-label-badge uppercase bg-primary-container text-on-primary-container px-space-xs py-0.5">INNINGS 1 • 14.3 OV</span>
+</div>
+<!-- Active Pitch Pairings HUD -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-xs bg-surface-container-highest p-space-sm">
+<div class="flex flex-col bg-surface-container p-space-xs">
+<span class="font-label-badge text-label-badge text-outline uppercase tracking-wider">Striker *</span>
+<span class="font-title-md text-title-md text-secondary-container truncate" id="txt-striker-name">Aditya Rao</span>
+<span class="font-label-numeric-md text-label-numeric-md text-on-surface" id="txt-striker-stats">54* (32b) [4x4, 3x6]</span>
+</div>
+<div class="flex flex-col bg-surface-container p-space-xs">
+<span class="font-label-badge text-label-badge text-outline uppercase tracking-wider">Non-Striker</span>
+<span class="font-title-md text-title-md text-on-surface truncate" id="txt-nonstriker-name">Vikram Sharma</span>
+<span class="font-label-numeric-md text-label-numeric-md text-on-surface-variant" id="txt-nonstriker-stats">28 (19b) [2x4, 1x6]</span>
+</div>
+<div class="flex flex-col bg-surface-container p-space-xs">
+<span class="font-label-badge text-label-badge text-outline uppercase tracking-wider">Current Bowler</span>
+<span class="font-title-md text-title-md text-primary truncate" id="txt-bowler-name">Karthik Reddy</span>
+<span class="font-label-numeric-md text-label-numeric-md text-on-surface" id="txt-bowler-stats">2.3-0-22-1</span>
+</div>
+</div>
+<!-- Cricket Action Block 1: Standard Runs -->
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-outline">Primary Ball Outcomes</span>
+<div class="grid grid-cols-3 sm:grid-cols-6 gap-space-xs">
+<button class="h-16 bg-surface-container-high hover:bg-surface-bright text-on-surface font-headline-lg text-headline-lg flex flex-col items-center justify-center transition-all shadow-md active:scale-95" onclick="addCricketRuns(0, 'DOT', false)">
+<span>0</span>
+<span class="font-label-badge text-label-badge text-outline-variant uppercase">DOT</span>
+</button>
+<button class="h-16 bg-surface-container-high hover:bg-surface-bright text-on-surface font-headline-lg text-headline-lg flex flex-col items-center justify-center transition-all shadow-md active:scale-95" onclick="addCricketRuns(1, 'SINGLE', false)">
+<span>1</span>
+<span class="font-label-badge text-label-badge text-outline-variant uppercase">RUN</span>
+</button>
+<button class="h-16 bg-surface-container-high hover:bg-surface-bright text-on-surface font-headline-lg text-headline-lg flex flex-col items-center justify-center transition-all shadow-md active:scale-95" onclick="addCricketRuns(2, 'DOUBLE', false)">
+<span>2</span>
+<span class="font-label-badge text-label-badge text-outline-variant uppercase">RUNS</span>
+</button>
+<button class="h-16 bg-surface-container-high hover:bg-surface-bright text-on-surface font-headline-lg text-headline-lg flex flex-col items-center justify-center transition-all shadow-md active:scale-95" onclick="addCricketRuns(3, 'TRIPLE', false)">
+<span>3</span>
+<span class="font-label-badge text-label-badge text-outline-variant uppercase">RUNS</span>
+</button>
+<button class="h-16 bg-surface-container-high hover:bg-secondary-container hover:text-on-secondary-container text-secondary-container font-headline-lg text-headline-lg flex flex-col items-center justify-center transition-all shadow-md active:scale-95" onclick="addCricketRuns(4, 'FOUR', false)">
+<span>4</span>
+<span class="font-label-badge text-label-badge uppercase font-bold">FOUR</span>
+</button>
+<button class="h-16 bg-surface-container-high hover:bg-primary-container hover:text-on-primary-container text-primary font-headline-lg text-headline-lg flex flex-col items-center justify-center transition-all shadow-md active:scale-95" onclick="addCricketRuns(6, 'SIX', false)">
+<span>6</span>
+<span class="font-label-badge text-label-badge uppercase font-bold">MAX SIX</span>
+</button>
+</div>
+</div>
+<!-- Cricket Action Block 2: Extras -->
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-outline">Extras &amp; Infractions</span>
+<div class="grid grid-cols-2 sm:grid-cols-5 gap-space-xs">
+<button class="py-space-sm bg-surface-container hover:bg-surface-bright text-secondary-fixed font-title-md text-title-md uppercase tracking-wider transition-all shadow-sm" onclick="addCricketExtra('WIDE', 1)">
+                +1 WIDE (WD)
+              </button>
+<button class="py-space-sm bg-surface-container hover:bg-surface-bright text-primary font-title-md text-title-md uppercase tracking-wider transition-all shadow-sm" onclick="addCricketExtra('NO BALL', 1)">
+                +1 NO BALL (NB)
+              </button>
+<button class="py-space-sm bg-surface-container hover:bg-surface-bright text-on-surface font-title-md text-title-md uppercase tracking-wider transition-all shadow-sm" onclick="addCricketExtra('BYE', 1)">
+                +1 BYE (B)
+              </button>
+<button class="py-space-sm bg-surface-container hover:bg-surface-bright text-on-surface font-title-md text-title-md uppercase tracking-wider transition-all shadow-sm" onclick="addCricketExtra('LEG BYE', 1)">
+                +1 LEG BYE (LB)
+              </button>
+<button class="py-space-sm bg-surface-container hover:bg-surface-bright text-error font-title-md text-title-md uppercase tracking-wider transition-all shadow-sm col-span-2 sm:col-span-1" onclick="addCricketExtra('PENALTY', 5)">
+                +5 PENALTY
+              </button>
+</div>
+</div>
+<!-- Cricket Action Block 3: Huge High-Impact Wicket Trigger -->
+<div class="w-full">
+<button class="w-full h-20 bg-primary-container hover:bg-primary-container/90 text-on-primary-container font-headline-xl text-headline-xl uppercase tracking-wider flex items-center justify-center gap-space-md shadow-[0_0_28px_rgba(225,6,0,0.6)] clip-angle transition-all active:scale-[0.99]" onclick="openWicketModal()">
+<span class="material-symbols-outlined text-[36px] animate-bounce">bolt</span>
+<span>WICKET DISMISSAL</span>
+<span class="material-symbols-outlined text-[36px] animate-bounce">sports_kabaddi</span>
+</button>
+</div>
+<!-- Cricket Auxiliary Tactical Controls -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-xs pt-space-xs">
+<button class="py-space-sm bg-surface-container-high hover:bg-surface-bright text-on-surface font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-1 shadow-sm" onclick="undoLastEvent()">
+<span class="material-symbols-outlined text-[18px]">undo</span> Undo Ball
+            </button>
+<button class="py-space-sm bg-surface-container-high hover:bg-surface-bright text-secondary-container font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-1 shadow-sm" onclick="swapStrike()">
+<span class="material-symbols-outlined text-[18px]">sync_alt</span> Swap Strike
+            </button>
+<button class="py-space-sm bg-surface-container-high hover:bg-surface-bright text-on-surface font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-1 shadow-sm" onclick="promptChangeBowler()">
+<span class="material-symbols-outlined text-[18px]">directions_run</span> Change Bowler
+            </button>
+<button class="py-space-sm bg-surface-container-high hover:bg-surface-bright text-on-surface-variant font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-1 shadow-sm" onclick="openDlsModal()">
+<span class="material-symbols-outlined text-[18px]">functions</span> Revise Overs
+            </button>
+</div>
+</div>
+<!-- FOOTBALL SCORER CONSOLE (HIDDEN BY DEFAULT, TOGGLEABLE) -->
+<div class="hidden flex-col gap-space-md bg-surface-container-low p-space-md shadow-2xl" id="football-panel">
+<div class="flex items-center justify-between bg-surface-container p-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary-container text-[24px]">sports_soccer</span>
+<span class="font-headline-md text-headline-md uppercase text-on-surface tracking-wider">Football Match Operations</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="font-label-numeric-md text-label-numeric-md bg-surface-container-highest text-secondary-container px-space-sm py-0.5">MATCH CLOCK: <span id="fb-timer">68:42</span></span>
+</div>
+</div>
+<!-- Football Score Action Buttons -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm">
+<button class="h-20 bg-primary-container hover:bg-primary-container/90 text-on-primary-container font-headline-lg text-headline-lg uppercase tracking-wider flex items-center justify-center gap-space-sm clip-angle shadow-lg active:scale-95" onclick="addFootballGoal('HOME')">
+<span class="material-symbols-outlined text-[28px]">sports_score</span>
+<span>+ GOAL (VNR FC)</span>
+</button>
+<button class="h-20 bg-surface-container-high hover:bg-surface-bright text-secondary-container font-headline-lg text-headline-lg uppercase tracking-wider flex items-center justify-center gap-space-sm clip-angle shadow-lg active:scale-95" onclick="addFootballGoal('AWAY')">
+<span class="material-symbols-outlined text-[28px]">sports_score</span>
+<span>+ GOAL (OU TITANS)</span>
+</button>
+</div>
+<!-- Cards & Disciplinary Panel -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-xs">
+<button class="py-space-md bg-secondary-container text-on-secondary-container font-headline-sm text-headline-sm uppercase tracking-wider flex flex-col items-center justify-center gap-1 shadow-md" onclick="addFootballEvent('YELLOW CARD', 'Player #7')">
+<span class="h-4 w-3 bg-on-secondary-container inline-block rounded-xs"></span>
+<span>Yellow Card</span>
+</button>
+<button class="py-space-md bg-primary-container text-on-primary-container font-headline-sm text-headline-sm uppercase tracking-wider flex flex-col items-center justify-center gap-1 shadow-md" onclick="addFootballEvent('RED CARD', 'Player #4')">
+<span class="h-4 w-3 bg-white inline-block rounded-xs"></span>
+<span>Red Card</span>
+</button>
+<button class="py-space-md bg-surface-container-high hover:bg-surface-bright text-on-surface font-headline-sm text-headline-sm uppercase tracking-wider flex flex-col items-center justify-center gap-1 shadow-md" onclick="addFootballEvent('ASSIST', 'Player #10')">
+<span class="material-symbols-outlined text-[20px]">handshake</span>
+<span>+ Assist</span>
+</button>
+<button class="py-space-md bg-surface-container-high hover:bg-surface-bright text-on-surface font-headline-sm text-headline-sm uppercase tracking-wider flex flex-col items-center justify-center gap-1 shadow-md" onclick="addFootballEvent('SUBSTITUTION', 'In: #9 / Out: #11')">
+<span class="material-symbols-outlined text-[20px]">swap_horizontal_circle</span>
+<span>Substitution</span>
+</button>
+</div>
+<!-- Football Time & Period Controls -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-xs pt-space-xs">
+<button class="py-space-sm bg-tertiary-container text-on-tertiary-container font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-1" id="btn-clock-toggle" onclick="toggleFootballClock()">
+<span class="material-symbols-outlined text-[18px]">timer</span> Pause Clock
+            </button>
+<button class="py-space-sm bg-surface-container-high hover:bg-surface-bright text-on-surface font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-1" onclick="addFootballEvent('HALF TIME', '45:00 Period Close')">
+<span class="material-symbols-outlined text-[18px]">pause_circle</span> Half Time
+            </button>
+<button class="py-space-sm bg-surface-container-high hover:bg-surface-bright text-primary font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-1" onclick="addFootballEvent('FULL TIME', '90:00 Final')">
+<span class="material-symbols-outlined text-[18px]">alarm_on</span> Full Time
+            </button>
+<button class="py-space-sm bg-surface-container-high hover:bg-surface-bright text-error font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-1" onclick="undoLastEvent()">
+<span class="material-symbols-outlined text-[18px]">undo</span> Undo Event
+            </button>
+</div>
+</div>
+<!-- STADIUM BROADCAST VISUALIZER (Rich inline graphic) -->
+<div class="relative bg-surface-container-low p-space-md overflow-hidden shadow-xl">
+<div class="flex items-center justify-between pb-space-sm">
+<span class="font-headline-sm text-headline-sm uppercase text-outline tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px] text-tertiary">radar</span> Stadium Pitch Heatmap Telemetry
+            </span>
+<span class="font-label-badge text-label-badge text-outline">STME ARENA MAIN OVAL</span>
+</div>
+<!-- Tactical Pitch SVG Diagram -->
+<div class="relative w-full h-44 bg-surface-container-lowest flex items-center justify-center overflow-hidden">
+<svg class="w-full h-full text-surface-container-high" fill="none" viewbox="0 0 600 240" xmlns="http://www.w3.org/2000/svg">
+<rect height="220" opacity="0.4" rx="110" stroke="currentColor" stroke-dasharray="4 4" stroke-width="1.5" width="580" x="10" y="10"></rect>
+<ellipse cx="300" cy="120" opacity="0.5" rx="210" ry="85" stroke="currentColor" stroke-width="1"></ellipse>
+<rect fill="currentColor" fill-opacity="0.2" height="80" stroke="currentColor" stroke-width="1" width="60" x="270" y="80"></rect>
+<line opacity="0.8" stroke="#fed400" stroke-dasharray="2 2" stroke-width="1.5" x1="300" x2="300" y1="80" y2="160"></line>
+<!-- Heatmap Hotspots -->
+<circle cx="285" cy="110" fill="#e10600" fill-opacity="0.55" r="14"></circle>
+<circle cx="340" cy="130" fill="#fed400" fill-opacity="0.35" r="22"></circle>
+<circle cx="230" cy="95" fill="#4edea3" fill-opacity="0.25" r="18"></circle>
+<circle cx="300" cy="95" fill="#ffffff" r="4"></circle>
+<circle cx="300" cy="145" fill="#ffffff" r="4"></circle>
+</svg>
+<div class="absolute bottom-2 left-4 flex items-center gap-space-md text-on-surface-variant font-label-badge text-label-badge uppercase">
+<span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-primary-container"></span> Heavy Wagon Wheel</span>
+<span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-secondary-container"></span> Strike Rotation Zone</span>
+<span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-tertiary"></span> Dot Density</span>
+</div>
+<div class="absolute top-2 right-4 font-label-numeric-md text-label-numeric-md text-secondary-container">
+              RADAR SPEED: 138.4 KM/H
+            </div>
+</div>
+</div>
+</div>
+<!-- RIGHT 5 COLS: SIDE-BY-SIDE PUBLIC LIVE VIEW REPLICA -->
+<div class="lg:col-span-5 flex flex-col gap-space-md">
+<!-- Public Broadcast Scorebug Card -->
+<div class="flex flex-col bg-surface-container-low shadow-2xl p-space-md">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-container opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary-container"></span>
+</span>
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface tracking-wider">Live Public Scorebug</span>
+</div>
+<span class="font-label-badge text-label-badge uppercase px-space-xs py-0.5 bg-tertiary-container text-on-tertiary-container font-bold" id="preview-match-status">
+              IN PROGRESS (LIVE)
+            </span>
+</div>
+<!-- Real-Time Score Engine Box -->
+<div class="bg-surface-container-lowest p-space-md shadow-inner flex flex-col gap-space-md">
+<!-- Cricket Display Mode -->
+<div class="flex flex-col gap-space-sm" id="preview-cricket-block">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-headline-lg text-headline-lg uppercase text-secondary-container leading-none">NMIMS STRIKERS</span>
+<span class="font-label-badge text-label-badge text-outline uppercase tracking-wider mt-1">Batting First • T20 Super-8</span>
+</div>
+<div class="flex items-baseline gap-space-xs">
+<span class="font-label-numeric-lg text-label-numeric-lg text-white font-bold" id="pub-runs">142</span>
+<span class="font-label-numeric-lg text-label-numeric-lg text-outline-variant font-light">/</span>
+<span class="font-label-numeric-lg text-label-numeric-lg text-primary font-bold" id="pub-wickets">3</span>
+</div>
+</div>
+<!-- Overs and Run Rate Bar -->
+<div class="flex items-center justify-between bg-surface-container px-space-sm py-space-xs">
+<span class="font-label-numeric-md text-label-numeric-md text-on-surface">OVERS: <strong class="text-white" id="pub-overs">14.3</strong> / 20.0</span>
+<span class="font-label-numeric-md text-label-numeric-md text-secondary-container">CRR: <strong id="pub-crr">9.79</strong></span>
+<span class="font-label-numeric-md text-label-numeric-md text-tertiary">PROJ: <strong id="pub-proj">195</strong></span>
+</div>
+<!-- This Over Ball Pills -->
+<div class="flex flex-col gap-1 pt-1">
+<span class="font-label-badge text-label-badge uppercase tracking-widest text-outline">This Over (Over 15)</span>
+<div class="flex items-center gap-space-xs overflow-x-auto py-1" id="over-ball-container">
+<span class="h-8 w-8 rounded-full bg-surface-container-high flex items-center justify-center font-label-numeric-md text-on-surface font-bold text-[14px]">1</span>
+<span class="h-8 w-8 rounded-full bg-surface-container-high flex items-center justify-center font-label-numeric-md text-on-surface font-bold text-[14px]">0</span>
+<span class="h-8 w-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-label-numeric-md font-bold text-[14px]">4</span>
+<span class="h-8 w-8 rounded-full bg-surface-container-highest flex items-center justify-center font-label-numeric-md text-outline font-bold text-[14px]">-</span>
+<span class="h-8 w-8 rounded-full bg-surface-container-highest flex items-center justify-center font-label-numeric-md text-outline font-bold text-[14px]">-</span>
+<span class="h-8 w-8 rounded-full bg-surface-container-highest flex items-center justify-center font-label-numeric-md text-outline font-bold text-[14px]">-</span>
+</div>
+</div>
+</div>
+<!-- Football Display Mode (Hidden by default) -->
+<div class="hidden flex flex-col gap-space-sm" id="preview-football-block">
+<div class="flex items-center justify-between">
+<div class="flex flex-col text-left">
+<span class="font-headline-md text-headline-md uppercase text-primary leading-tight">VNR VJIET</span>
+<span class="font-label-badge text-label-badge text-outline">HOME SQUAD</span>
+</div>
+<div class="flex items-center gap-space-md">
+<span class="font-label-numeric-lg text-label-numeric-lg text-white" id="pub-fb-score-home">2</span>
+<span class="font-headline-md text-headline-md text-outline">-</span>
+<span class="font-label-numeric-lg text-label-numeric-lg text-secondary-container" id="pub-fb-score-away">1</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="font-headline-md text-headline-md uppercase text-secondary-container leading-tight">OU TITANS</span>
+<span class="font-label-badge text-label-badge text-outline">VISITOR SQUAD</span>
+</div>
+</div>
+<div class="bg-surface-container text-center py-1">
+<span class="font-label-numeric-md text-label-numeric-md text-tertiary font-bold tracking-widest">2ND HALF • 68' 42"</span>
+</div>
+</div>
+</div>
+<!-- Official Referee & Scorer Telemetry Note -->
+<div class="pt-space-sm flex items-center justify-between text-on-surface-variant font-label-badge text-label-badge uppercase">
+<span>Umpire 1: Suresh Nair</span>
+<span>Third Umpire: Active VAR</span>
+</div>
+</div>
+<!-- Live Match Operations Log & Auditor -->
+<div class="flex flex-col bg-surface-container-low shadow-xl p-space-md">
+<div class="flex items-center justify-between pb-space-sm">
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px] text-secondary-container">history</span> Ball Log &amp; Audit History
+            </span>
+<span class="font-label-badge text-label-badge text-outline uppercase">Live Stream Log</span>
+</div>
+<!-- Scrollable Table -->
+<div class="overflow-y-auto max-h-80 flex flex-col gap-1 pr-1" id="audit-log-list">
+<!-- Log Entry 1 -->
+<div class="flex items-center justify-between bg-surface-container p-space-xs text-on-surface hover:bg-surface-bright transition-colors">
+<div class="flex items-center gap-space-xs min-w-0">
+<span class="font-label-numeric-md text-label-numeric-md text-secondary-container w-12 shrink-0">14.3</span>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold truncate">Aditya Rao to Karthik Reddy</span>
+<span class="font-label-badge text-label-badge text-outline truncate">Driven through covers • Boundary</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="font-label-numeric-md text-label-numeric-md px-space-xs py-0.5 bg-secondary-container text-on-secondary-container font-bold">+4</span>
+<button class="p-1 text-on-surface-variant hover:text-white" onclick="overrideLogItem('14.3', '4 Runs')" title="Referee Override">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+</div>
+</div>
+<!-- Log Entry 2 -->
+<div class="flex items-center justify-between bg-surface-container p-space-xs text-on-surface hover:bg-surface-bright transition-colors">
+<div class="flex items-center gap-space-xs min-w-0">
+<span class="font-label-numeric-md text-label-numeric-md text-outline w-12 shrink-0">14.2</span>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold truncate">Aditya Rao to Karthik Reddy</span>
+<span class="font-label-badge text-label-badge text-outline truncate">Defended towards mid-off</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="font-label-numeric-md text-label-numeric-md px-space-xs py-0.5 bg-surface-container-highest text-on-surface">DOT</span>
+<button class="p-1 text-on-surface-variant hover:text-white" onclick="overrideLogItem('14.2', '0 Dot')" title="Referee Override">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+</div>
+</div>
+<!-- Log Entry 3 -->
+<div class="flex items-center justify-between bg-surface-container p-space-xs text-on-surface hover:bg-surface-bright transition-colors">
+<div class="flex items-center gap-space-xs min-w-0">
+<span class="font-label-numeric-md text-label-numeric-md text-outline w-12 shrink-0">14.1</span>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold truncate">Vikram Sharma to Karthik Reddy</span>
+<span class="font-label-badge text-label-badge text-outline truncate">Tucked off hips to square leg</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="font-label-numeric-md text-label-numeric-md px-space-xs py-0.5 bg-surface-container-highest text-on-surface">+1</span>
+<button class="p-1 text-on-surface-variant hover:text-white" onclick="overrideLogItem('14.1', '1 Single')" title="Referee Override">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+</div>
+</div>
+<!-- Log Entry 4 (Wicket) -->
+<div class="flex items-center justify-between bg-surface-container p-space-xs text-on-surface hover:bg-surface-bright transition-colors">
+<div class="flex items-center gap-space-xs min-w-0">
+<span class="font-label-numeric-md text-label-numeric-md text-primary w-12 shrink-0">13.6</span>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold truncate">Rohan V. • WICKET (CAUGHT)</span>
+<span class="font-label-badge text-label-badge text-outline truncate">c Harsha b Pranav • 41 (26)</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="font-label-numeric-md text-label-numeric-md px-space-xs py-0.5 bg-primary-container text-on-primary-container font-bold">WKT</span>
+<button class="p-1 text-on-surface-variant hover:text-white" onclick="overrideLogItem('13.6', 'Wicket Caught')" title="Referee Override">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+</div>
+</div>
+<!-- Log Entry 5 -->
+<div class="flex items-center justify-between bg-surface-container p-space-xs text-on-surface hover:bg-surface-bright transition-colors">
+<div class="flex items-center gap-space-xs min-w-0">
+<span class="font-label-numeric-md text-label-numeric-md text-secondary-container w-12 shrink-0">13.5</span>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold truncate">Rohan V. to Pranav</span>
+<span class="font-label-badge text-label-badge text-outline truncate">Pull shot over deep midwicket</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="font-label-numeric-md text-label-numeric-md px-space-xs py-0.5 bg-primary-container text-on-primary-container font-bold">+6</span>
+<button class="p-1 text-on-surface-variant hover:text-white" onclick="overrideLogItem('13.5', '6 Runs')" title="Referee Override">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+</div>
+</div>
+</div>
+<div class="pt-space-xs text-center">
+<span class="font-label-badge text-label-badge text-outline uppercase tracking-wider">Audit log immutably cryptographically signed</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- MODAL 1: HIGH-IMPACT WICKET DISMISSAL DIALOG (HIDDEN BY DEFAULT) -->
+<div class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-space-md" id="modal-wicket">
+<div class="bg-surface-container-low max-w-lg w-full p-space-lg flex flex-col gap-space-md shadow-[0_0_50px_rgba(225,6,0,0.7)]">
+<div class="flex items-center justify-between bg-primary-container p-space-sm text-on-primary-container">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[24px]">bolt</span>
+<span class="font-headline-md text-headline-md uppercase tracking-wider">Confirm Wicket Dismissal</span>
+</div>
+<button class="hover:opacity-75" onclick="closeWicketModal()">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="flex flex-col gap-space-sm">
+<label class="font-label-badge text-label-badge uppercase tracking-wider text-outline">Dismissed Batter</label>
+<div class="grid grid-cols-2 gap-space-xs">
+<button class="p-space-sm bg-surface-container-highest text-secondary-container font-title-md text-title-md uppercase text-left ring-1 ring-secondary-container" id="wkt-target-striker" onclick="selectDismissedBatter('striker')">
+            Aditya Rao (Striker)
+          </button>
+<button class="p-space-sm bg-surface-container text-on-surface font-title-md text-title-md uppercase text-left hover:bg-surface-container-high" id="wkt-target-nonstriker" onclick="selectDismissedBatter('nonstriker')">
+            Vikram Sharma (Non-Striker)
+          </button>
+</div>
+<label class="font-label-badge text-label-badge uppercase tracking-wider text-outline pt-space-xs">Dismissal Mode</label>
+<div class="grid grid-cols-3 gap-space-xs">
+<button class="p-space-sm bg-surface-container-high hover:bg-primary-container hover:text-white text-on-surface font-headline-sm text-headline-sm uppercase text-center transition-all" onclick="executeDismissal('Bowled')">
+            Bowled
+          </button>
+<button class="p-space-sm bg-surface-container-high hover:bg-primary-container hover:text-white text-on-surface font-headline-sm text-headline-sm uppercase text-center transition-all" onclick="executeDismissal('Caught')">
+            Caught
+          </button>
+<button class="p-space-sm bg-surface-container-high hover:bg-primary-container hover:text-white text-on-surface font-headline-sm text-headline-sm uppercase text-center transition-all" onclick="executeDismissal('LBW')">
+            LBW
+          </button>
+<button class="p-space-sm bg-surface-container-high hover:bg-primary-container hover:text-white text-on-surface font-headline-sm text-headline-sm uppercase text-center transition-all" onclick="executeDismissal('Run Out')">
+            Run Out
+          </button>
+<button class="p-space-sm bg-surface-container-high hover:bg-primary-container hover:text-white text-on-surface font-headline-sm text-headline-sm uppercase text-center transition-all" onclick="executeDismissal('Stumped')">
+            Stumped
+          </button>
+<button class="p-space-sm bg-surface-container-high hover:bg-primary-container hover:text-white text-on-surface font-headline-sm text-headline-sm uppercase text-center transition-all" onclick="executeDismissal('Hit Wicket')">
+            Hit Wicket
+          </button>
+</div>
+<div class="flex items-center gap-space-xs pt-space-xs">
+<label class="font-label-badge text-label-badge uppercase text-outline">Next Batter In:</label>
+<input class="bg-surface-container-high text-on-surface px-space-sm py-1 font-body-sm text-body-sm grow focus:outline-none focus:ring-1 focus:ring-primary-container" id="next-batter-input" type="text" value="Siddharth Pillai (#5)"/>
+</div>
+</div>
+<div class="flex items-center justify-end gap-space-sm pt-space-sm">
+<button class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase bg-surface-container text-on-surface-variant hover:text-on-surface" onclick="closeWicketModal()">
+          Cancel
+        </button>
+<button class="px-space-lg py-space-sm font-headline-sm text-headline-sm uppercase bg-primary-container text-on-primary-container shadow-lg hover:bg-inverse-primary clip-angle" onclick="executeDismissal('Confirmed Dismissal')">
+          Authorize Out
+        </button>
+</div>
+</div>
+</div>
+<!-- MODAL 2: FINALIZE MATCH CONFIRMATION (HIDDEN BY DEFAULT) -->
+<div class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-space-md" id="modal-finalize">
+<div class="bg-surface-container-low max-w-md w-full p-space-lg flex flex-col gap-space-md shadow-2xl">
+<div class="flex items-center gap-space-xs text-primary-container">
+<span class="material-symbols-outlined text-[28px]">gavel</span>
+<span class="font-headline-md text-headline-md uppercase">Lock &amp; Finalize Match</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface">
+        Are you sure you want to end and certify Match #14? This permanently closes public live scoring, commits final bonus points to the tournament ladder, and transmits the verified score sheet to the STME impulse committee.
+      </p>
+<div class="bg-surface-container p-space-sm flex flex-col gap-1 text-on-surface-variant font-label-badge text-label-badge uppercase">
+<span>Recorded Winner: NMIMS Strikers (Projected)</span>
+<span>Lead Official: Rajesh K. • Scorer Hub #088</span>
+</div>
+<div class="flex items-center justify-end gap-space-sm pt-space-sm">
+<button class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase bg-surface-container text-on-surface-variant hover:text-white" onclick="closeEndMatchModal()">
+          Back to Scoring
+        </button>
+<button class="px-space-lg py-space-sm font-headline-sm text-headline-sm uppercase bg-primary-container text-on-primary-container shadow-xl hover:bg-inverse-primary clip-angle" onclick="confirmEndMatch()">
+          Certify &amp; Publish
+        </button>
+</div>
+</div>
+</div>
+<!-- MODAL 3: REFEREE OVERRIDE DIALOG -->
+<div class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-space-md" id="modal-override">
+<div class="bg-surface-container-low max-w-sm w-full p-space-lg flex flex-col gap-space-md shadow-2xl">
+<div class="flex items-center gap-space-xs text-secondary-container">
+<span class="material-symbols-outlined text-[24px]">rule</span>
+<span class="font-headline-md text-headline-md uppercase">Referee Ball Correction</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface" id="override-details">
+        Overriding ball delivery log.
+      </p>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-badge text-label-badge text-outline uppercase">Corrected Outcome</label>
+<select class="bg-surface-container-high text-white p-space-xs font-title-md text-title-md" id="override-action-select">
+<option value="0">0 - Dot Ball</option>
+<option value="1">1 - Single Run</option>
+<option value="2">2 - Two Runs</option>
+<option value="4">4 - Boundary Four</option>
+<option value="6">6 - Maximum Six</option>
+<option value="WD">Wide (+1)</option>
+<option value="NB">No Ball (+1)</option>
+<option value="DEAD">Dead Ball (Re-bowl)</option>
+</select>
+</div>
+<div class="flex items-center justify-end gap-space-sm pt-space-xs">
+<button class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase bg-surface-container text-on-surface-variant hover:text-white" onclick="closeOverrideModal()">
+          Cancel
+        </button>
+<button class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase bg-secondary-container text-on-secondary-container font-bold clip-angle" onclick="commitOverride()">
+          Save Override
+        </button>
+</div>
+</div>
+</div>
+<!-- Inline Tactical Interactive Script -->
+<script>
+    let currentScore = {
+      runs: 142,
+      wickets: 3,
+      oversBalls: 87, // 14.3 overs = 14*6 + 3 = 87 balls
+      striker: "Aditya Rao",
+      nonStriker: "Vikram Sharma",
+      bowler: "Karthik Reddy",
+      thisOverBalls: ["1", "0", "4"]
+    };
+
+    let footballScore = {
+      home: 2,
+      away: 1,
+      clockRunning: true
+    };
+
+    let activeSport = 'cricket';
+
+    function switchSportConsole(sport) {
+      activeSport = sport;
+      const cricketPanel = document.getElementById('cricket-panel');
+      const footballPanel = document.getElementById('football-panel');
+      const tabCricket = document.getElementById('tab-cricket');
+      const tabFootball = document.getElementById('tab-football');
+      const previewCricket = document.getElementById('preview-cricket-block');
+      const previewFootball = document.getElementById('preview-football-block');
+
+      if (sport === 'cricket') {
+        cricketPanel.classList.remove('hidden');
+        cricketPanel.classList.add('flex');
+        footballPanel.classList.add('hidden');
+        footballPanel.classList.remove('flex');
+        
+        previewCricket.classList.remove('hidden');
+        previewFootball.classList.add('hidden');
+
+        tabCricket.className = "px-space-lg py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider bg-primary-container text-on-primary-container shadow-[0_0_16px_rgba(225,6,0,0.5)] transition-all flex items-center gap-space-xs clip-angle";
+        tabFootball.className = "px-space-lg py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider bg-surface-container-high text-on-surface-variant hover:text-on-surface shadow-md transition-all flex items-center gap-space-xs clip-angle";
+      } else {
+        cricketPanel.classList.add('hidden');
+        cricketPanel.classList.remove('flex');
+        footballPanel.classList.remove('hidden');
+        footballPanel.classList.add('flex');
+
+        previewCricket.classList.add('hidden');
+        previewFootball.classList.remove('hidden');
+
+        tabFootball.className = "px-space-lg py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider bg-primary-container text-on-primary-container shadow-[0_0_16px_rgba(225,6,0,0.5)] transition-all flex items-center gap-space-xs clip-angle";
+        tabCricket.className = "px-space-lg py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider bg-surface-container-high text-on-surface-variant hover:text-on-surface shadow-md transition-all flex items-center gap-space-xs clip-angle";
+      }
+    }
+
+    function updateMatchStatus(statusText, classStyle) {
+      const previewBadge = document.getElementById('preview-match-status');
+      previewBadge.textContent = statusText;
+      previewBadge.className = "font-label-badge text-label-badge uppercase px-space-xs py-0.5 font-bold " + classStyle;
+    }
+
+    function addCricketRuns(amount, label, isExtra) {
+      currentScore.runs += amount;
+      if (!isExtra) {
+        currentScore.oversBalls += 1;
+        currentScore.thisOverBalls.push(amount.toString());
+      }
+      refreshCricketUI();
+      appendAuditLog(formatOvers(currentScore.oversBalls), currentScore.striker + " vs " + currentScore.bowler, label, (amount > 0 ? "+" + amount : "DOT"));
+    }
+
+    function addCricketExtra(extraType, penaltyRuns) {
+      currentScore.runs += penaltyRuns;
+      refreshCricketUI();
+      appendAuditLog(formatOvers(currentScore.oversBalls), "EXTRA: " + extraType, extraType + " signalled by umpire", "+" + penaltyRuns);
+    }
+
+    function formatOvers(balls) {
+      const full = Math.floor(balls / 6);
+      const rem = balls % 6;
+      return full + "." + rem;
+    }
+
+    function refreshCricketUI() {
+      document.getElementById('pub-runs').textContent = currentScore.runs;
+      document.getElementById('pub-wickets').textContent = currentScore.wickets;
+      
+      const ovStr = formatOvers(currentScore.oversBalls);
+      document.getElementById('pub-overs').textContent = ovStr;
+
+      const oversDecimal = (Math.floor(currentScore.oversBalls / 6)) + ((currentScore.oversBalls % 6) / 6);
+      if (oversDecimal > 0) {
+        const crr = (currentScore.runs / oversDecimal).toFixed(2);
+        document.getElementById('pub-crr').textContent = crr;
+        document.getElementById('pub-proj').textContent = Math.round(crr * 20);
+      }
+
+      // Re-render Over Ball Pills
+      const container = document.getElementById('over-ball-container');
+      const recent = currentScore.thisOverBalls.slice(-6);
+      container.innerHTML = '';
+      for (let i = 0; i < 6; i++) {
+        const pill = document.createElement('span');
+        if (i < recent.length) {
+          const val = recent[i];
+          pill.className = "h-8 w-8 rounded-full flex items-center justify-center font-label-numeric-md font-bold text-[14px] " + 
+            (val === '4' ? "bg-secondary-container text-on-secondary-container" : 
+             val === '6' ? "bg-primary-container text-on-primary-container" : 
+             val === 'W' ? "bg-primary text-on-primary" : "bg-surface-container-high text-on-surface");
+          pill.textContent = val;
+        } else {
+          pill.className = "h-8 w-8 rounded-full bg-surface-container-highest flex items-center justify-center font-label-numeric-md text-outline font-bold text-[14px]";
+          pill.textContent = "-";
+        }
+        container.appendChild(pill);
+      }
+    }
+
+    function swapStrike() {
+      const temp = currentScore.striker;
+      currentScore.striker = currentScore.nonStriker;
+      currentScore.nonStriker = temp;
+      document.getElementById('txt-striker-name').textContent = currentScore.striker;
+      document.getElementById('txt-nonstriker-name').textContent = currentScore.nonStriker;
+    }
+
+    function promptChangeBowler() {
+      const newBowler = prompt("Enter replacement bowler name:", "Tarun Verma");
+      if (newBowler) {
+        currentScore.bowler = newBowler;
+        document.getElementById('txt-bowler-name').textContent = newBowler;
+        document.getElementById('txt-bowler-stats').textContent = "0.0-0-0-0";
+      }
+    }
+
+    function openDlsModal() {
+      const revOvers = prompt("Revise match overs allocation (Current: 20):", "18");
+      if (revOvers) {
+        alert("Overs revised to " + revOvers + " overs. DLS Par targets recalibrated.");
+      }
+    }
+
+    // Wicket Modal Handlers
+    function openWicketModal() {
+      document.getElementById('modal-wicket').classList.remove('hidden');
+      document.getElementById('modal-wicket').classList.add('flex');
+    }
+
+    function closeWicketModal() {
+      document.getElementById('modal-wicket').classList.add('hidden');
+      document.getElementById('modal-wicket').classList.remove('flex');
+    }
+
+    let dismissedTarget = "striker";
+    function selectDismissedBatter(target) {
+      dismissedTarget = target;
+      const b1 = document.getElementById('wkt-target-striker');
+      const b2 = document.getElementById('wkt-target-nonstriker');
+      if (target === 'striker') {
+        b1.className = "p-space-sm bg-surface-container-highest text-secondary-container font-title-md text-title-md uppercase text-left ring-1 ring-secondary-container";
+        b2.className = "p-space-sm bg-surface-container text-on-surface font-title-md text-title-md uppercase text-left hover:bg-surface-container-high";
+      } else {
+        b2.className = "p-space-sm bg-surface-container-highest text-secondary-container font-title-md text-title-md uppercase text-left ring-1 ring-secondary-container";
+        b1.className = "p-space-sm bg-surface-container text-on-surface font-title-md text-title-md uppercase text-left hover:bg-surface-container-high";
+      }
+    }
+
+    function executeDismissal(kind) {
+      currentScore.wickets += 1;
+      currentScore.oversBalls += 1;
+      currentScore.thisOverBalls.push('W');
+      
+      const nextBatter = document.getElementById('next-batter-input').value || "New Batter";
+      if (dismissedTarget === 'striker') {
+        currentScore.striker = nextBatter;
+        document.getElementById('txt-striker-name').textContent = nextBatter;
+        document.getElementById('txt-striker-stats').textContent = "0* (0b)";
+      } else {
+        currentScore.nonStriker = nextBatter;
+        document.getElementById('txt-nonstriker-name').textContent = nextBatter;
+        document.getElementById('txt-nonstriker-stats').textContent = "0* (0b)";
+      }
+
+      refreshCricketUI();
+      appendAuditLog(formatOvers(currentScore.oversBalls), "WICKET DISMISSAL (" + kind + ")", "Dismissed batsman walked off", "WKT");
+      closeWicketModal();
+    }
+
+    // Football Actions
+    function addFootballGoal(team) {
+      if (team === 'HOME') {
+        footballScore.home += 1;
+        document.getElementById('pub-fb-score-home').textContent = footballScore.home;
+        appendAuditLog("69'", "GOAL! VNR VJIET", "Scored into top corner", "GOL");
+      } else {
+        footballScore.away += 1;
+        document.getElementById('pub-fb-score-away').textContent = footballScore.away;
+        appendAuditLog("69'", "GOAL! OU TITANS", "Header from corner kick", "GOL");
+      }
+    }
+
+    function addFootballEvent(type, detail) {
+      appendAuditLog("69'", type, detail, type.substring(0, 3).toUpperCase());
+    }
+
+    function toggleFootballClock() {
+      footballScore.clockRunning = !footballScore.clockRunning;
+      const btn = document.getElementById('btn-clock-toggle');
+      if (footballScore.clockRunning) {
+        btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">timer</span> Pause Clock';
+        btn.className = "py-space-sm bg-tertiary-container text-on-tertiary-container font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-1";
+      } else {
+        btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">play_arrow</span> Resume Clock';
+        btn.className = "py-space-sm bg-secondary-container text-on-secondary-container font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-1";
+      }
+    }
+
+    // Log & Auditing Append
+    function appendAuditLog(ov, title, desc, tag) {
+      const list = document.getElementById('audit-log-list');
+      const item = document.createElement('div');
+      item.className = "flex items-center justify-between bg-surface-container p-space-xs text-on-surface hover:bg-surface-bright transition-colors";
+      
+      const tagBg = tag === 'WKT' || tag === 'RED' ? 'bg-primary-container text-on-primary-container' :
+                    tag === 'GOL' || tag === '+4' || tag === '+6' ? 'bg-secondary-container text-on-secondary-container' : 'bg-surface-container-highest text-on-surface';
+
+      item.innerHTML = `
+        <div class="flex items-center gap-space-xs min-w-0">
+          <span class="font-label-numeric-md text-label-numeric-md text-secondary-container w-12 shrink-0">${ov}</span>
+          <div class="flex flex-col min-w-0">
+            <span class="font-body-sm text-body-sm font-semibold truncate">${title}</span>
+            <span class="font-label-badge text-label-badge text-outline truncate">${desc}</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-space-xs shrink-0">
+          <span class="font-label-numeric-md text-label-numeric-md px-space-xs py-0.5 ${tagBg} font-bold">${tag}</span>
+          <button onclick="overrideLogItem('${ov}', '${title}')" title="Referee Override" class="p-1 text-on-surface-variant hover:text-white">
+            <span class="material-symbols-outlined text-[16px]">edit</span>
+          </button>
+        </div>
+      `;
+      list.prepend(item);
+    }
+
+    function undoLastEvent() {
+      const list = document.getElementById('audit-log-list');
+      if (list.children.length > 0) {
+        list.removeChild(list.firstElementChild);
+        alert("Last recorded telemetry event rolled back successfully.");
+      }
+    }
+
+    // Modal Overrides
+    let activeOverrideOv = "";
+    function overrideLogItem(ov, label) {
+      activeOverrideOv = ov;
+      document.getElementById('override-details').textContent = "Modifying event at delivery index: " + ov + " (" + label + ")";
+      document.getElementById('modal-override').classList.remove('hidden');
+      document.getElementById('modal-override').classList.add('flex');
+    }
+
+    function closeOverrideModal() {
+      document.getElementById('modal-override').classList.add('hidden');
+      document.getElementById('modal-override').classList.remove('flex');
+    }
+
+    function commitOverride() {
+      const choice = document.getElementById('override-action-select').value;
+      appendAuditLog(activeOverrideOv, "OVERRIDE BY OFFICIAL", "Adjusted to: " + choice, "REV");
+      closeOverrideModal();
+    }
+
+    // End Match Modal
+    function openEndMatchModal() {
+      document.getElementById('modal-finalize').classList.remove('hidden');
+      document.getElementById('modal-finalize').classList.add('flex');
+    }
+
+    function closeEndMatchModal() {
+      document.getElementById('modal-finalize').classList.add('hidden');
+      document.getElementById('modal-finalize').classList.remove('flex');
+    }
+
+    function confirmEndMatch() {
+      closeEndMatchModal();
+      updateMatchStatus('CONCLUDED (FINAL)', 'bg-primary-container text-on-primary-container');
+      alert("Match officially sealed and concluded. Scores published to public standings ladder.");
+    }
+  </script>
+</div></main><footer class="w-full bg-surface-dim pt-space-xxl pb-space-xl shadow-[0_-8px_32px_rgba(0,0,0,0.8)]"><div class="w-full px-gutter max-w-7xl mx-auto flex flex-col gap-space-xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-xl"><div class="flex flex-col gap-space-md"><div class="flex items-center gap-space-sm"><span class="font-headline-lg text-headline-lg uppercase text-on-surface tracking-wide">Legends Walk Off</span></div><p class="font-title-md text-title-md text-secondary-container tracking-wider uppercase">'Only Legends Walk Off the Field.'</p><p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">Presented by STME Impulse Committee, NMIMS Hyderabad (School of Technology Management &amp; Engineering). High-voltage inter-collegiate sports arena.</p></div><div class="flex flex-col gap-space-sm"><span class="font-headline-sm text-headline-sm uppercase tracking-widest text-primary font-bold">Quick Navigation</span><div class="flex flex-col gap-space-xs"><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="home" href="#">Tournament Home</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="standings" href="#">Points &amp; Standings</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="live-scores" href="#">Broadcast Live Telemetry</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="about-sponsors" href="#">Sponsors &amp; Partners</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="admin-console" href="#">Admin Console Portal</a></div></div><div class="flex flex-col gap-space-sm"><span class="font-headline-sm text-headline-sm uppercase tracking-widest text-primary font-bold">Official Contact</span><div class="flex flex-col gap-space-xs font-body-sm text-body-sm text-on-surface-variant"><div class="flex items-start gap-space-xs"><span class="material-symbols-outlined text-[18px] text-secondary-container shrink-0 mt-0.5">mail</span><span class="font-label-numeric-md text-label-numeric-md text-on-surface">impulse.stme@nmims.edu.in</span></div><div class="flex items-start gap-space-xs mt-space-xs"><span class="material-symbols-outlined text-[18px] text-secondary-container shrink-0 mt-0.5">location_on</span><span>STME Campus, Jadcherla, Hyderabad, Telangana - 509301</span></div></div></div><div class="flex flex-col gap-space-sm"><span class="font-headline-sm text-headline-sm uppercase tracking-widest text-primary font-bold">Arena Broadcasts</span><p class="font-body-sm text-body-sm text-on-surface-variant">Follow official match highlights, instant VAR telemetry, and stream drops:</p><div class="flex items-center gap-space-sm mt-space-xs"><a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_0_12px_rgba(0,0,0,0.5)]" href="#"><span class="material-symbols-outlined text-[20px]">photo_camera</span></a><a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_0_12px_rgba(0,0,0,0.5)]" href="#"><span class="material-symbols-outlined text-[20px]">play_circle</span></a><a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_0_12px_rgba(0,0,0,0.5)]" href="#"><span class="material-symbols-outlined text-[20px]">forum</span></a><a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_0_12px_rgba(0,0,0,0.5)]" href="#"><span class="material-symbols-outlined text-[20px]">tag</span></a></div></div></div><div class="pt-space-lg flex flex-col md:flex-row items-center justify-between gap-space-md font-body-sm text-body-sm text-on-surface-variant"><p class="text-center md:text-left">© 2026 Legends Walk Off. All Rights Reserved. STME Impulse Sports Committee.</p><div class="flex items-center gap-space-md font-label-badge text-label-badge uppercase tracking-widest text-outline"><span class="hover:text-on-surface transition-colors cursor-pointer">Privacy Policy</span><span class="hover:text-on-surface transition-colors cursor-pointer">Rulebook &amp; Code</span><span class="hover:text-on-surface transition-colors cursor-pointer">Anti-Doping Policy</span></div></div></div></footer></body></html>
