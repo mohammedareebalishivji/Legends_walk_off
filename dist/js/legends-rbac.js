@@ -1,19 +1,22 @@
 /**
- * Legends Walk Off — Role-Based Access Control (RBAC) Engine
+ * Legends Walk Off — Role-Based Access Control (RBAC) & Route Guard Engine
  * STME Impulse Committee • NMIMS Hyderabad 2026
  *
- * Supports Roles:
- * - committee: Committee Executive Admin (Super Admin)
- * - cricket: Official Cricket Match Scorer
- * - football: Official Football Match Scorer
- * - referees: Match Referees Panel & Auditor
- * - viewer: Public / Unauthenticated
+ * Security Model:
+ * - Public Viewers / Guests: Full access to all public live score telemetry,
+ *   standings, and schedules. Scoring engine and admin console links are strictly
+ *   HIDDEN from the UI. Direct URL access to admin routes is blocked.
+ * - Authenticated Officials (after Admin Login):
+ *   - committee: Full unrestricted scoring & arena broadcast controls
+ *   - cricket: Cricket scoring console only (Football locked)
+ *   - football: Football scoring console only (Cricket locked)
+ *   - referees: Adjudication, override, and match verification
  */
 
 (function () {
   'use strict';
 
-  // 1. ROLE DEFINITIONS & PERMISSIONS MATRIX
+  // 1. ROLES AND PERMISSIONS MATRIX
   const ROLES = {
     committee: {
       id: 'committee',
@@ -79,26 +82,19 @@
     }
   };
 
-  const DEFAULT_USER = {
-    email: 'officer@nmims.edu.in',
-    name: 'Rajesh K. (NMIMS STME Impulse)',
-    role: 'committee',
-    institution: 'School of Technology Management & Engineering, NMIMS Hyderabad',
-    token: 'NMIMS-STME-AUTH-2026-X99',
-    timestamp: Date.now()
-  };
-
-  // 2. RBAC ENGINE OBJECT
+  // 2. RBAC ENGINE
   window.LegendsRBAC = {
     roles: ROLES,
 
-    // Retrieve active session
+    // Retrieve active session from localStorage
     getCurrentUser: function () {
       try {
         const saved = localStorage.getItem('legends_auth_session');
         if (saved) {
           const user = JSON.parse(saved);
-          return user;
+          if (user && user.role && user.role !== 'viewer') {
+            return user;
+          }
         }
       } catch (e) {
         console.warn('Failed to parse auth session:', e);
@@ -106,10 +102,10 @@
       return null;
     },
 
-    // Check if authenticated
+    // Check if user is an authenticated official
     isAuthenticated: function () {
       const user = this.getCurrentUser();
-      return user !== null && !!user.role;
+      return user !== null && !!user.role && user.role !== 'viewer';
     },
 
     // Check specific permission
@@ -121,8 +117,8 @@
       return roleConfig.permissions.includes(perm);
     },
 
-    // Login user
-    login: function (email, roleId, remember = true) {
+    // Login user (stores session)
+    login: function (email, roleId) {
       const roleConfig = ROLES[roleId] || ROLES.cricket;
       const user = {
         email: email || 'officer@nmims.edu.in',
@@ -141,123 +137,210 @@
       return user;
     },
 
-    // Logout user
+    // Logout user (reverts to guest / public viewer)
     logout: function () {
       localStorage.removeItem('legends_auth_session');
       localStorage.removeItem('legends_admin_logged_in');
       localStorage.removeItem('legends_admin_email');
       window.dispatchEvent(new CustomEvent('legends_auth_changed', { detail: null }));
       if (window.LegendsApp) {
-        window.LegendsApp.showToast('Logged out of Admin Portal.', 'info');
+        window.LegendsApp.showToast('Logged out: Reverted to Public Viewer mode.', 'info');
       }
       setTimeout(() => {
-        window.location.href = 'login.html';
-      }, 500);
+        window.location.href = 'index.html';
+      }, 400);
     },
 
-    // Quick role switch (ideal for demonstrations)
+    // Switch role (only accessible to authenticated officials)
     switchRole: function (roleId) {
-      if (!ROLES[roleId]) return;
-      let user = this.getCurrentUser();
-      if (!user) {
-        user = Object.assign({}, DEFAULT_USER);
-      }
+      if (!ROLES[roleId] || !this.isAuthenticated()) return;
+      const user = this.getCurrentUser();
       user.role = roleId;
       localStorage.setItem('legends_auth_session', JSON.stringify(user));
       window.dispatchEvent(new CustomEvent('legends_auth_changed', { detail: user }));
       this.applyUI();
       if (window.LegendsApp) {
-        window.LegendsApp.showToast(`Switched Role: ${ROLES[roleId].title}`, 'success');
+        window.LegendsApp.showToast(`Active Role: ${ROLES[roleId].title}`, 'success');
       }
     },
 
-    // Route Guard for Admin Pages
+    // Strict Page Guard for Admin Scoring Routes
     enforcePageGuard: function () {
-      if (!this.isAuthenticated()) {
-        // Show route guard modal or auto-login default for demo
-        const isDemo = true; // Auto-login default committee admin for seamless review
-        if (isDemo) {
-          this.login(DEFAULT_USER.email, 'committee');
-          if (window.LegendsApp) {
-            window.LegendsApp.showToast('Authorized: Auto-authenticated as Committee Admin for review', 'info');
-          }
+      const isProtectedPage = window.location.pathname.includes('admin-console') || window.location.pathname.includes('mobile-admin');
+      if (!isProtectedPage) return true;
+
+      const isAuthed = this.isAuthenticated();
+      const gate = document.getElementById('rbac-auth-gate');
+      const mainContent = document.querySelector('main');
+
+      if (!isAuthed) {
+        // Strict Lock: Hide main content and display Access Denied Gate
+        if (mainContent) {
+          mainContent.style.filter = 'blur(12px)';
+          mainContent.style.pointerEvents = 'none';
+          mainContent.style.userSelect = 'none';
+        }
+        if (gate) {
+          gate.classList.remove('hidden');
+          gate.classList.add('flex');
         } else {
+          // If gate element is missing, redirect immediately to login
           window.location.href = 'login.html';
         }
+        return false;
       }
+
+      // Authenticated: remove gate & blur
+      if (mainContent) {
+        mainContent.style.filter = 'none';
+        mainContent.style.pointerEvents = 'auto';
+        mainContent.style.userSelect = 'auto';
+      }
+      if (gate) {
+        gate.classList.add('hidden');
+        gate.classList.remove('flex');
+      }
+      return true;
     },
 
-    // Apply UI visibility & disable states based on permissions
+    // Apply UI visibility based on whether user is Admin or Public Viewer
     applyUI: function () {
-      const user = this.getCurrentUser() || { role: 'viewer', name: 'Anonymous' };
-      const roleConfig = ROLES[user.role] || ROLES.viewer;
+      const isAuthed = this.isAuthenticated();
+      const user = this.getCurrentUser();
+      const roleConfig = user ? (ROLES[user.role] || ROLES.viewer) : ROLES.viewer;
 
-      // 1. Update Role Banner / Info Badges
-      const bannerName = document.getElementById('rbac-user-name');
-      if (bannerName) bannerName.textContent = user.name || user.email;
-
-      const bannerRole = document.getElementById('rbac-role-badge');
-      if (bannerRole) {
-        bannerRole.className = `px-space-sm py-0.5 font-label-badge text-label-badge uppercase font-bold clip-angle ${roleConfig.badgeClass}`;
-        bannerRole.textContent = roleConfig.title;
-      }
-
-      const roleSelect = document.getElementById('rbac-role-switcher');
-      if (roleSelect && roleSelect.value !== user.role) {
-        roleSelect.value = user.role;
-      }
-
-      // 2. Enforce Permissions on Elements with data-rbac-perm
-      document.querySelectorAll('[data-rbac-perm]').forEach(el => {
-        const requiredPerm = el.getAttribute('data-rbac-perm');
-        const allowed = this.hasPermission(requiredPerm);
-
-        if (!allowed) {
-          el.classList.add('opacity-40', 'cursor-not-allowed', 'pointer-events-none');
-          el.setAttribute('title', `Permission required: ${requiredPerm} (Active: ${roleConfig.title})`);
-          if (el.tagName === 'BUTTON' || el.tagName === 'INPUT') {
-            el.disabled = true;
-          }
+      // 1. PUBLIC VIEWERS: HIDE ALL "Admin Console" NAV AND FOOTER LINKS
+      document.querySelectorAll('[data-path="admin-console"]').forEach(el => {
+        if (isAuthed) {
+          el.classList.remove('hidden');
+          el.style.display = '';
         } else {
-          el.classList.remove('opacity-40', 'cursor-not-allowed', 'pointer-events-none');
-          el.removeAttribute('title');
-          if (el.tagName === 'BUTTON' || el.tagName === 'INPUT') {
-            el.disabled = false;
-          }
+          el.classList.add('hidden');
+          el.style.display = 'none';
         }
       });
 
-      // 3. Sport Deck Controls: lock decks if not permitted
-      const canCricket = this.hasPermission('cricket:score');
-      const canFootball = this.hasPermission('football:score');
-      const cricketLockBanner = document.getElementById('cricket-deck-lock');
-      const footballLockBanner = document.getElementById('football-deck-lock');
-
-      if (cricketLockBanner) {
-        if (!canCricket) cricketLockBanner.classList.remove('hidden');
-        else cricketLockBanner.classList.add('hidden');
+      // 2. MOBILE DRAWER: HIDE Admin Console for Guests
+      const mobileDrawer = document.getElementById('mobile-menu-drawer');
+      if (mobileDrawer) {
+        mobileDrawer.querySelectorAll('a[href*="admin-console"]').forEach(el => {
+          if (isAuthed) {
+            el.classList.remove('hidden');
+            el.style.display = 'flex';
+          } else {
+            el.classList.add('hidden');
+            el.style.display = 'none';
+          }
+        });
       }
 
-      if (footballLockBanner) {
-        if (!canFootball) footballLockBanner.classList.remove('hidden');
-        else footballLockBanner.classList.add('hidden');
+      // 3. HEADER ACTIONS:
+      // Guests see "Admin Login"
+      // Authenticated Admins see Profile Chip + Logout
+      document.querySelectorAll('[data-path="admin-login"]').forEach(el => {
+        if (isAuthed) {
+          el.classList.add('hidden');
+          el.style.display = 'none';
+        } else {
+          el.classList.remove('hidden');
+          el.style.display = '';
+        }
+      });
+
+      // Render or Update Admin Status Chip in Header
+      const headerActionAreas = document.querySelectorAll('header .flex.items-center.gap-space-md.shrink-0');
+      headerActionAreas.forEach(container => {
+        let existingChip = document.getElementById('navbar-admin-status-chip');
+        if (isAuthed && user) {
+          if (!existingChip) {
+            existingChip = document.createElement('div');
+            existingChip.id = 'navbar-admin-status-chip';
+            existingChip.className = 'flex items-center gap-space-xs bg-surface-container-high px-space-sm py-1 border border-secondary-container/50 clip-angle shadow-md';
+            container.insertBefore(existingChip, container.firstChild);
+          }
+          existingChip.classList.remove('hidden');
+          existingChip.innerHTML = `
+            <span class="w-2 h-2 rounded-full bg-tertiary animate-ping"></span>
+            <span class="font-label-badge text-label-badge uppercase font-bold text-secondary-container hidden sm:inline">${roleConfig.title.split(' ')[0]}</span>
+            <a href="admin-console.html" class="font-headline-sm text-xs text-primary hover:text-white uppercase tracking-wider ml-1" title="Open Scoring Engine">Console</a>
+            <button onclick="window.LegendsRBAC.logout()" class="text-on-surface-variant hover:text-error ml-1 transition-colors p-0.5" title="Exit Admin Session">
+              <span class="material-symbols-outlined text-[15px] align-middle">logout</span>
+            </button>
+          `;
+        } else if (existingChip) {
+          existingChip.classList.add('hidden');
+        }
+      });
+
+      // 4. INSIDE ADMIN CONSOLE: ENFORCE BUTTON PERMISSIONS & DECK LOCKS
+      if (isAuthed) {
+        const bannerName = document.getElementById('rbac-user-name');
+        if (bannerName) bannerName.textContent = user.name || user.email;
+
+        const bannerRole = document.getElementById('rbac-role-badge');
+        if (bannerRole) {
+          bannerRole.className = `px-space-sm py-0.5 font-label-badge text-label-badge uppercase font-bold clip-angle ${roleConfig.badgeClass}`;
+          bannerRole.textContent = roleConfig.title;
+        }
+
+        const roleSelect = document.getElementById('rbac-role-switcher');
+        if (roleSelect && roleSelect.value !== user.role) {
+          roleSelect.value = user.role;
+        }
+
+        // Apply permission attributes
+        document.querySelectorAll('[data-rbac-perm]').forEach(el => {
+          const perm = el.getAttribute('data-rbac-perm');
+          const allowed = this.hasPermission(perm);
+
+          if (!allowed) {
+            el.classList.add('opacity-40', 'cursor-not-allowed', 'pointer-events-none');
+            el.setAttribute('title', `Restricted: Requires ${perm}`);
+            if (el.tagName === 'BUTTON' || el.tagName === 'INPUT') {
+              el.disabled = true;
+            }
+          } else {
+            el.classList.remove('opacity-40', 'cursor-not-allowed', 'pointer-events-none');
+            el.removeAttribute('title');
+            if (el.tagName === 'BUTTON' || el.tagName === 'INPUT') {
+              el.disabled = false;
+            }
+          }
+        });
+
+        // Sport deck locks
+        const canCricket = this.hasPermission('cricket:score');
+        const canFootball = this.hasPermission('football:score');
+        const cricketLock = document.getElementById('cricket-deck-lock');
+        const footballLock = document.getElementById('football-deck-lock');
+
+        if (cricketLock) {
+          if (!canCricket) cricketLock.classList.remove('hidden');
+          else cricketLock.classList.add('hidden');
+        }
+        if (footballLock) {
+          if (!canFootball) footballLock.classList.remove('hidden');
+          else footballLock.classList.add('hidden');
+        }
       }
     }
   };
 
   // 3. AUTO INITIALIZATION
   document.addEventListener('DOMContentLoaded', function () {
-    const isProtectedPage = window.location.pathname.includes('admin-console') || window.location.pathname.includes('mobile-admin');
-    if (isProtectedPage) {
-      window.LegendsRBAC.enforcePageGuard();
-    }
+    window.LegendsRBAC.enforcePageGuard();
     window.LegendsRBAC.applyUI();
 
-    // Listen for auth changes across tabs
     window.addEventListener('storage', function (e) {
       if (e.key === 'legends_auth_session') {
+        window.LegendsRBAC.enforcePageGuard();
         window.LegendsRBAC.applyUI();
       }
+    });
+
+    window.addEventListener('legends_auth_changed', function () {
+      window.LegendsRBAC.enforcePageGuard();
+      window.LegendsRBAC.applyUI();
     });
   });
 

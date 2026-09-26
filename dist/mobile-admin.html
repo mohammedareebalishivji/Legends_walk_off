@@ -18,7 +18,28 @@
       min-height: max(884px, 100dvh);
     }
   </style>
-  </head><body class="bg-surface text-on-surface min-h-screen flex flex-col antialiased selection:bg-primary-container selection:text-on-primary-container"><header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,0,0,0.6)] pt-safe"><div class="h-16 px-margin-mobile flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-xs min-w-0 flex-1"><img alt='Fierce esports and sports championship emblem logo for "LEGENDS WALK OFF". Aggressive angular crest with crossed cricket bat and lightning/football motifs, sharp metallic blood red (#E10600) and electric neon yellow (#FFD400) accents, bold modern sports typography, dark background, stadium battle emblem aesthetic.. Design context: - Primary color: #e10600
+  </head><body class="relative" class="bg-surface text-on-surface min-h-screen flex flex-col antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- Strict RBAC Auth Gate for Guests/Viewers -->
+<div id="rbac-auth-gate" class="hidden fixed inset-0 z-[99999] bg-surface-container-lowest/95 backdrop-blur-2xl flex-col items-center justify-center p-6 text-center">
+  <div class="max-w-md w-full bg-surface-container-low border border-primary-container p-space-xl shadow-[0_0_50px_rgba(225,6,0,0.4)] clip-angle flex flex-col items-center text-center">
+    <div class="w-16 h-16 rounded-full bg-primary-container/20 border border-primary-container flex items-center justify-center mb-space-md">
+      <span class="material-symbols-outlined text-4xl text-primary animate-pulse">lock</span>
+    </div>
+    <span class="font-label-badge text-label-badge text-primary uppercase font-bold tracking-widest">ACCESS RESTRICTED • OFFICIALS ONLY</span>
+    <h2 class="font-headline-lg text-headline-lg uppercase text-on-surface mt-2">Scoring Console Locked</h2>
+    <p class="font-body-md text-body-md text-on-surface-variant mt-space-sm mb-space-lg leading-relaxed">
+      This live scoring engine is restricted to accredited NMIMS match officials, scorers, and tournament executives. Public spectators and guests can view real-time scores on the Live Hub.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-space-sm w-full">
+      <a href="login.html" class="flex-1 py-3 px-space-md bg-primary-container hover:bg-primary-container/90 text-on-primary-container font-headline-sm uppercase tracking-wider text-center flex items-center justify-center gap-1.5 shadow-[0_0_20px_rgba(225,6,0,0.5)]">
+        <span class="material-symbols-outlined text-[18px]">key</span>Official Login
+      </a>
+      <a href="live-scores.html" class="flex-1 py-3 px-space-md bg-surface-container-high hover:bg-surface-bright text-secondary-container font-headline-sm uppercase tracking-wider text-center flex items-center justify-center gap-1.5">
+        <span class="material-symbols-outlined text-[18px]">sensors</span>View Live Scores
+      </a>
+    </div>
+  </div>
+</div><header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,0,0,0.6)] pt-safe"><div class="h-16 px-margin-mobile flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-xs min-w-0 flex-1"><img alt='Fierce esports and sports championship emblem logo for "LEGENDS WALK OFF". Aggressive angular crest with crossed cricket bat and lightning/football motifs, sharp metallic blood red (#E10600) and electric neon yellow (#FFD400) accents, bold modern sports typography, dark background, stadium battle emblem aesthetic.. Design context: - Primary color: #e10600
 - Font: anton
 - Mode: dark
 - Roundness: rounded-lg

@@ -48,6 +48,7 @@ global.CustomEvent = class CustomEvent {
 global.document = {
   addEventListener: () => {},
   querySelectorAll: () => [],
+  querySelector: () => null,
   getElementById: (id) => null
 };
 
@@ -126,6 +127,20 @@ it('Logging out clears session and permissions', () => {
   RBAC.logout();
   assert.strictEqual(RBAC.isAuthenticated(), false);
   assert.strictEqual(RBAC.hasPermission('cricket:score'), false);
+});
+
+it('Guest / unauthenticated user is strictly blocked by page guard', () => {
+  RBAC.logout();
+  assert.strictEqual(RBAC.isAuthenticated(), false);
+  const allowed = RBAC.enforcePageGuard();
+  assert.strictEqual(allowed, false);
+});
+
+it('Admin user passes page guard and accesses scoring console', () => {
+  RBAC.login('officer@nmims.edu.in', 'committee');
+  assert.strictEqual(RBAC.isAuthenticated(), true);
+  const allowed = RBAC.enforcePageGuard();
+  assert.strictEqual(allowed, true);
 });
 
 console.log('\n--- 3. HTML CODEBASE INTEGRITY ---');
