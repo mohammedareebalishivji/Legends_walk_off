@@ -8,60 +8,26 @@
 
 ## 🏆 Overview
 
-**Legends Walk Off** is an esports & broadcast-style tournament web application engineered for the premier inter-collegiate sports championship at NMIMS Hyderabad Arena. Built using **Stitch MCP**, this portal provides broadcast telemetry, real-time scorekeeping, role-based access control, and an automated continuous integration & installation pipeline.
+**Legends Walk Off** is a high-octane, esports & broadcast-style tournament web application engineered for the premier inter-collegiate sports championship at NMIMS Hyderabad Arena. Built using **Stitch MCP**, this web portal delivers broadcast telemetry, real-time scorekeeping, and interactive leaderboards.
 
 ---
 
 ## 🚀 Quick Start
 
-### 1. One-Click Installer & Pipeline
+You can run this portal with zero build steps or dependencies:
+
+### Option 1: Local HTTP Server (Recommended)
 ```bash
-./install.sh
+# Using Node / npx
+npx serve -l 3000 .
+
+# OR using Python
+python3 -m http.server 3000
 ```
-*Validates the environment, verifies syntax, runs the automated RBAC test suite, builds the distribution bundle, and smoke-tests all web endpoints.*
+Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### 2. Launch Local Server
-```bash
-./start.sh
-```
-*Spins up the web server on port `3000` and automatically opens your browser.*
-
----
-
-## 🔐 Role-Based Access Control (RBAC) System
-
-The portal features an integrated institutional Role-Based Access Control engine ([`js/legends-rbac.js`](file:///Users/areebalishivji/Desktop/Legends_walk_off/js/legends-rbac.js)):
-
-| Role | Title | Permissions & Access Scope |
-| :--- | :--- | :--- |
-| **`committee`** | **Committee Executive Admin** | **Super-Admin:** Full scoring for Cricket & Football, emergency broadcast alert dispatcher, match finalization & reset, sponsor management, audit override |
-| **`cricket`** | **Official Scorer (Cricket)** | **Cricket Scorer:** Real-time ball-by-ball deliveries (`0`, `1`, `2`, `3`, `4`, `6`), wickets, extras, strike swapping, and bowler rotations. Football scoring is locked |
-| **`football`** | **Official Scorer (Football)** | **Football Scorer:** Goals, yellow/red cards, penalty fouls, match half clocks, and substitutions. Cricket scoring is locked |
-| **`referees`** | **Referees Panel & Match Judge** | **Judiciary & Audit:** Referee audit override, match dispute adjudication, DLS par calculations, official sign-off |
-| **`viewer`** | **Public Spectator / Athlete** | **Public View:** Read-only access to schedules, live broadcasts, and tables. Protected scoring routes automatically enforce login |
-
-### Live RBAC Features in [`admin-console.html`](file:///Users/areebalishivji/Desktop/Legends_walk_off/admin-console.html):
-- **Dynamic Security Ribbon:** Displays the authenticated official's name, role badge, and active relay telemetry.
-- **Interactive Role Switcher:** Dropdown in the header enables instant role switching for rapid demonstration of permission enforcement.
-- **Automated Deck Locking:** Unauthorized decks (e.g. attempting to score football as a cricket scorer) display permission lock banners.
-- **Visual Disablement:** Elements tagged with `data-rbac-perm` (e.g. `cricket:score`, `alerts:broadcast`) are dynamically disabled and grayed out if the active role lacks authorization.
-
----
-
-## 🛠️ Automated CI/CD & Installer Pipeline
-
-The project includes an enterprise-grade automated pipeline ([`pipeline.sh`](file:///Users/areebalishivji/Desktop/Legends_walk_off/pipeline.sh)):
-
-```text
-[STAGE 1/5] Environment & Tooling Verification (Bash, Node.js, Python, Git)
-[STAGE 2/5] Static Integrity & Syntax Validation (node -c, core files verification)
-[STAGE 3/5] RBAC Security & Permission Test Suite (node tests/rbac.test.js - 17 automated tests)
-[STAGE 4/5] Distribution Artifact Generation (dist/ packaging for static deployment)
-[STAGE 5/5] Local HTTP Server Smoke Test (Automated curl status code checks across all 11 routes)
-```
-
-### GitHub Actions CI/CD
-A GitHub Actions workflow is pre-configured in [`.github/workflows/ci-cd.yml`](file:///Users/areebalishivji/Desktop/Legends_walk_off/.github/workflows/ci-cd.yml) to automatically validate commits, execute the RBAC test suite, and deploy `dist/` to GitHub Pages.
+### Option 2: Direct File Open
+Simply double-click [index.html](file:///Users/areebalishivji/Desktop/Legends_walk_off/index.html) to view in any modern web browser.
 
 ---
 
@@ -73,8 +39,8 @@ A GitHub Actions workflow is pre-configured in [`.github/workflows/ci-cd.yml`](f
 | **Points & Standings** | [`standings.html`](file:///Users/areebalishivji/Desktop/Legends_walk_off/standings.html) | Dual-sport pool tables (Cricket & Football), real-time search, group filtering, Golden Bat / Golden Boot leaderboards |
 | **Live Scores & Telemetry** | [`live-scores.html`](file:///Users/areebalishivji/Desktop/Legends_walk_off/live-scores.html) | Live broadcast scorecard, ball-by-ball commentary, radar telemetry, and interactive fan voting poll |
 | **About Arena & Sponsors** | [`about.html`](file:///Users/areebalishivji/Desktop/Legends_walk_off/about.html) | NMIMS Arena specifications, STME Impulse Committee contacts, rulebook, and interactive sponsor manager |
-| **Admin Scoring Engine** | [`admin-console.html`](file:///Users/areebalishivji/Desktop/Legends_walk_off/admin-console.html) | Official referee console with RBAC controls, scoring buttons, audit log, and instant broadcast dispatcher |
-| **Admin Official Login** | [`login.html`](file:///Users/areebalishivji/Desktop/Legends_walk_off/login.html) | Authenticated credentials portal with animated 2FA verification, role preview, and redirect to Admin Console |
+| **Admin Scoring Engine** | [`admin-console.html`](file:///Users/areebalishivji/Desktop/Legends_walk_off/admin-console.html) | Official referee console: ball-by-ball scoring (+1, +4, +6, Wicket, Extras, Undo, Strike swap, alerts) |
+| **Admin Official Login** | [`login.html`](file:///Users/areebalishivji/Desktop/Legends_walk_off/login.html) | Authenticated credentials portal with animated 2FA verification and automatic redirect to Admin Console |
 | **Mobile Live Scores** | [`mobile-live.html`](file:///Users/areebalishivji/Desktop/Legends_walk_off/mobile-live.html) | Dedicated mobile viewport live match console with sticky bottom navigation |
 | **Mobile Admin Console** | [`mobile-admin.html`](file:///Users/areebalishivji/Desktop/Legends_walk_off/mobile-admin.html) | Mobile scorer console for sideline field umpires |
 
