@@ -39,6 +39,8 @@ if command -v node >/dev/null 2>&1; then
   echo "  ✓ js/legends-core.js syntax verified"
   node -c js/legends-rbac.js
   echo "  ✓ js/legends-rbac.js syntax verified"
+  node -c js/legends-roster.js
+  echo "  ✓ js/legends-roster.js syntax verified"
 fi
 
 # Verify required core files
@@ -53,6 +55,7 @@ REQUIRED_FILES=(
   "mobile-admin.html"
   "js/legends-core.js"
   "js/legends-rbac.js"
+  "js/legends-roster.js"
   "assets/logo.png"
   "assets/hero-banner.png"
 )
@@ -66,10 +69,11 @@ for file in "${REQUIRED_FILES[@]}"; do
   fi
 done
 
-# STAGE 3: RUN RBAC SECURITY TEST SUITE
-echo -e "\n🧪 [STAGE 3/5] Executing RBAC Security & Permission Test Suite..."
+# STAGE 3: RUN RBAC & ROSTER TEST SUITES
+echo -e "\n🧪 [STAGE 3/5] Executing RBAC Security & Roster Test Suites..."
 if command -v node >/dev/null 2>&1; then
   node tests/rbac.test.js
+  node tests/roster.test.js
 else
   echo "  ⚠ Skipping node tests (Node.js required)."
 fi
@@ -110,6 +114,7 @@ if command -v python3 >/dev/null 2>&1; then
     "mobile-admin.html"
     "js/legends-core.js"
     "js/legends-rbac.js"
+    "js/legends-roster.js"
   )
 
   ALL_SUCCESS=true

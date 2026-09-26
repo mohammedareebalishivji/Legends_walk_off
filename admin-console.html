@@ -173,6 +173,10 @@
 <span class="material-symbols-outlined text-[20px]">sports_soccer</span>
           Football Engine
         </button>
+<button class="flex-1 flex items-center justify-center gap-space-xs py-space-xs px-space-md font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 transition-all" id="tabRoster" onclick="toggleSportMode('roster')" data-rbac-perm="roster:manage">
+<span class="material-symbols-outlined text-[20px]">groups</span>
+          Teams &amp; Rosters
+        </button>
 </div>
 <!-- CRICKET SCORING DECK -->
 <div class="flex flex-col gap-space-lg" id="cricketConsole">
@@ -383,6 +387,58 @@
 </div>
 </div>
 </div>
+
+<!-- Teams & Rosters Management Console (id="rosterConsole") -->
+<div class="hidden flex-col gap-space-lg" id="rosterConsole">
+  <!-- Roster Control Header -->
+  <div class="bg-surface-container p-space-md flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md shadow-sm border-l-4 border-secondary-container">
+    <div>
+      <div class="flex items-center gap-space-xs">
+        <span class="material-symbols-outlined text-secondary-container text-2xl">groups</span>
+        <h3 class="font-headline-lg text-headline-lg text-on-surface uppercase">Tournament Teams &amp; Squad Rosters</h3>
+      </div>
+      <p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+        Authorized Committee Admin portal to register new inter-collegiate franchises, draft squad players, assign jersey numbers, and manage tournament pools.
+      </p>
+    </div>
+    <div class="flex items-center gap-space-sm shrink-0">
+      <button onclick="openAddTeamModal()" class="px-space-md py-2.5 bg-primary-container hover:bg-primary-container/90 text-on-primary-container font-headline-sm text-headline-sm uppercase tracking-wider transition-all clip-angle shadow-[0_0_15px_rgba(225,6,0,0.4)] flex items-center gap-1.5 font-bold">
+        <span class="material-symbols-outlined text-[18px]">add_circle</span>Register Team
+      </button>
+      <button onclick="if(confirm('Reset all teams & squads to initial official tournament roster?')){ window.LegendsRoster.resetDefaults(); renderRosterUI(); }" class="px-space-sm py-2 bg-surface-container-high hover:bg-error-container hover:text-on-error-container text-on-surface-variant font-label-badge text-xs uppercase transition-colors clip-angle flex items-center gap-1" title="Reset teams to default">
+        <span class="material-symbols-outlined text-[14px]">refresh</span>Reset Rosters
+      </button>
+    </div>
+  </div>
+
+  <!-- Sport & Pool Filter Bar -->
+  <div class="bg-surface-container-low p-space-sm flex flex-wrap items-center justify-between gap-space-md border border-outline-variant/20">
+    <div class="flex items-center gap-space-xs">
+      <button onclick="filterRosterSport('all', this)" class="roster-filter-btn px-space-md py-1 font-headline-sm text-xs uppercase tracking-wider bg-surface-container-highest text-secondary-container clip-angle font-bold">All Franchises</button>
+      <button onclick="filterRosterSport('cricket', this)" class="roster-filter-btn px-space-md py-1 font-headline-sm text-xs uppercase tracking-wider text-on-surface-variant hover:text-on-surface clip-angle">Cricket Only</button>
+      <button onclick="filterRosterSport('football', this)" class="roster-filter-btn px-space-md py-1 font-headline-sm text-xs uppercase tracking-wider text-on-surface-variant hover:text-on-surface clip-angle">Football Only</button>
+    </div>
+    <div class="flex items-center gap-2 w-full sm:w-auto">
+      <span class="material-symbols-outlined text-outline text-lg">search</span>
+      <input type="text" id="rosterSearchInput" oninput="renderRosterUI()" placeholder="Search team or college..." class="bg-surface-container-high text-on-surface font-body-sm px-3 py-1.5 border border-outline-variant/30 text-xs w-full sm:w-64 focus:outline-none focus:border-secondary-container">
+    </div>
+  </div>
+
+  <!-- Main Roster Layout: Left (Teams List), Right (Active Team Squad View) -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+    <!-- Left Column: Teams Grid (5 cols) -->
+    <div class="lg:col-span-5 flex flex-col gap-space-sm" id="rosterTeamsListContainer">
+      <!-- Injected via JavaScript -->
+    </div>
+
+    <!-- Right Column: Active Team Squad Roster (7 cols) -->
+    <div class="lg:col-span-7 bg-surface-container p-space-md flex flex-col gap-space-md shadow-md border border-outline-variant/30" id="activeTeamSquadPanel">
+      <!-- Injected via JavaScript -->
+    </div>
+  </div>
+</div>
+
+
 <!-- BALL LOG & AUDIT LOG TABLE -->
 <div class="bg-surface-container p-space-md flex flex-col gap-space-md shadow-sm">
 <div class="flex items-center justify-between">
@@ -656,29 +712,34 @@
     function toggleSportMode(sport) {
       const cricketDeck = document.getElementById('cricketConsole');
       const footballDeck = document.getElementById('footballConsole');
+      const rosterDeck = document.getElementById('rosterConsole');
       const tabCricket = document.getElementById('tabCricket');
       const tabFootball = document.getElementById('tabFootball');
+      const tabRoster = document.getElementById('tabRoster');
+
+      const activeCls = "flex-1 flex items-center justify-center gap-space-xs py-space-xs px-space-md font-headline-sm text-headline-sm uppercase tracking-wider bg-surface-container-high text-secondary-container shadow-inner transition-all";
+      const inactiveCls = "flex-1 flex items-center justify-center gap-space-xs py-space-xs px-space-md font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 transition-all";
+
+      if (cricketDeck) { cricketDeck.classList.add('hidden'); cricketDeck.classList.remove('flex'); }
+      if (footballDeck) { footballDeck.classList.add('hidden'); footballDeck.classList.remove('flex'); }
+      if (rosterDeck) { rosterDeck.classList.add('hidden'); rosterDeck.classList.remove('flex'); }
+
+      if (tabCricket) tabCricket.className = inactiveCls;
+      if (tabFootball) tabFootball.className = inactiveCls;
+      if (tabRoster) tabRoster.className = inactiveCls;
 
       if (sport === 'cricket') {
-        cricketDeck.classList.remove('hidden');
-        cricketDeck.classList.add('flex');
-        footballDeck.classList.add('hidden');
-        footballDeck.classList.remove('flex');
-        
-        tabCricket.className = "flex-1 flex items-center justify-center gap-space-xs py-space-xs px-space-md font-headline-sm text-headline-sm uppercase tracking-wider bg-surface-container-high text-secondary-container shadow-inner transition-all";
-        tabFootball.className = "flex-1 flex items-center justify-center gap-space-xs py-space-xs px-space-md font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 transition-all";
-      } else {
-        footballDeck.classList.remove('hidden');
-        footballDeck.classList.add('flex');
-        cricketDeck.classList.add('hidden');
-        cricketDeck.classList.remove('flex');
-
-        tabFootball.className = "flex-1 flex items-center justify-center gap-space-xs py-space-xs px-space-md font-headline-sm text-headline-sm uppercase tracking-wider bg-surface-container-high text-secondary-container shadow-inner transition-all";
-        tabCricket.className = "flex-1 flex items-center justify-center gap-space-xs py-space-xs px-space-md font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 transition-all";
+        if (cricketDeck) { cricketDeck.classList.remove('hidden'); cricketDeck.classList.add('flex'); }
+        if (tabCricket) tabCricket.className = activeCls;
+      } else if (sport === 'football') {
+        if (footballDeck) { footballDeck.classList.remove('hidden'); footballDeck.classList.add('flex'); }
+        if (tabFootball) tabFootball.className = activeCls;
+      } else if (sport === 'roster') {
+        if (rosterDeck) { rosterDeck.classList.remove('hidden'); rosterDeck.classList.add('flex'); }
+        if (tabRoster) tabRoster.className = activeCls;
+        if (window.renderRosterUI) window.renderRosterUI();
       }
-    }
-
-    function toggleSportView(val) {
+    }function toggleSportView(val) {
       if (val === 'football') {
         toggleSportMode('football');
       } else {
@@ -898,4 +959,150 @@
   </script>
 </div></main><footer class="w-full bg-surface-dim pt-space-xxl pb-space-xl shadow-[0_-8px_32px_rgba(0,0,0,0.8)]"><div class="w-full px-gutter max-w-7xl mx-auto flex flex-col gap-space-xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-xl"><div class="flex flex-col gap-space-md"><div class="flex items-center gap-space-sm"><span class="font-headline-lg text-headline-lg uppercase text-on-surface tracking-wide">Legends Walk Off</span></div><p class="font-title-md text-title-md text-secondary-container tracking-wider uppercase">'Only Legends Walk Off the Field.'</p><p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">Presented by STME Impulse Committee, NMIMS Hyderabad (School of Technology Management &amp; Engineering). High-voltage inter-collegiate sports arena.</p></div><div class="flex flex-col gap-space-sm"><span class="font-headline-sm text-headline-sm uppercase tracking-widest text-primary font-bold">Quick Navigation</span><div class="flex flex-col gap-space-xs"><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="home" href="index.html">Tournament Home</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="standings" href="standings.html">Points &amp; Standings</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="live-scores" href="live-scores.html">Broadcast Live Telemetry</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="about-sponsors" href="about.html">Sponsors &amp; Partners</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" data-path="admin-console" href="admin-console.html">Admin Console Portal</a></div></div><div class="flex flex-col gap-space-sm"><span class="font-headline-sm text-headline-sm uppercase tracking-widest text-primary font-bold">Official Contact</span><div class="flex flex-col gap-space-xs font-body-sm text-body-sm text-on-surface-variant"><div class="flex items-start gap-space-xs"><span class="material-symbols-outlined text-[18px] text-secondary-container shrink-0 mt-0.5">mail</span><span class="font-label-numeric-md text-label-numeric-md text-on-surface">impulse.stme@nmims.edu.in</span></div><div class="flex items-start gap-space-xs mt-space-xs"><span class="material-symbols-outlined text-[18px] text-secondary-container shrink-0 mt-0.5">location_on</span><span>STME Campus, Jadcherla, Hyderabad, Telangana - 509301</span></div></div></div><div class="flex flex-col gap-space-sm"><span class="font-headline-sm text-headline-sm uppercase tracking-widest text-primary font-bold">Arena Broadcasts</span><p class="font-body-sm text-body-sm text-on-surface-variant">Follow official match highlights, instant VAR telemetry, and stream drops:</p><div class="flex items-center gap-space-sm mt-space-xs"><a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_0_12px_rgba(0,0,0,0.5)]" href="#"><span class="material-symbols-outlined text-[20px]">photo_camera</span></a><a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_0_12px_rgba(0,0,0,0.5)]" href="#"><span class="material-symbols-outlined text-[20px]">play_circle</span></a><a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_0_12px_rgba(0,0,0,0.5)]" href="#"><span class="material-symbols-outlined text-[20px]">forum</span></a><a class="w-10 h-10 bg-surface-container flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_0_12px_rgba(0,0,0,0.5)]" href="#"><span class="material-symbols-outlined text-[20px]">tag</span></a></div></div></div><div class="pt-space-lg flex flex-col md:flex-row items-center justify-between gap-space-md font-body-sm text-body-sm text-on-surface-variant"><p class="text-center md:text-left">© 2026 Legends Walk Off. All Rights Reserved. STME Impulse Sports Committee.</p><div class="flex items-center gap-space-md font-label-badge text-label-badge uppercase tracking-widest text-outline"><span class="hover:text-on-surface transition-colors cursor-pointer">Privacy Policy</span><span class="hover:text-on-surface transition-colors cursor-pointer">Rulebook &amp; Code</span><span class="hover:text-on-surface transition-colors cursor-pointer">Anti-Doping Policy</span></div></div></div></footer><script src="js/legends-core.js"></script>
 <script src="js/legends-rbac.js"></script>
+<script src="js/legends-roster.js"></script>
+<!-- Modal: Add New Team -->
+<div class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-gutter" id="addTeamModal">
+  <div class="bg-surface-container-high w-full max-w-lg p-space-xl flex flex-col gap-space-md shadow-2xl relative border border-secondary-container/40 clip-angle">
+    <div class="flex items-center justify-between pb-space-xs border-b border-outline-variant/30">
+      <div class="flex items-center gap-space-xs text-secondary-container">
+        <span class="material-symbols-outlined text-[28px]">shield</span>
+        <span class="font-headline-md text-headline-md uppercase tracking-wider">Register New Franchise</span>
+      </div>
+      <button class="text-on-surface-variant hover:text-on-surface" onclick="closeAddTeamModal()">
+        <span class="material-symbols-outlined text-[24px]">close</span>
+      </button>
+    </div>
+
+    <form id="newTeamForm" onsubmit="submitAddTeamForm(event)" class="flex flex-col gap-space-sm">
+      <div>
+        <label class="block font-label-badge text-xs uppercase text-on-surface-variant mb-1">Franchise / Team Name *</label>
+        <input type="text" id="teamNameInput" required placeholder="e.g. IIT Hyderabad CyberKnights" class="w-full bg-surface-container-lowest text-on-surface p-2.5 text-sm border border-outline-variant/30 focus:border-secondary-container focus:outline-none">
+      </div>
+
+      <div class="grid grid-cols-2 gap-space-sm">
+        <div>
+          <label class="block font-label-badge text-xs uppercase text-on-surface-variant mb-1">Short Code *</label>
+          <input type="text" id="teamCodeInput" required maxlength="6" placeholder="e.g. IITH" class="w-full bg-surface-container-lowest text-on-surface p-2.5 text-sm uppercase font-mono border border-outline-variant/30 focus:border-secondary-container focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-label-badge text-xs uppercase text-on-surface-variant mb-1">Sport *</label>
+          <select id="teamSportInput" class="w-full bg-surface-container-lowest text-on-surface p-2.5 text-sm border border-outline-variant/30 focus:border-secondary-container focus:outline-none">
+            <option value="cricket">Cricket (T20 League)</option>
+            <option value="football">Football (Soccer 90')</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-space-sm">
+        <div>
+          <label class="block font-label-badge text-xs uppercase text-on-surface-variant mb-1">Tournament Pool *</label>
+          <select id="teamPoolInput" class="w-full bg-surface-container-lowest text-on-surface p-2.5 text-sm border border-outline-variant/30 focus:border-secondary-container focus:outline-none">
+            <option value="Group Alpha">Group Alpha (Cricket)</option>
+            <option value="Group Bravo">Group Bravo (Cricket)</option>
+            <option value="Conference Alpha">Conference Alpha (Football)</option>
+            <option value="Conference Bravo">Conference Bravo (Football)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-label-badge text-xs uppercase text-on-surface-variant mb-1">Team Accent Color</label>
+          <select id="teamColorInput" class="w-full bg-surface-container-lowest text-on-surface p-2.5 text-sm border border-outline-variant/30 focus:border-secondary-container focus:outline-none">
+            <option value="#e10600">Blood Red (#e10600)</option>
+            <option value="#ffd400">Neon Yellow (#ffd400)</option>
+            <option value="#38bdf8">Electric Sky (#38bdf8)</option>
+            <option value="#4edea3">Pitch Green (#4edea3)</option>
+            <option value="#a855f7">Royal Purple (#a855f7)</option>
+            <option value="#fb923c">Flame Orange (#fb923c)</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="block font-label-badge text-xs uppercase text-on-surface-variant mb-1">College / Campus Institution *</label>
+        <input type="text" id="teamInstInput" required placeholder="e.g. Indian Institute of Technology, Kandi Campus" class="w-full bg-surface-container-lowest text-on-surface p-2.5 text-sm border border-outline-variant/30 focus:border-secondary-container focus:outline-none">
+      </div>
+
+      <div>
+        <label class="block font-label-badge text-xs uppercase text-on-surface-variant mb-1">Initial Captain Name</label>
+        <input type="text" id="teamCaptainInput" placeholder="e.g. Manas Verma" class="w-full bg-surface-container-lowest text-on-surface p-2.5 text-sm border border-outline-variant/30 focus:border-secondary-container focus:outline-none">
+      </div>
+
+      <div class="flex items-center justify-end gap-space-sm mt-space-md pt-space-xs border-t border-outline-variant/20">
+        <button type="button" onclick="closeAddTeamModal()" class="px-space-md py-2 bg-surface-container text-on-surface font-headline-sm uppercase text-xs">Cancel</button>
+        <button type="submit" class="px-space-lg py-2.5 bg-primary-container text-on-primary font-headline-sm uppercase text-xs clip-angle shadow-lg font-bold flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">how_to_reg</span>Confirm Registration
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Add Squad Player -->
+<div class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-gutter" id="addMemberModal">
+  <div class="bg-surface-container-high w-full max-w-lg p-space-xl flex flex-col gap-space-md shadow-2xl relative border border-secondary-container/40 clip-angle">
+    <div class="flex items-center justify-between pb-space-xs border-b border-outline-variant/30">
+      <div class="flex items-center gap-space-xs text-secondary-container">
+        <span class="material-symbols-outlined text-[28px]">person_add</span>
+        <span class="font-headline-md text-headline-md uppercase tracking-wider">Draft Squad Member</span>
+      </div>
+      <button class="text-on-surface-variant hover:text-on-surface" onclick="closeAddMemberModal()">
+        <span class="material-symbols-outlined text-[24px]">close</span>
+      </button>
+    </div>
+
+    <p class="font-body-sm text-xs text-on-surface-variant">
+      Drafting athlete to <strong class="text-secondary-container" id="addMemberTeamTitle">Active Franchise</strong>.
+    </p>
+
+    <form id="newMemberForm" onsubmit="submitAddMemberForm(event)" class="flex flex-col gap-space-sm">
+      <input type="hidden" id="targetMemberTeamId" value="">
+
+      <div>
+        <label class="block font-label-badge text-xs uppercase text-on-surface-variant mb-1">Player Full Name *</label>
+        <input type="text" id="memberNameInput" required placeholder="e.g. Rohit Sharma" class="w-full bg-surface-container-lowest text-on-surface p-2.5 text-sm border border-outline-variant/30 focus:border-secondary-container focus:outline-none">
+      </div>
+
+      <div class="grid grid-cols-2 gap-space-sm">
+        <div>
+          <label class="block font-label-badge text-xs uppercase text-on-surface-variant mb-1">Jersey Number (#) *</label>
+          <input type="number" id="memberNumberInput" required min="1" max="99" placeholder="45" class="w-full bg-surface-container-lowest text-on-surface p-2.5 text-sm font-mono border border-outline-variant/30 focus:border-secondary-container focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-label-badge text-xs uppercase text-on-surface-variant mb-1">Tactical Role *</label>
+          <select id="memberRoleInput" class="w-full bg-surface-container-lowest text-on-surface p-2.5 text-sm border border-outline-variant/30 focus:border-secondary-container focus:outline-none">
+            <option value="Opening Batsman">Opening Batsman</option>
+            <option value="Top-order Batsman">Top-order Batsman</option>
+            <option value="Middle-order Batsman">Middle-order Batsman</option>
+            <option value="Wicket-keeper Batsman">Wicket-keeper Batsman</option>
+            <option value="All-Rounder">All-Rounder</option>
+            <option value="Pace Bowler">Pace Bowler</option>
+            <option value="Spin Bowler">Spin Bowler</option>
+            <option value="Goalkeeper (GK)">Goalkeeper (GK)</option>
+            <option value="Centre-Back (CB)">Centre-Back (CB)</option>
+            <option value="Full-Back (LB/RB)">Full-Back (LB/RB)</option>
+            <option value="Central Midfielder (CM)">Central Midfielder (CM)</option>
+            <option value="Winger (LW/RW)">Winger (LW/RW)</option>
+            <option value="Striker / Centre Forward (ST)">Striker / Centre Forward (ST)</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="block font-label-badge text-xs uppercase text-on-surface-variant mb-1">Playing Style / Specialization</label>
+        <input type="text" id="memberStyleInput" placeholder="e.g. Right-hand bat, Right-arm fast medium" class="w-full bg-surface-container-lowest text-on-surface p-2.5 text-sm border border-outline-variant/30 focus:border-secondary-container focus:outline-none">
+      </div>
+
+      <div class="flex items-center gap-2 mt-1">
+        <input type="checkbox" id="memberIsCaptain" class="w-4 h-4 accent-secondary-container cursor-pointer">
+        <label for="memberIsCaptain" class="font-label-badge text-xs uppercase text-on-surface cursor-pointer select-none">Designate as Team Captain (c)</label>
+      </div>
+
+      <div class="flex items-center justify-end gap-space-sm mt-space-md pt-space-xs border-t border-outline-variant/20">
+        <button type="button" onclick="closeAddMemberModal()" class="px-space-md py-2 bg-surface-container text-on-surface font-headline-sm uppercase text-xs">Cancel</button>
+        <button type="submit" class="px-space-lg py-2.5 bg-secondary-container text-on-secondary font-headline-sm uppercase text-xs clip-angle shadow-lg font-bold flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">person_add</span>Draft Player
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 </body></html>
