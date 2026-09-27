@@ -1,124 +1,324 @@
 <!DOCTYPE html>
 
-<html class="dark" lang="en"><head>
+<html class="dark" lang="en">
+<head>
 <title>Official Admin Login | Legends Walk Off 2026</title>
 <meta name="description" content="Official match referee and scorekeeper authentication portal for STME Impulse Committee."/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_blank" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Inter:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"tertiary-fixed":"#6ffbbe","surface-container-high":"#2a2a2a","surface-bright":"#3a3939","error":"#ffb4ab","on-error":"#690005","surface-tint":"#ffb4a8","inverse-on-surface":"#313030","on-surface":"#e5e2e1","on-surface-variant":"#e9bcb5","on-background":"#e5e2e1","on-tertiary":"#003824","surface-container-lowest":"#0e0e0e","primary-fixed-dim":"#ffb4a8","on-secondary":"#3b2f00","on-secondary-fixed":"#231b00","secondary-fixed":"#ffe177","surface-container-highest":"#353534","secondary":"#fff3d4","on-secondary-fixed-variant":"#554500","surface-dim":"#131313","outline":"#af8781","secondary-fixed-dim":"#ebc300","surface-variant":"#353534","error-container":"#93000a","on-primary-fixed":"#410100","surface":"#131313","surface-container-low":"#1c1b1b","tertiary-container":"#008058","primary-fixed":"#ffdad4","tertiary":"#4edea3","outline-variant":"#5e3f3a","inverse-primary":"#c00500","on-secondary-container":"#6f5c00","on-tertiary-fixed-variant":"#005236","primary-container":"#e10600","on-tertiary-container":"#d4ffe5","secondary-container":"#fed400","on-tertiary-fixed":"#002113","on-primary":"#680200","tertiary-fixed-dim":"#4edea3","on-primary-container":"#fff2f0","background":"#131313","primary":"#ffb4a8","on-primary-fixed-variant":"#930300","on-error-container":"#ffdad6","surface-container":"#201f1f","inverse-surface":"#e5e2e1"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"margin-mobile":"1rem","space-sm":"0.5rem","margin":"2.5rem","gutter":"1.5rem","gutter-mobile":"0.75rem","space-lg":"1.5rem","space-xxl":"4rem","space-md":"1rem","space-xs":"0.25rem","space-xl":"2.5rem"},fontFamily:{"body-lg":["Inter"],"title-lg":["Inter"],"label-numeric-lg":["JetBrains Mono"],"label-badge":["JetBrains Mono"],"headline-xl":["Anton"],"headline-md":["Anton"],"label-numeric-md":["JetBrains Mono"],"headline-lg":["Anton"],"headline-xl-mobile":["Anton"],"body-md":["Inter"],"display-hero-mobile":["Anton"],"title-md":["Inter"],"display-hero":["Anton"],"body-sm":["Inter"],"headline-sm":["Anton"]},fontSize:{"body-lg":["1.125rem",{"lineHeight":"1.625rem","letterSpacing":"0em","fontWeight":"400"}],"title-lg":["1.25rem",{"lineHeight":"1.5rem","letterSpacing":"-0.01em","fontWeight":"800"}],"label-numeric-lg":["1.75rem",{"lineHeight":"1.75rem","letterSpacing":"-0.04em","fontWeight":"700"}],"label-badge":["0.6875rem",{"lineHeight":"0.875rem","letterSpacing":"0.12em","fontWeight":"700"}],"headline-xl":["3rem",{"lineHeight":"3rem","letterSpacing":"0.05em","fontWeight":"400"}],"headline-md":["1.5rem",{"lineHeight":"1.625rem","letterSpacing":"0.04em","fontWeight":"400"}],"label-numeric-md":["1rem",{"lineHeight":"1.25rem","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["2rem",{"lineHeight":"2.125rem","letterSpacing":"0.05em","fontWeight":"400"}],"headline-xl-mobile":["2rem",{"lineHeight":"2.125rem","letterSpacing":"0.04em","fontWeight":"400"}],"body-md":["0.9375rem",{"lineHeight":"1.5rem","letterSpacing":"0em","fontWeight":"400"}],"display-hero-mobile":["2.75rem",{"lineHeight":"2.75rem","letterSpacing":"0.03em","fontWeight":"400"}],"title-md":["1rem",{"lineHeight":"1.375rem","letterSpacing":"0.01em","fontWeight":"700"}],"display-hero":["4.5rem",{"lineHeight":"4.25rem","letterSpacing":"0.04em","fontWeight":"400"}],"body-sm":["0.8125rem",{"lineHeight":"1.25rem","letterSpacing":"0.01em","fontWeight":"400"}],"headline-sm":["1.125rem",{"lineHeight":"1.25rem","letterSpacing":"0.03em","fontWeight":"400"}]}}}};</script></head><body class="bg-surface-container-lowest font-body-md text-on-surface antialiased min-h-screen flex items-center justify-center p-gutter"><main class="w-full max-w-xl"><div class="flex flex-col w-full relative">
-<div class="absolute -top-32 left-1/2 -translate-x-1/2 w-96 h-96 bg-primary-container/20 rounded-full blur-[100px] pointer-events-none"></div>
-<div class="absolute top-1/2 -right-40 w-80 h-80 bg-secondary-container/10 rounded-full blur-[90px] pointer-events-none"></div>
-<div class="mb-space-md flex items-center justify-between">
-<a class="group inline-flex items-center gap-space-xs text-on-surface-variant hover:text-on-surface transition-colors py-space-xs px-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container shadow-sm" href="index.html">
-<span class="material-symbols-outlined text-base group-hover:-translate-x-1 transition-transform">arrow_back</span>
-<span class="font-label-badge text-label-badge uppercase tracking-wider">RETURN TO TOURNAMENT HUB</span>
-</a>
-<div class="inline-flex items-center gap-space-xs py-space-xs px-space-sm rounded-lg bg-surface-container-low">
-<span class="w-2 h-2 rounded-full bg-tertiary animate-ping"></span>
-<span class="font-label-badge text-label-badge text-tertiary uppercase tracking-widest">LIVE ENCRYPTION</span>
-</div>
-</div>
-<div class="relative w-full rounded-xl bg-surface-container-low/90 backdrop-blur-xl shadow-2xl p-space-lg sm:p-space-xl overflow-hidden">
-<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary-container to-transparent"></div>
-<div class="absolute -bottom-12 -left-12 w-48 h-48 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
-<div class="absolute top-3 left-3 w-2 h-2 rounded-full bg-surface-bright shadow-inner"></div>
-<div class="absolute top-3 right-3 w-2 h-2 rounded-full bg-surface-bright shadow-inner"></div>
-<div class="absolute bottom-3 left-3 w-2 h-2 rounded-full bg-surface-bright shadow-inner"></div>
-<div class="absolute bottom-3 right-3 w-2 h-2 rounded-full bg-surface-bright shadow-inner"></div>
-<div class="flex flex-col items-center text-center mb-space-lg">
-<div class="w-full max-w-[240px] mb-space-sm flex items-center justify-center p-space-xs rounded-lg bg-surface-container-lowest/60 shadow-inner">
-<img alt="Legends Walk Off Championship Logo" class="w-full h-auto object-contain max-h-24" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2galx7WljV6w1igXr8o3dLOgoDJjG8Kn73Y3ektTQeD1MJuoQ1q8t84byFJ5dK9bnOkDr23wGzjeaj-6TxnMjRhS-4QqmSxCMX995uthYCqOOpj_J4-bZGYoc-6ywwjXFTn4_W2OXETVDlpTxw9OJzcJM0XHb9iJpcC6_a1PVdK5rSVwo8sKOtKQ7nJVcGFlSsmPLb-HkDrfx9GpJwmc8EoydhgZctiY28L6yCiSAlVm0FXXnB9AC"/>
-</div>
-<div class="inline-flex items-center gap-space-xs px-space-sm py-1 rounded-sm bg-primary-container/20 text-primary-fixed mb-space-xs shadow-sm">
-<span class="material-symbols-outlined text-sm text-primary-container">shield</span>
-<span class="font-label-badge text-label-badge uppercase tracking-wider">SECURITY GATEWAY</span>
-</div>
-<h1 class="font-headline-md text-headline-md uppercase text-on-surface tracking-wide mt-1">
-        ADMIN ACCESS — AUTHORIZED SCORERS &amp; OFFICIALS ONLY
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<style>
+  @layer base {
+    html, body { margin: 0; padding: 0; }
+    body { overscroll-behavior: none; }
+    main > :first-child { margin-top: 0 !important; }
+    main > :last-child { margin-bottom: 0 !important; }
+  }
+  ::-webkit-scrollbar { display: none; }
+  
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-6px); }
+    40%, 80% { transform: translateX(6px); }
+  }
+  .animate-shake {
+    animation: shake 0.4s ease-in-out;
+  }
+  
+  .clip-angle {
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+  }
+</style>
+<script src="https://cdn.tailwindcss.com"></script>
+<script id="tailwind-config">
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"tertiary-fixed":"#6ffbbe","surface-container-high":"#2a2a2a","surface-bright":"#3a3939","error":"#ffb4ab","on-error":"#690005","surface-tint":"#ffb4a8","inverse-on-surface":"#313030","on-surface":"#e5e2e1","on-surface-variant":"#e9bcb5","on-background":"#e5e2e1","on-tertiary":"#003824","surface-container-lowest":"#0e0e0e","primary-fixed-dim":"#ffb4a8","on-secondary":"#3b2f00","on-secondary-fixed":"#231b00","secondary-fixed":"#ffe177","surface-container-highest":"#353534","secondary":"#fff3d4","on-secondary-fixed-variant":"#554500","surface-dim":"#131313","outline":"#af8781","secondary-fixed-dim":"#ebc300","surface-variant":"#353534","error-container":"#93000a","on-primary-fixed":"#410100","surface":"#131313","surface-container-low":"#1c1b1b","tertiary-container":"#008058","primary-fixed":"#ffdad4","tertiary":"#4edea3","outline-variant":"#5e3f3a","inverse-primary":"#c00500","on-secondary-container":"#6f5c00","on-tertiary-fixed-variant":"#005236","primary-container":"#e10600","on-tertiary-container":"#d4ffe5","secondary-container":"#fed400","on-tertiary-fixed":"#002113","on-primary":"#680200","tertiary-fixed-dim":"#4edea3","on-primary-container":"#fff2f0","background":"#131313","primary":"#ffb4a8","on-primary-fixed-variant":"#930300","on-error-container":"#ffdad6","surface-container":"#201f1f","inverse-surface":"#e5e2e1"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"margin-mobile":"1rem","space-sm":"0.5rem","margin":"2.5rem","gutter":"1.5rem","gutter-mobile":"0.75rem","space-lg":"1.5rem","space-xxl":"4rem","space-md":"1rem","space-xs":"0.25rem","space-xl":"2.5rem"},fontFamily:{"body-lg":["Inter"],"title-lg":["Inter"],"label-numeric-lg":["JetBrains Mono"],"label-badge":["JetBrains Mono"],"headline-xl":["Anton"],"headline-md":["Anton"],"label-numeric-md":["JetBrains Mono"],"headline-lg":["Anton"],"headline-xl-mobile":["Anton"],"body-md":["Inter"],"display-hero-mobile":["Anton"],"title-md":["Inter"],"display-hero":["Anton"],"body-sm":["Inter"],"headline-sm":["Anton"]}}}};
+</script>
+</head>
+
+<body class="bg-surface-container-lowest font-body-md text-on-surface antialiased min-h-screen flex items-center justify-center p-gutter">
+<main class="w-full max-w-xl">
+<div class="flex flex-col w-full relative">
+  <!-- Stadium Atmospheric Lighting -->
+  <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-96 h-96 bg-primary-container/20 rounded-full blur-[100px] pointer-events-none"></div>
+  <div class="absolute top-1/2 -right-40 w-80 h-80 bg-secondary-container/10 rounded-full blur-[90px] pointer-events-none"></div>
+
+  <!-- Top Navigation & Encryption Status -->
+  <div class="mb-space-md flex items-center justify-between">
+    <a class="group inline-flex items-center gap-space-xs text-on-surface-variant hover:text-on-surface transition-colors py-space-xs px-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container shadow-sm border border-outline/10" href="index.html">
+      <span class="material-symbols-outlined text-base group-hover:-translate-x-1 transition-transform">arrow_back</span>
+      <span class="font-label-badge text-label-badge uppercase tracking-wider">RETURN TO TOURNAMENT HUB</span>
+    </a>
+    <div class="inline-flex items-center gap-space-xs py-space-xs px-space-sm rounded-lg bg-surface-container-low border border-tertiary/20">
+      <span class="w-2 h-2 rounded-full bg-tertiary animate-ping"></span>
+      <span class="font-label-badge text-label-badge text-tertiary uppercase tracking-widest font-mono">256-BIT SSL GATEWAY</span>
+    </div>
+  </div>
+
+  <!-- Active Session Detected Notification (Shown if already authenticated) -->
+  <div id="activeSessionBanner" class="hidden mb-space-md p-space-md rounded-xl bg-surface-container-low border-l-4 border-secondary-container shadow-2xl relative overflow-hidden">
+    <div class="flex items-center justify-between mb-1">
+      <div class="flex items-center gap-space-xs">
+        <span class="w-2 h-2 rounded-full bg-secondary-container animate-pulse"></span>
+        <span class="font-label-badge text-label-badge text-secondary-container uppercase tracking-wider font-bold">Active Official Session Detected</span>
+      </div>
+      <span id="activeSessionToken" class="font-label-badge text-[10px] text-outline font-mono">AUTH-ACTIVE</span>
+    </div>
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm mt-2">
+      <div>
+        <div id="activeSessionName" class="font-headline-sm text-base text-on-surface uppercase">Dr. Rajesh K.</div>
+        <div id="activeSessionRole" class="font-body-sm text-xs text-on-surface-variant">Committee Executive Admin • NMIMS Hyderabad</div>
+      </div>
+      <div class="flex items-center gap-space-xs">
+        <a href="admin-console.html" class="py-2 px-space-md bg-secondary-container text-on-secondary font-headline-sm text-xs uppercase tracking-wider rounded hover:bg-secondary-container/90 transition-all flex items-center gap-1 shadow-md">
+          <span>Open Console</span>
+          <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        </a>
+        <button type="button" onclick="window.LegendsRBAC.logout()" class="py-2 px-space-sm bg-surface-container-high text-on-surface-variant hover:text-error text-xs rounded transition-colors flex items-center gap-1" title="Sign Out">
+          <span class="material-symbols-outlined text-sm">logout</span>
+          <span class="hidden sm:inline">Logout</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Card Container -->
+  <div class="relative w-full rounded-xl bg-surface-container-low/95 backdrop-blur-xl shadow-2xl p-space-lg sm:p-space-xl overflow-hidden border border-outline/10">
+    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary-container to-transparent"></div>
+    <div class="absolute -bottom-12 -left-12 w-48 h-48 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <!-- Header & Badge -->
+    <div class="flex flex-col items-center text-center mb-space-md">
+      <div class="w-full max-w-[220px] mb-space-xs flex items-center justify-center p-space-xs rounded-lg bg-surface-container-lowest/70 shadow-inner border border-outline/10">
+        <img alt="Legends Walk Off Championship Logo" class="w-full h-auto object-contain max-h-20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2galx7WljV6w1igXr8o3dLOgoDJjG8Kn73Y3ektTQeD1MJuoQ1q8t84byFJ5dK9bnOkDr23wGzjeaj-6TxnMjRhS-4QqmSxCMX995uthYCqOOpj_J4-bZGYoc-6ywwjXFTn4_W2OXETVDlpTxw9OJzcJM0XHb9iJpcC6_a1PVdK5rSVwo8sKOtKQ7nJVcGFlSsmPLb-HkDrfx9GpJwmc8EoydhgZctiY28L6yCiSAlVm0FXXnB9AC"/>
+      </div>
+      <div class="inline-flex items-center gap-space-xs px-space-sm py-1 rounded-sm bg-primary-container/20 text-primary-fixed mb-space-xs shadow-sm">
+        <span class="material-symbols-outlined text-sm text-primary-container">shield</span>
+        <span class="font-label-badge text-label-badge uppercase tracking-wider">OFFICIAL SECURITY GATEWAY</span>
+      </div>
+      <h1 class="font-headline-md text-headline-md uppercase text-on-surface tracking-wide mt-1">
+        ADMIN &amp; SCORER ACCESS PORTAL
       </h1>
-<div class="mt-space-xs px-space-sm py-1 rounded-sm bg-surface-container-highest/50">
-<p class="font-label-badge text-label-badge text-secondary-container tracking-wider uppercase">
+      <div class="mt-space-xs px-space-sm py-1 rounded-sm bg-surface-container-highest/50">
+        <p class="font-label-badge text-label-badge text-secondary-container tracking-wider uppercase">
           STME IMPULSE OFFICIAL SCORING &amp; LEAGUE MANAGEMENT SYSTEM
         </p>
-</div>
-</div>
-<form class="flex flex-col gap-space-md" id="adminLoginForm" onsubmit="event.preventDefault(); return false;">
-<div class="flex flex-col gap-1.5">
-<label class="font-label-badge text-label-badge text-on-surface-variant uppercase flex items-center justify-between" for="adminEmail">
-<span>Official Institutional Email</span>
-<span class="text-secondary-container font-mono text-[10px]">NMIMS AUTH</span>
-</label>
-<div class="relative flex items-center">
-<span class="material-symbols-outlined absolute left-3 text-on-surface-variant pointer-events-none text-lg">admin_panel_settings</span>
-<input class="w-full pl-10 pr-space-md py-2.5 rounded-lg bg-surface-container-highest text-on-surface font-body-md text-body-md placeholder:text-outline focus:outline-none focus:bg-surface-bright focus:shadow-md transition-all" id="adminEmail" placeholder="officer@nmims.edu.in" required="" type="email"/>
-</div>
-</div>
-<div class="flex flex-col gap-1.5">
-<label class="font-label-badge text-label-badge text-on-surface-variant uppercase flex items-center justify-between" for="adminPassword">
-<span>Secure Tournament Password</span>
-<span class="text-outline text-[10px]">256-BIT SECURED</span>
-</label>
-<div class="relative flex items-center">
-<span class="material-symbols-outlined absolute left-3 text-on-surface-variant pointer-events-none text-lg">lock</span>
-<input class="w-full pl-10 pr-10 py-2.5 rounded-lg bg-surface-container-highest text-on-surface font-body-md text-body-md placeholder:text-outline focus:outline-none focus:bg-surface-bright focus:shadow-md transition-all" id="adminPassword" placeholder="••••••••••••" required="" type="password"/>
-<button aria-label="Toggle password visibility" class="absolute right-3 text-on-surface-variant hover:text-on-surface transition-colors flex items-center justify-center p-1 rounded" id="togglePassword" type="button">
-<span class="material-symbols-outlined text-lg" id="pwdIcon">visibility</span>
-</button>
-</div>
-</div>
-<div class="flex flex-col gap-1.5">
-<label class="font-label-badge text-label-badge text-on-surface-variant uppercase" for="adminRole">
-          Assigned Official Role
-        </label>
-<div class="relative flex items-center">
-<span class="material-symbols-outlined absolute left-3 text-on-surface-variant pointer-events-none text-lg">sports_score</span>
-<select class="w-full pl-10 pr-10 py-2.5 rounded-lg bg-surface-container-highest text-on-surface font-body-md text-body-md focus:outline-none focus:bg-surface-bright focus:shadow-md transition-all appearance-none cursor-pointer" id="adminRole">
-<option value="cricket">Official Scorer (Cricket)</option>
-<option value="football">Official Scorer (Football)</option>
-<option value="committee">Committee Executive Admin</option>
-<option value="referees">Referees Panel</option>
-</select>
+      </div>
+    </div>
 
-<div id="roleDescriptionBox" class="mt-2 p-space-xs bg-surface-container-high border-l-2 border-secondary-container text-xs text-on-surface-variant flex items-start gap-2">
-  <span class="material-symbols-outlined text-sm text-secondary-container mt-0.5">info</span>
-  <span id="roleDescriptionText">Field official authorized for cricket ball-by-ball scoring, wickets, and extras.</span>
-</div>
+    <!-- Quick Fill Official Credentials Cards -->
+    <div class="mb-space-md p-space-sm rounded-lg bg-surface-container-lowest/80 border border-outline/15">
+      <div class="flex items-center justify-between mb-2">
+        <span class="font-label-badge text-[10px] text-on-surface-variant uppercase tracking-wider flex items-center gap-1 font-bold">
+          <span class="material-symbols-outlined text-xs text-secondary-container">touch_app</span>
+          Quick-Fill Official Accounts (1-Click Fill)
+        </span>
+        <span class="font-label-badge text-[9px] text-outline uppercase font-mono">STME PASS: legends2026</span>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+        <button type="button" onclick="quickFillAccount('committee')" class="p-2 rounded bg-surface-container-high hover:bg-surface-bright border border-secondary-container/30 hover:border-secondary-container text-left transition-all group flex flex-col justify-between">
+          <div class="flex items-center gap-1 text-secondary-container font-headline-sm text-xs uppercase">
+            <span class="material-symbols-outlined text-sm">shield</span>
+            <span>Admin</span>
+          </div>
+          <div class="font-body-sm text-[10px] text-on-surface-variant truncate mt-1">admin@nmims.edu.in</div>
+        </button>
+        <button type="button" onclick="quickFillAccount('cricket')" class="p-2 rounded bg-surface-container-high hover:bg-surface-bright border border-primary/30 hover:border-primary text-left transition-all group flex flex-col justify-between">
+          <div class="flex items-center gap-1 text-primary font-headline-sm text-xs uppercase">
+            <span class="material-symbols-outlined text-sm">sports_cricket</span>
+            <span>Cricket</span>
+          </div>
+          <div class="font-body-sm text-[10px] text-on-surface-variant truncate mt-1">cricket@nmims.edu.in</div>
+        </button>
+        <button type="button" onclick="quickFillAccount('football')" class="p-2 rounded bg-surface-container-high hover:bg-surface-bright border border-tertiary/30 hover:border-tertiary text-left transition-all group flex flex-col justify-between">
+          <div class="flex items-center gap-1 text-tertiary font-headline-sm text-xs uppercase">
+            <span class="material-symbols-outlined text-sm">sports_soccer</span>
+            <span>Football</span>
+          </div>
+          <div class="font-body-sm text-[10px] text-on-surface-variant truncate mt-1">football@nmims.edu.in</div>
+        </button>
+        <button type="button" onclick="quickFillAccount('referees')" class="p-2 rounded bg-surface-container-high hover:bg-surface-bright border border-outline/30 hover:border-outline text-left transition-all group flex flex-col justify-between">
+          <div class="flex items-center gap-1 text-on-surface font-headline-sm text-xs uppercase">
+            <span class="material-symbols-outlined text-sm">gavel</span>
+            <span>Referees</span>
+          </div>
+          <div class="font-body-sm text-[10px] text-on-surface-variant truncate mt-1">referee@nmims.edu.in</div>
+        </button>
+      </div>
+    </div>
 
-<span class="material-symbols-outlined absolute right-3 text-on-surface-variant pointer-events-none text-lg">unfold_more</span>
-</div>
-</div>
-<div class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-highest/40 mt-1">
-<label class="flex items-center gap-space-sm cursor-pointer select-none">
-<input checked="" class="w-4 h-4 rounded-none accent-primary-container cursor-pointer" id="auth2fa" type="checkbox"/>
-<span class="font-body-sm text-body-sm text-on-surface">Send OTP to registered phone</span>
-</label>
-<span class="font-label-badge text-label-badge text-tertiary bg-tertiary-container/30 px-1.5 py-0.5 rounded-sm">2FA ENFORCED</span>
-</div>
-<button class="group relative w-full mt-space-sm py-3 px-space-md rounded-lg bg-primary-container text-on-primary font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-space-sm shadow-xl hover:bg-primary-container/90 active:scale-[0.99] transition-all overflow-hidden" id="submitBtn" type="submit">
-<div class="absolute inset-0 w-1/3 h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-[400%] transition-transform duration-1000 ease-out pointer-events-none"></div>
-<span>ENTER THE ARENA</span>
-<span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">bolt</span>
-</button>
-<div class="pt-space-sm text-center">
-<a class="inline-flex items-center gap-1 font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" href="about.html#contact-inquiry-form">
-<span class="material-symbols-outlined text-sm">support_agent</span>
-<span>Lost Scorer Credentials? Contact STME Impulse Committee Desk</span>
-</a>
-</div>
-</form>
-</div>
-<div class="mt-space-md flex flex-wrap items-center justify-between px-space-xs text-outline font-label-badge text-label-badge uppercase">
-<span>SYSTEM IDENT: SEC-LWO-2025</span>
-<span class="flex items-center gap-1">
-<span class="w-1.5 h-1.5 rounded-full bg-secondary-container"></span>
+    <!-- VIEW 1: CREDENTIALS AUTHENTICATION FORM -->
+    <div id="credentialsView">
+      <!-- Error Alert Banner -->
+      <div id="authErrorBanner" class="hidden mb-space-md p-space-sm rounded-lg bg-error-container/40 border border-error text-error text-xs flex items-center gap-space-xs animate-shake">
+        <span class="material-symbols-outlined text-lg shrink-0">error</span>
+        <span id="authErrorMessage" class="font-body-sm text-xs">Access Denied: Invalid credentials.</span>
+      </div>
+
+      <form class="flex flex-col gap-space-md" id="adminLoginForm" onsubmit="event.preventDefault(); return false;">
+        <!-- Email Input -->
+        <div class="flex flex-col gap-1.5">
+          <label class="font-label-badge text-label-badge text-on-surface-variant uppercase flex items-center justify-between" for="adminEmail">
+            <span>Official Institutional Email</span>
+            <span class="text-secondary-container font-mono text-[10px]">NMIMS AUTH</span>
+          </label>
+          <div class="relative flex items-center">
+            <span class="material-symbols-outlined absolute left-3 text-on-surface-variant pointer-events-none text-lg">admin_panel_settings</span>
+            <input class="w-full pl-10 pr-space-md py-2.5 rounded-lg bg-surface-container-highest text-on-surface font-body-md text-body-md placeholder:text-outline focus:outline-none focus:bg-surface-bright focus:ring-1 focus:ring-secondary-container transition-all" id="adminEmail" placeholder="admin@nmims.edu.in" required="" type="email" value="admin@nmims.edu.in"/>
+          </div>
+        </div>
+
+        <!-- Password Input -->
+        <div class="flex flex-col gap-1.5">
+          <label class="font-label-badge text-label-badge text-on-surface-variant uppercase flex items-center justify-between" for="adminPassword">
+            <span>Secure Tournament Password</span>
+            <span class="text-outline text-[10px]">256-BIT SECURED</span>
+          </label>
+          <div class="relative flex items-center">
+            <span class="material-symbols-outlined absolute left-3 text-on-surface-variant pointer-events-none text-lg">lock</span>
+            <input class="w-full pl-10 pr-10 py-2.5 rounded-lg bg-surface-container-highest text-on-surface font-body-md text-body-md placeholder:text-outline focus:outline-none focus:bg-surface-bright focus:ring-1 focus:ring-secondary-container transition-all" id="adminPassword" placeholder="••••••••••••" required="" type="password" value="legends2026"/>
+            <button aria-label="Toggle password visibility" class="absolute right-3 text-on-surface-variant hover:text-on-surface transition-colors flex items-center justify-center p-1 rounded" id="togglePassword" type="button">
+              <span class="material-symbols-outlined text-lg" id="pwdIcon">visibility</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Role Select -->
+        <div class="flex flex-col gap-1.5">
+          <label class="font-label-badge text-label-badge text-on-surface-variant uppercase" for="adminRole">
+            Assigned Official Role
+          </label>
+          <div class="relative flex items-center">
+            <span class="material-symbols-outlined absolute left-3 text-on-surface-variant pointer-events-none text-lg">sports_score</span>
+            <select class="w-full pl-10 pr-10 py-2.5 rounded-lg bg-surface-container-highest text-on-surface font-body-md text-body-md focus:outline-none focus:bg-surface-bright focus:ring-1 focus:ring-secondary-container transition-all appearance-none cursor-pointer" id="adminRole">
+              <option value="committee" selected>Committee Executive Admin (Full Arena Control)</option>
+              <option value="cricket">Official Scorer (Cricket Match Telemetry)</option>
+              <option value="football">Official Scorer (Football Match Telemetry)</option>
+              <option value="referees">Referees Panel (Audit &amp; DLS Calculations)</option>
+            </select>
+            <span class="material-symbols-outlined absolute right-3 text-on-surface-variant pointer-events-none text-lg">unfold_more</span>
+          </div>
+
+          <div id="roleDescriptionBox" class="mt-1 p-space-xs bg-surface-container-high border-l-2 border-secondary-container text-xs text-on-surface-variant flex items-start gap-2">
+            <span class="material-symbols-outlined text-sm text-secondary-container mt-0.5">info</span>
+            <span id="roleDescriptionText">Executive Super-Admin: Unrestricted arena control, emergency broadcast announcements, sponsor curation, and match finalization.</span>
+          </div>
+        </div>
+
+        <!-- 2FA & Remember Me Options -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs p-space-sm rounded-lg bg-surface-container-highest/40 mt-1">
+          <label class="flex items-center gap-space-xs cursor-pointer select-none">
+            <input checked="" class="w-4 h-4 rounded-none accent-primary-container cursor-pointer" id="auth2fa" type="checkbox"/>
+            <span class="font-body-sm text-body-sm text-on-surface">Send OTP to registered phone</span>
+          </label>
+          <div class="flex items-center gap-space-xs">
+            <label class="flex items-center gap-space-xs cursor-pointer select-none">
+              <input checked="" class="w-3.5 h-3.5 rounded-none accent-secondary-container cursor-pointer" id="rememberMe" type="checkbox"/>
+              <span class="font-body-sm text-xs text-on-surface-variant">Remember terminal</span>
+            </label>
+            <span class="font-label-badge text-label-badge text-tertiary bg-tertiary-container/30 px-1.5 py-0.5 rounded-sm">2FA READY</span>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button class="group relative w-full mt-space-xs py-3 px-space-md rounded-lg bg-primary-container text-on-primary font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-space-sm shadow-xl hover:bg-primary-container/90 active:scale-[0.99] transition-all overflow-hidden" id="submitBtn" type="submit">
+          <div class="absolute inset-0 w-1/3 h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-[400%] transition-transform duration-1000 ease-out pointer-events-none"></div>
+          <span id="submitBtnText">AUTHENTICATE &amp; ENTER</span>
+          <span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform" id="submitBtnIcon">bolt</span>
+        </button>
+
+        <div class="pt-space-xs text-center">
+          <a class="inline-flex items-center gap-1 font-body-sm text-body-sm text-on-surface-variant hover:text-secondary-container transition-colors" href="about.html#contact-inquiry-form">
+            <span class="material-symbols-outlined text-sm">support_agent</span>
+            <span>Lost Scorer Credentials? Contact STME Impulse Committee Desk</span>
+          </a>
+        </div>
+      </form>
+    </div>
+
+    <!-- VIEW 2: INTERACTIVE 2FA VERIFICATION STEP -->
+    <div id="twoFactorView" class="hidden flex-col gap-space-md">
+      <div class="p-space-md rounded-lg bg-surface-container border border-secondary-container/40">
+        <div class="flex items-center justify-between mb-1">
+          <div class="inline-flex items-center gap-1 text-secondary-container font-label-badge text-[11px] uppercase tracking-wider font-bold">
+            <span class="material-symbols-outlined text-sm">lock_clock</span>
+            <span>SECURITY STEP 2/2</span>
+          </div>
+          <span class="text-tertiary font-mono text-[11px] flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span>
+            SMS DISPATCHED
+          </span>
+        </div>
+        <h2 class="font-headline-sm text-lg text-on-surface uppercase tracking-wide">Enter 6-Digit Verification Code</h2>
+        <p class="font-body-sm text-xs text-on-surface-variant mt-1">
+          A one-time passcode was dispatched to official phone ending in <strong id="twoFactorPhoneTarget" class="text-secondary-container font-mono">•••• 9821</strong>.
+        </p>
+
+        <!-- 2FA Error Box -->
+        <div id="twoFactorErrorBanner" class="hidden mt-3 p-space-xs rounded bg-error-container/40 border border-error text-error text-xs flex items-center gap-1 animate-shake">
+          <span class="material-symbols-outlined text-sm shrink-0">error</span>
+          <span id="twoFactorErrorMessage">Incorrect verification code. Please try again.</span>
+        </div>
+
+        <!-- 6-digit OTP Inputs -->
+        <div class="flex items-center justify-between gap-2 mt-4" id="otpInputContainer">
+          <input type="text" maxlength="1" inputmode="numeric" class="otp-box w-12 h-14 rounded-lg bg-surface-container-highest text-center font-headline-md text-2xl text-secondary-container border border-outline/30 focus:outline-none focus:border-secondary-container focus:ring-2 focus:ring-secondary-container/50 transition-all" data-index="0" autofocus autocomplete="one-time-code"/>
+          <input type="text" maxlength="1" inputmode="numeric" class="otp-box w-12 h-14 rounded-lg bg-surface-container-highest text-center font-headline-md text-2xl text-secondary-container border border-outline/30 focus:outline-none focus:border-secondary-container focus:ring-2 focus:ring-secondary-container/50 transition-all" data-index="1"/>
+          <input type="text" maxlength="1" inputmode="numeric" class="otp-box w-12 h-14 rounded-lg bg-surface-container-highest text-center font-headline-md text-2xl text-secondary-container border border-outline/30 focus:outline-none focus:border-secondary-container focus:ring-2 focus:ring-secondary-container/50 transition-all" data-index="2"/>
+          <input type="text" maxlength="1" inputmode="numeric" class="otp-box w-12 h-14 rounded-lg bg-surface-container-highest text-center font-headline-md text-2xl text-secondary-container border border-outline/30 focus:outline-none focus:border-secondary-container focus:ring-2 focus:ring-secondary-container/50 transition-all" data-index="3"/>
+          <input type="text" maxlength="1" inputmode="numeric" class="otp-box w-12 h-14 rounded-lg bg-surface-container-highest text-center font-headline-md text-2xl text-secondary-container border border-outline/30 focus:outline-none focus:border-secondary-container focus:ring-2 focus:ring-secondary-container/50 transition-all" data-index="4"/>
+          <input type="text" maxlength="1" inputmode="numeric" class="otp-box w-12 h-14 rounded-lg bg-surface-container-highest text-center font-headline-md text-2xl text-secondary-container border border-outline/30 focus:outline-none focus:border-secondary-container focus:ring-2 focus:ring-secondary-container/50 transition-all" data-index="5"/>
+        </div>
+
+        <!-- Demo OTP Quick Fill Button -->
+        <div class="mt-4 flex items-center justify-between flex-wrap gap-2 pt-2 border-t border-outline/15">
+          <button type="button" onclick="autoFillDemoOtp()" class="inline-flex items-center gap-1 font-mono text-xs text-secondary-container bg-secondary-container/10 hover:bg-secondary-container/20 px-2 py-1 rounded transition-colors border border-secondary-container/30">
+            <span class="material-symbols-outlined text-sm">key</span>
+            <span>Test OTP: <strong id="demoOtpDisplay">123456</strong> (Click to Fill)</span>
+          </button>
+
+          <span class="text-on-surface-variant font-body-sm text-xs">
+            Resend in <span id="otpCountdown" class="text-outline font-mono font-bold">30s</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- 2FA Actions -->
+      <button type="button" onclick="verifyOtpAndProceed()" class="group relative w-full py-3 px-space-md rounded-lg bg-secondary-container text-on-secondary font-headline-sm text-headline-sm uppercase tracking-wider flex items-center justify-center gap-space-sm shadow-xl hover:bg-secondary-container/90 active:scale-[0.99] transition-all overflow-hidden" id="verifyOtpBtn">
+        <span id="verifyOtpBtnText">VERIFY CODE &amp; ENTER ARENA</span>
+        <span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform" id="verifyOtpBtnIcon">verified_user</span>
+      </button>
+
+      <div class="flex items-center justify-between text-xs pt-1">
+        <button type="button" onclick="cancel2faAndReturn()" class="text-on-surface-variant hover:text-on-surface inline-flex items-center gap-1 transition-colors">
+          <span class="material-symbols-outlined text-sm">arrow_back</span>
+          <span>Back to Credentials</span>
+        </button>
+        <button type="button" onclick="resendOtpCode()" id="resendOtpBtn" class="text-outline hover:text-secondary-container transition-colors disabled:opacity-40 disabled:pointer-events-none" disabled>
+          Resend Security Code
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom System Identifier -->
+  <div class="mt-space-md flex flex-wrap items-center justify-between px-space-xs text-outline font-label-badge text-label-badge uppercase">
+    <span>SYSTEM IDENT: SEC-LWO-2026-NMIMS</span>
+    <span class="flex items-center gap-1">
+      <span class="w-1.5 h-1.5 rounded-full bg-secondary-container"></span>
       TERMINAL READY
     </span>
+  </div>
 </div>
-</div>
+
 <script>
-  (function() {
+  let pendingAuthData = null;
+  let resendTimer = null;
+  let countdownSeconds = 30;
+
+  // 1. Password reveal toggle
+  (function initPasswordToggle() {
     const toggleBtn = document.getElementById('togglePassword');
     const pwdInput = document.getElementById('adminPassword');
     const pwdIcon = document.getElementById('pwdIcon');
@@ -130,53 +330,384 @@
         pwdIcon.textContent = isPassword ? 'visibility_off' : 'visibility';
       });
     }
+  })();
 
-    
+  // 2. Role descriptions dictionary
+  const roleDescriptions = {
+    committee: 'Executive Super-Admin: Unrestricted arena control, emergency broadcast announcements, sponsor curation, and match finalization.',
+    cricket: 'Official Field Scorer: Real-time ball-by-ball delivery, wicket recording, extras, and striker swap.',
+    football: 'Official Match Scorer: Goals, penalty cards, fouls, half-time clock management, and substitutions.',
+    referees: 'Match Referees Panel: Audit log adjudication, referee override, DLS target calculations, and match verification.'
+  };
+
+  const roleSelect = document.getElementById('adminRole');
+  const roleDesc = document.getElementById('roleDescriptionText');
+  if (roleSelect && roleDesc) {
+    roleSelect.addEventListener('change', function() {
+      roleDesc.textContent = roleDescriptions[this.value] || '';
+    });
+  }
+
+  // 3. Quick Fill Official Accounts
+  window.quickFillAccount = function(role) {
+    const emailInput = document.getElementById('adminEmail');
+    const pwdInput = document.getElementById('adminPassword');
     const roleSelect = document.getElementById('adminRole');
     const roleDesc = document.getElementById('roleDescriptionText');
-    const roleDescriptions = {
-      cricket: 'Official Field Scorer: Real-time ball-by-ball delivery, wicket recording, extras, and striker swap.',
-      football: 'Official Match Scorer: Goals, penalty cards, fouls, half-time clock management, and substitutions.',
-      committee: 'Executive Super-Admin: Unrestricted arena control, emergency broadcast announcements, sponsor curation, and match finalization.',
-      referees: 'Match Referees Panel: Audit log adjudication, referee override, DLS target calculations, and match verification.'
+
+    hideAuthError();
+
+    const accounts = {
+      committee: { email: 'admin@nmims.edu.in', pass: 'legends2026' },
+      cricket: { email: 'cricket@nmims.edu.in', pass: 'cricket2026' },
+      football: { email: 'football@nmims.edu.in', pass: 'football2026' },
+      referees: { email: 'referee@nmims.edu.in', pass: 'referee2026' }
     };
-    if (roleSelect && roleDesc) {
-      roleSelect.addEventListener('change', function() {
-        roleDesc.textContent = roleDescriptions[this.value] || '';
-      });
+
+    const target = accounts[role];
+    if (target) {
+      if (emailInput) emailInput.value = target.email;
+      if (pwdInput) pwdInput.value = target.pass;
+      if (roleSelect) {
+        roleSelect.value = role;
+        if (roleDesc) roleDesc.textContent = roleDescriptions[role] || '';
+      }
+
+      if (window.LegendsApp) {
+        window.LegendsApp.showToast('Selected official profile: ' + role.toUpperCase(), 'info');
+      }
     }
+  };
 
-    const loginForm = document.getElementById('adminLoginForm');
-    if (loginForm) {
-      loginForm.addEventListener('submit', function(e) {
-        if (e) e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        const emailInput = document.getElementById('adminEmail');
-        const roleSelect = document.getElementById('adminRole');
-        const email = emailInput ? emailInput.value : 'officer@nmims.edu.in';
-        const role = roleSelect ? roleSelect.value : 'committee';
+  // 4. Check for active session on page load
+  function checkActiveSession() {
+    if (!window.LegendsRBAC) return;
+    const isAuthed = window.LegendsRBAC.isAuthenticated();
+    const banner = document.getElementById('activeSessionBanner');
+    if (!banner) return;
 
-        if (btn) {
-          btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">progress_activity</span><span>AUTHENTICATING ' + role.toUpperCase() + '...</span>';
-          btn.classList.add('opacity-80', 'pointer-events-none');
-          setTimeout(() => {
-            if (window.LegendsRBAC) {
-              window.LegendsRBAC.login(email, role);
-            }
-            btn.innerHTML = '<span class="material-symbols-outlined text-lg">check_circle</span><span>ACCESS GRANTED • ROLE VERIFIED</span>';
-            btn.classList.remove('bg-primary-container');
-            btn.classList.add('bg-tertiary-container', 'text-on-tertiary-container');
-            if (window.LegendsApp) {
-              window.LegendsApp.showToast('Logged in as ' + role.toUpperCase(), 'success');
-            }
-            setTimeout(() => {
-              window.location.href = 'admin-console.html';
-            }, 700);
-          }, 900);
+    if (isAuthed) {
+      const user = window.LegendsRBAC.getCurrentUser();
+      if (user) {
+        document.getElementById('activeSessionName').textContent = user.name || user.email;
+        const roleConfig = window.LegendsRBAC.roles[user.role] || { title: user.role };
+        document.getElementById('activeSessionRole').textContent = roleConfig.title + ' • ' + (user.institution || 'NMIMS Hyderabad');
+        document.getElementById('activeSessionToken').textContent = user.token || 'AUTH-ACTIVE';
+        banner.classList.remove('hidden');
+      }
+    } else {
+      banner.classList.add('hidden');
+    }
+  }
+
+  function showAuthError(msg) {
+    const banner = document.getElementById('authErrorBanner');
+    const text = document.getElementById('authErrorMessage');
+    if (banner && text) {
+      text.textContent = msg;
+      banner.classList.remove('hidden');
+      banner.classList.remove('animate-shake');
+      void banner.offsetWidth; // trigger reflow
+      banner.classList.add('animate-shake');
+    }
+  }
+
+  function hideAuthError() {
+    const banner = document.getElementById('authErrorBanner');
+    if (banner) banner.classList.add('hidden');
+  }
+
+  function showTwoFactorError(msg) {
+    const banner = document.getElementById('twoFactorErrorBanner');
+    const text = document.getElementById('twoFactorErrorMessage');
+    if (banner && text) {
+      text.textContent = msg;
+      banner.classList.remove('hidden');
+      banner.classList.remove('animate-shake');
+      void banner.offsetWidth;
+      banner.classList.add('animate-shake');
+    }
+  }
+
+  function hideTwoFactorError() {
+    const banner = document.getElementById('twoFactorErrorBanner');
+    if (banner) banner.classList.add('hidden');
+  }
+
+  // 5. Submit Credentials Form Handler
+  const loginForm = document.getElementById('adminLoginForm');
+  if (loginForm) {
+    loginForm.addEventListener('submit', function(e) {
+      if (e) e.preventDefault();
+      hideAuthError();
+
+      const emailInput = document.getElementById('adminEmail');
+      const pwdInput = document.getElementById('adminPassword');
+      const roleSelect = document.getElementById('adminRole');
+      const auth2faCheckbox = document.getElementById('auth2fa');
+      const rememberCheckbox = document.getElementById('rememberMe');
+      const btn = document.getElementById('submitBtn');
+
+      const email = emailInput ? emailInput.value.trim() : '';
+      const password = pwdInput ? pwdInput.value : '';
+      const role = roleSelect ? roleSelect.value : 'committee';
+      const is2fa = auth2faCheckbox ? auth2faCheckbox.checked : true;
+      const remember = rememberCheckbox ? rememberCheckbox.checked : true;
+
+      if (!email) {
+        showAuthError('Please enter an official institutional email.');
+        return;
+      }
+      if (!password) {
+        showAuthError('Please enter the secure tournament password.');
+        return;
+      }
+
+      // Verify credentials with LegendsRBAC engine
+      if (window.LegendsRBAC) {
+        const verifyResult = window.LegendsRBAC.verifyCredentials(email, password, role);
+        if (!verifyResult.success) {
+          showAuthError(verifyResult.error || 'Access Denied: Invalid credentials.');
+          return;
         }
-      });
+
+        // Valid credentials! Check if 2FA is requested
+        if (is2fa) {
+          // Switch to 2FA view
+          btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">progress_activity</span><span>GENERATING 2FA OTP...</span>';
+          btn.classList.add('opacity-80', 'pointer-events-none');
+
+          setTimeout(() => {
+            const twoFaData = window.LegendsRBAC.generate2FA(email);
+            pendingAuthData = {
+              email: email,
+              role: role,
+              name: verifyResult.account.name,
+              rememberMe: remember,
+              phoneHint: twoFaData.phoneHint,
+              demoCode: twoFaData.demoCode
+            };
+
+            document.getElementById('twoFactorPhoneTarget').textContent = twoFaData.phoneHint;
+            document.getElementById('demoOtpDisplay').textContent = twoFaData.demoCode || '123456';
+
+            // Transition views
+            document.getElementById('credentialsView').classList.add('hidden');
+            const twoFactorView = document.getElementById('twoFactorView');
+            twoFactorView.classList.remove('hidden');
+            twoFactorView.classList.add('flex');
+
+            btn.innerHTML = '<span id="submitBtnText">AUTHENTICATE &amp; ENTER</span><span class="material-symbols-outlined text-lg" id="submitBtnIcon">bolt</span>';
+            btn.classList.remove('opacity-80', 'pointer-events-none');
+
+            // Setup OTP countdown & focus first box
+            startOtpCountdown();
+            const firstBox = document.querySelector('.otp-box[data-index="0"]');
+            if (firstBox) firstBox.focus();
+
+            if (window.LegendsApp) {
+              window.LegendsApp.showToast(`2FA Code generated for ${twoFaData.phoneHint}`, 'info');
+            }
+          }, 600);
+        } else {
+          // Direct login without 2FA
+          completeLogin(email, role, remember, verifyResult.account.name);
+        }
+      }
+    });
+  }
+
+  // 6. Complete Login & Redirect
+  function completeLogin(email, role, rememberMe, displayName) {
+    const btn = document.getElementById('submitBtn');
+    if (btn) {
+      btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">progress_activity</span><span>VERIFYING AUTHORIZATION...</span>';
+      btn.classList.add('opacity-80', 'pointer-events-none');
     }
-  })();
-</script></main><script src="js/legends-core.js"></script>
+
+    setTimeout(() => {
+      if (window.LegendsRBAC) {
+        window.LegendsRBAC.login(email, role, rememberMe, displayName);
+      }
+
+      if (btn) {
+        btn.innerHTML = '<span class="material-symbols-outlined text-lg">check_circle</span><span>ACCESS GRANTED • ROLE VERIFIED</span>';
+        btn.classList.remove('bg-primary-container');
+        btn.classList.add('bg-tertiary-container', 'text-on-tertiary-container');
+      }
+
+      if (window.LegendsApp) {
+        window.LegendsApp.showToast(`Access Granted: Logged in as ${role.toUpperCase()} Official`, 'success');
+      }
+
+      setTimeout(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirect = urlParams.get('redirect') || 'admin-console.html';
+        window.location.href = redirect;
+      }, 600);
+    }, 700);
+  }
+
+  // 7. 2FA OTP Inputs Configuration
+  const otpBoxes = document.querySelectorAll('.otp-box');
+  otpBoxes.forEach((box, idx) => {
+    box.addEventListener('input', function(e) {
+      const val = e.target.value.replace(/[^0-9]/g, '');
+      e.target.value = val ? val[val.length - 1] : '';
+
+      if (val && idx < otpBoxes.length - 1) {
+        otpBoxes[idx + 1].focus();
+      }
+      hideTwoFactorError();
+    });
+
+    box.addEventListener('keydown', function(e) {
+      if (e.key === 'Backspace' && !e.target.value && idx > 0) {
+        otpBoxes[idx - 1].focus();
+      }
+      if (e.key === 'Enter') {
+        verifyOtpAndProceed();
+      }
+    });
+
+    box.addEventListener('paste', function(e) {
+      e.preventDefault();
+      const pasteData = (e.clipboardData || window.clipboardData).getData('text').trim().replace(/[^0-9]/g, '');
+      if (pasteData) {
+        for (let i = 0; i < Math.min(pasteData.length, otpBoxes.length); i++) {
+          otpBoxes[i].value = pasteData[i];
+        }
+        if (pasteData.length >= otpBoxes.length) {
+          otpBoxes[otpBoxes.length - 1].focus();
+        } else {
+          otpBoxes[pasteData.length].focus();
+        }
+      }
+    });
+  });
+
+  // 8. Auto-fill Demo OTP
+  window.autoFillDemoOtp = function() {
+    const demoCode = (pendingAuthData && pendingAuthData.demoCode) ? pendingAuthData.demoCode : '123456';
+    for (let i = 0; i < otpBoxes.length && i < demoCode.length; i++) {
+      otpBoxes[i].value = demoCode[i];
+    }
+    hideTwoFactorError();
+    if (otpBoxes[5]) otpBoxes[5].focus();
+  };
+
+  // 9. Verify OTP Code and Proceed
+  window.verifyOtpAndProceed = function() {
+    if (!pendingAuthData) {
+      cancel2faAndReturn();
+      return;
+    }
+
+    let enteredOtp = '';
+    otpBoxes.forEach(b => { enteredOtp += (b.value || '').trim(); });
+
+    if (enteredOtp.length < 6) {
+      showTwoFactorError('Please enter all 6 digits of the security OTP.');
+      return;
+    }
+
+    const verifyBtn = document.getElementById('verifyOtpBtn');
+    if (verifyBtn) {
+      verifyBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">progress_activity</span><span>VALIDATING OTP...</span>';
+      verifyBtn.classList.add('opacity-80', 'pointer-events-none');
+    }
+
+    setTimeout(() => {
+      if (window.LegendsRBAC) {
+        const result = window.LegendsRBAC.verify2FA(pendingAuthData.email, enteredOtp);
+        if (!result.success) {
+          showTwoFactorError(result.error || 'Invalid 6-digit security code. Try demo code 123456.');
+          if (verifyBtn) {
+            verifyBtn.innerHTML = '<span id="verifyOtpBtnText">VERIFY CODE &amp; ENTER ARENA</span><span class="material-symbols-outlined text-lg" id="verifyOtpBtnIcon">verified_user</span>';
+            verifyBtn.classList.remove('opacity-80', 'pointer-events-none');
+          }
+          return;
+        }
+
+        // 2FA Verified!
+        if (verifyBtn) {
+          verifyBtn.innerHTML = '<span class="material-symbols-outlined text-lg">verified</span><span>2FA VERIFIED • ENTERING CONSOLE</span>';
+          verifyBtn.classList.remove('bg-secondary-container', 'text-on-secondary');
+          verifyBtn.classList.add('bg-tertiary-container', 'text-on-tertiary-container');
+        }
+
+        if (window.LegendsApp) {
+          window.LegendsApp.showToast('2FA Verified! Establishing session...', 'success');
+        }
+
+        window.LegendsRBAC.login(
+          pendingAuthData.email,
+          pendingAuthData.role,
+          pendingAuthData.rememberMe,
+          pendingAuthData.name
+        );
+
+        setTimeout(() => {
+          const urlParams = new URLSearchParams(window.location.search);
+          const redirect = urlParams.get('redirect') || 'admin-console.html';
+          window.location.href = redirect;
+        }, 500);
+      }
+    }, 700);
+  };
+
+  // 10. Cancel 2FA and Return to Credentials
+  window.cancel2faAndReturn = function() {
+    clearInterval(resendTimer);
+    hideTwoFactorError();
+    document.getElementById('twoFactorView').classList.add('hidden');
+    document.getElementById('twoFactorView').classList.remove('flex');
+    document.getElementById('credentialsView').classList.remove('hidden');
+    otpBoxes.forEach(b => { b.value = ''; });
+  };
+
+  // 11. OTP Countdown & Resend
+  function startOtpCountdown() {
+    clearInterval(resendTimer);
+    countdownSeconds = 30;
+    const countEl = document.getElementById('otpCountdown');
+    const resendBtn = document.getElementById('resendOtpBtn');
+    if (resendBtn) resendBtn.disabled = true;
+
+    resendTimer = setInterval(() => {
+      countdownSeconds--;
+      if (countEl) countEl.textContent = countdownSeconds + 's';
+      if (countdownSeconds <= 0) {
+        clearInterval(resendTimer);
+        if (countEl) countEl.textContent = 'Ready';
+        if (resendBtn) resendBtn.disabled = false;
+      }
+    }, 1000);
+  }
+
+  window.resendOtpCode = function() {
+    if (!pendingAuthData || !window.LegendsRBAC) return;
+    const new2fa = window.LegendsRBAC.generate2FA(pendingAuthData.email);
+    pendingAuthData.demoCode = new2fa.demoCode;
+    document.getElementById('demoOtpDisplay').textContent = new2fa.demoCode || '123456';
+    otpBoxes.forEach(b => { b.value = ''; });
+    hideTwoFactorError();
+    startOtpCountdown();
+    if (otpBoxes[0]) otpBoxes[0].focus();
+
+    if (window.LegendsApp) {
+      window.LegendsApp.showToast(`New security code sent to ${pendingAuthData.phoneHint}`, 'info');
+    }
+  };
+
+  // 12. Lifecycle Initializer
+  document.addEventListener('DOMContentLoaded', function() {
+    checkActiveSession();
+    window.addEventListener('legends_auth_changed', checkActiveSession);
+  });
+</script>
+</main>
+<script src="js/legends-core.js"></script>
 <script src="js/legends-rbac.js"></script>
-</body></html>
+</body>
+</html>

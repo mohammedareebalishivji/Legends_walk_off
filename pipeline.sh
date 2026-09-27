@@ -69,11 +69,12 @@ for file in "${REQUIRED_FILES[@]}"; do
   fi
 done
 
-# STAGE 3: RUN RBAC & ROSTER TEST SUITES
-echo -e "\n🧪 [STAGE 3/5] Executing RBAC Security & Roster Test Suites..."
+# STAGE 3: RUN RBAC, ROSTER & LOGIN AUTH TEST SUITES
+echo -e "\n🧪 [STAGE 3/5] Executing RBAC Security, Roster & Login Auth Test Suites..."
 if command -v node >/dev/null 2>&1; then
   node tests/rbac.test.js
   node tests/roster.test.js
+  node tests/login.test.js
 else
   echo "  ⚠ Skipping node tests (Node.js required)."
 fi

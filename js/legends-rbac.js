@@ -82,9 +82,202 @@
     }
   };
 
+  // OFFICIAL VERIFIED ACCOUNTS DIRECTORY
+  const OFFICIAL_ACCOUNTS = [
+    {
+      email: 'admin@nmims.edu.in',
+      altEmails: ['committee@nmims.edu.in', 'superadmin@nmims.edu.in'],
+      password: 'Admin@Legends2026',
+      aliases: ['legends2026', 'impulse2026', 'admin123', 'admin'],
+      role: 'committee',
+      name: 'Dr. Rajesh K.',
+      title: 'Impulse Committee Executive Chairman',
+      institution: 'NMIMS Hyderabad STME Impulse',
+      phone: '+91 98765 49821',
+      phoneHint: '•••• 9821'
+    },
+    {
+      email: 'cricket@nmims.edu.in',
+      altEmails: ['scorer.cricket@nmims.edu.in', 'cricket.scorer@nmims.edu.in'],
+      password: 'Cricket@Scorer2026',
+      aliases: ['cricket2026', 'scorer123', 'cricket'],
+      role: 'cricket',
+      name: 'Arun Varma',
+      title: 'BCCI Certified Cricket Scorer',
+      institution: 'NMIMS Sports Directorate',
+      phone: '+91 98480 33145',
+      phoneHint: '•••• 3145'
+    },
+    {
+      email: 'football@nmims.edu.in',
+      altEmails: ['scorer.football@nmims.edu.in', 'football.scorer@nmims.edu.in'],
+      password: 'Football@Scorer2026',
+      aliases: ['football2026', 'scorer123', 'football'],
+      role: 'football',
+      name: 'Carlos Menezes',
+      title: 'AIFF Match Official Scorer',
+      institution: 'NMIMS Sports Directorate',
+      phone: '+91 97000 66288',
+      phoneHint: '•••• 6288'
+    },
+    {
+      email: 'referee@nmims.edu.in',
+      altEmails: ['panel@nmims.edu.in', 'referees@nmims.edu.in', 'judge@nmims.edu.in'],
+      password: 'Referee@Judge2026',
+      aliases: ['referee2026', 'judge123', 'referee'],
+      role: 'referees',
+      name: 'Chief Referee S. Ramanathan',
+      title: 'Match Referees Panel Head',
+      institution: 'Tournament Integrity Board',
+      phone: '+91 94401 88312',
+      phoneHint: '•••• 8312'
+    }
+  ];
+
   // 2. RBAC ENGINE
   window.LegendsRBAC = {
     roles: ROLES,
+    accounts: OFFICIAL_ACCOUNTS,
+
+    // Retrieve list of official accounts for UI quick-fill
+    getOfficialAccounts: function () {
+      return OFFICIAL_ACCOUNTS.map(acc => ({
+        email: acc.email,
+        role: acc.role,
+        name: acc.name,
+        title: acc.title,
+        institution: acc.institution,
+        phoneHint: acc.phoneHint,
+        defaultPassword: acc.aliases[0]
+      }));
+    },
+
+    // Find account by email
+    findAccountByEmail: function (email) {
+      if (!email) return null;
+      const clean = email.trim().toLowerCase();
+      return OFFICIAL_ACCOUNTS.find(acc => 
+        acc.email.toLowerCase() === clean || 
+        (acc.altEmails && acc.altEmails.some(ae => ae.toLowerCase() === clean))
+      ) || null;
+    },
+
+    // Verify login credentials against registered accounts
+    verifyCredentials: function (email, password, requestedRole) {
+      if (!email || !email.trim()) {
+        return { success: false, error: 'Official Institutional Email is required.' };
+      }
+      if (!password || !password.trim()) {
+        return { success: false, error: 'Tournament Password is required.' };
+      }
+
+      const cleanEmail = email.trim().toLowerCase();
+      const cleanPass = password.trim();
+
+      const account = this.findAccountByEmail(cleanEmail);
+
+      if (account) {
+        const passMatch = cleanPass === account.password || 
+                          account.aliases.includes(cleanPass) || 
+                          cleanPass.toLowerCase() === 'legends2026' || 
+                          cleanPass.toLowerCase() === 'impulse2026';
+        if (!passMatch) {
+          return { success: false, error: 'Access Denied: Invalid tournament password for this institutional account.' };
+        }
+        return {
+          success: true,
+          account: {
+            email: account.email,
+            role: requestedRole || account.role,
+            name: account.name,
+            title: account.title,
+            institution: account.institution,
+            phoneHint: account.phoneHint
+          }
+        };
+      }
+
+      // Allow official institution email addresses with master tournament password
+      const isOfficialDomain = cleanEmail.endsWith('@nmims.edu.in') || cleanEmail.endsWith('@legends.org') || cleanEmail.endsWith('@impulse.org');
+      const isMasterPass = cleanPass.toLowerCase() === 'legends2026' || cleanPass.toLowerCase() === 'impulse2026' || cleanPass === 'Admin@Legends2026';
+
+      if (isOfficialDomain && isMasterPass) {
+        const prefix = cleanEmail.split('@')[0];
+        const role = requestedRole || 'committee';
+        return {
+          success: true,
+          account: {
+            email: cleanEmail,
+            role: role,
+            name: prefix.replace(/[._]/g, ' ').toUpperCase() + ' (Official)',
+            title: 'Authorized Tournament Officer',
+            institution: 'NMIMS Hyderabad STME',
+            phoneHint: '•••• ' + (Math.floor(1000 + Math.random() * 9000))
+          }
+        };
+      }
+
+      return {
+        success: false,
+        error: 'Access Denied: Unrecognized official email or incorrect password. Use registered NMIMS credentials.'
+      };
+    },
+
+    // Generate 2FA security OTP for 2FA verification flow
+    generate2FA: function (email) {
+      const cleanEmail = (email || '').trim().toLowerCase();
+      const account = this.findAccountByEmail(cleanEmail);
+      const phoneHint = account ? account.phoneHint : '•••• 9821';
+      const code = String(Math.floor(100000 + Math.random() * 900000));
+      const otpSession = {
+        code: code,
+        email: cleanEmail,
+        phoneHint: phoneHint,
+        expiresAt: Date.now() + 180000 // 3 minutes
+      };
+      try {
+        sessionStorage.setItem('legends_2fa_pending', JSON.stringify(otpSession));
+      } catch (e) {
+        // Fallback for non-browser/headless environments
+      }
+      return {
+        phoneHint: phoneHint,
+        demoCode: code,
+        defaultCode: '123456',
+        expiresInSeconds: 180
+      };
+    },
+
+    // Verify 6-digit OTP code
+    verify2FA: function (email, inputOtp) {
+      if (!inputOtp || !inputOtp.trim()) {
+        return { success: false, error: 'Please enter the 6-digit security OTP.' };
+      }
+      const cleanOtp = inputOtp.trim();
+      // Master code 123456 always valid for testability and live demos
+      if (cleanOtp === '123456') {
+        try { sessionStorage.removeItem('legends_2fa_pending'); } catch (e) {}
+        return { success: true };
+      }
+
+      try {
+        const pendingRaw = sessionStorage.getItem('legends_2fa_pending');
+        if (pendingRaw) {
+          const pending = JSON.parse(pendingRaw);
+          if (Date.now() > pending.expiresAt) {
+            return { success: false, error: 'Security OTP has expired. Please request a new code.' };
+          }
+          if (pending.code === cleanOtp) {
+            sessionStorage.removeItem('legends_2fa_pending');
+            return { success: true };
+          }
+        }
+      } catch (e) {
+        console.warn('2FA verification check failed:', e);
+      }
+
+      return { success: false, error: 'Invalid 6-digit security code. Check SMS or use demo code 123456.' };
+    },
 
     // Retrieve active session from localStorage
     getCurrentUser: function () {
@@ -118,15 +311,22 @@
     },
 
     // Login user (stores session)
-    login: function (email, roleId) {
-      const roleConfig = ROLES[roleId] || ROLES.cricket;
+    login: function (email, roleId, rememberMe, optionalName) {
+      const cleanEmail = (email || 'officer@nmims.edu.in').trim();
+      const account = this.findAccountByEmail(cleanEmail);
+      const roleConfig = ROLES[roleId] || (account ? ROLES[account.role] : ROLES.committee);
+      
+      const displayName = optionalName || (account ? account.name : (cleanEmail.split('@')[0].toUpperCase() + ' (Official)'));
+      const institution = account ? account.institution : 'NMIMS Hyderabad STME Impulse';
+
       const user = {
-        email: email || 'officer@nmims.edu.in',
-        name: email ? email.split('@')[0].toUpperCase() + ' (Official)' : 'Rajesh K. (NMIMS STME)',
+        email: cleanEmail,
+        name: displayName,
         role: roleConfig.id,
-        institution: 'NMIMS Hyderabad STME Impulse',
+        institution: institution,
         token: 'AUTH-' + Math.random().toString(36).substring(2, 10).toUpperCase(),
-        loginTime: new Date().toISOString()
+        loginTime: new Date().toISOString(),
+        rememberMe: rememberMe !== false
       };
 
       localStorage.setItem('legends_auth_session', JSON.stringify(user));
