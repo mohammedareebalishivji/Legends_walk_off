@@ -62,13 +62,13 @@
       }
 
       if (type === 'success') {
-        toast.className = 'fixed bottom-6 right-6 z-[9999] px-space-md py-3 rounded-none clip-angle border border-tertiary bg-surface-container-high text-tertiary shadow-[0_0_24px_rgba(78,222,163,0.4)] transition-all duration-300 transform translate-y-0 opacity-100 flex items-center gap-3 font-title-md text-sm';
+        toast.className = 'fixed bottom-6 right-6 z-[9999] px-space-md py-3 rounded-none clip-angle border border-tertiary bg-surface-container-high text-tertiary shadow-[0_0_24px_rgba(130,162,225,0.4)] transition-all duration-300 transform translate-y-0 opacity-100 flex items-center gap-3 font-title-md text-sm';
         toast.innerHTML = `<span class="material-symbols-outlined text-tertiary">check_circle</span><span>${message}</span>`;
       } else if (type === 'error') {
-        toast.className = 'fixed bottom-6 right-6 z-[9999] px-space-md py-3 rounded-none clip-angle border border-primary-container bg-surface-container-high text-primary shadow-[0_0_24px_rgba(225,6,0,0.5)] transition-all duration-300 transform translate-y-0 opacity-100 flex items-center gap-3 font-title-md text-sm';
+        toast.className = 'fixed bottom-6 right-6 z-[9999] px-space-md py-3 rounded-none clip-angle border border-primary-container bg-surface-container-high text-primary shadow-[0_0_24px_rgba(130,162,225,0.5)] transition-all duration-300 transform translate-y-0 opacity-100 flex items-center gap-3 font-title-md text-sm';
         toast.innerHTML = `<span class="material-symbols-outlined text-primary-container">warning</span><span>${message}</span>`;
       } else {
-        toast.className = 'fixed bottom-6 right-6 z-[9999] px-space-md py-3 rounded-none clip-angle border border-secondary-container bg-surface-container-high text-secondary-container shadow-[0_0_24px_rgba(254,212,0,0.4)] transition-all duration-300 transform translate-y-0 opacity-100 flex items-center gap-3 font-title-md text-sm';
+        toast.className = 'fixed bottom-6 right-6 z-[9999] px-space-md py-3 rounded-none clip-angle border border-secondary-container bg-surface-container-high text-secondary-container shadow-[0_0_24px_rgba(168,117,89,0.5)] transition-all duration-300 transform translate-y-0 opacity-100 flex items-center gap-3 font-title-md text-sm';
         toast.innerHTML = `<span class="material-symbols-outlined text-secondary-container">bolt</span><span>${message}</span>`;
       }
 

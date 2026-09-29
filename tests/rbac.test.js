@@ -149,6 +149,7 @@ const expectedFiles = [
   'index.html',
   'standings.html',
   'live-scores.html',
+  'auction.html',
   'about.html',
   'admin-console.html',
   'login.html',

@@ -41,6 +41,8 @@ if command -v node >/dev/null 2>&1; then
   echo "  ✓ js/legends-rbac.js syntax verified"
   node -c js/legends-roster.js
   echo "  ✓ js/legends-roster.js syntax verified"
+  node -c js/legends-auction.js
+  echo "  ✓ js/legends-auction.js syntax verified"
 fi
 
 # Verify required core files
@@ -48,6 +50,7 @@ REQUIRED_FILES=(
   "index.html"
   "standings.html"
   "live-scores.html"
+  "auction.html"
   "about.html"
   "admin-console.html"
   "login.html"
@@ -56,6 +59,7 @@ REQUIRED_FILES=(
   "js/legends-core.js"
   "js/legends-rbac.js"
   "js/legends-roster.js"
+  "js/legends-auction.js"
   "assets/logo.png"
   "assets/hero-banner.png"
 )
@@ -69,11 +73,12 @@ for file in "${REQUIRED_FILES[@]}"; do
   fi
 done
 
-# STAGE 3: RUN RBAC, ROSTER & LOGIN AUTH TEST SUITES
-echo -e "\n🧪 [STAGE 3/5] Executing RBAC Security, Roster & Login Auth Test Suites..."
+# STAGE 3: RUN RBAC, ROSTER, AUCTION & LOGIN AUTH TEST SUITES
+echo -e "\n🧪 [STAGE 3/5] Executing RBAC Security, Roster, Auction & Login Auth Test Suites..."
 if command -v node >/dev/null 2>&1; then
   node tests/rbac.test.js
   node tests/roster.test.js
+  node tests/auction.test.js
   node tests/login.test.js
 else
   echo "  ⚠ Skipping node tests (Node.js required)."
@@ -108,6 +113,7 @@ if command -v python3 >/dev/null 2>&1; then
     "index.html"
     "standings.html"
     "live-scores.html"
+    "auction.html"
     "about.html"
     "admin-console.html"
     "login.html"
@@ -116,6 +122,7 @@ if command -v python3 >/dev/null 2>&1; then
     "js/legends-core.js"
     "js/legends-rbac.js"
     "js/legends-roster.js"
+    "js/legends-auction.js"
   )
 
   ALL_SUCCESS=true

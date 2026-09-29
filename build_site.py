@@ -10,7 +10,7 @@ def refine_site():
         c = f.read()
     
     old_about_nav = '<a class="px-space-md py-space-sm font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="about-sponsors" href="about.html">About &amp; Sponsors</a>'
-    new_about_nav = '<a aria-current="page" class="px-space-md py-space-sm font-headline-sm uppercase tracking-wider transition-all bg-surface-container-high text-secondary-container shadow-[inset_0_-2px_0_0_#fed400]" data-path="about-sponsors" href="about.html">About &amp; Sponsors</a>'
+    new_about_nav = '<a aria-current="page" class="px-space-md py-space-sm font-headline-sm uppercase tracking-wider transition-all bg-surface-container-high text-secondary-container shadow-[inset_0_-2px_0_0_#a87559]" data-path="about-sponsors" href="about.html">About &amp; Sponsors</a>'
     c = c.replace(old_about_nav, new_about_nav)
     with open(about_path, 'w', encoding='utf-8') as f:
         f.write(c)

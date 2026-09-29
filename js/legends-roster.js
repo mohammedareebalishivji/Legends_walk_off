@@ -22,7 +22,7 @@
       institution: 'School of Technology Management & Engineering, NMIMS Hyderabad',
       sport: 'cricket',
       pool: 'Group Alpha',
-      color: '#e10600',
+      color: '#82a2e1',
       captain: 'Vikramaditya',
       played: 3, won: 3, lost: 0, pts: 6, nrr: '+2.450',
       members: [
@@ -41,7 +41,7 @@
       institution: 'Chaitanya Bharathi Institute of Technology, Gandipet',
       sport: 'cricket',
       pool: 'Group Alpha',
-      color: '#ffd400',
+      color: '#a87559',
       captain: 'Pranav K.',
       played: 3, won: 2, lost: 1, pts: 4, nrr: '+1.180',
       members: [
@@ -58,7 +58,7 @@
       institution: 'VNR Vignana Jyothi Institute of Engineering, Bachupally',
       sport: 'cricket',
       pool: 'Group Bravo',
-      color: '#4edea3',
+      color: '#d1b3a1',
       captain: 'Rahul Sen',
       played: 3, won: 2, lost: 1, pts: 4, nrr: '+0.890',
       members: [
@@ -74,7 +74,7 @@
       institution: 'BITS Pilani Hyderabad Campus, Shamirpet',
       sport: 'cricket',
       pool: 'Group Bravo',
-      color: '#38bdf8',
+      color: '#24438c',
       captain: 'Anish Mathur',
       played: 3, won: 1, lost: 2, pts: 2, nrr: '-0.340',
       members: [
@@ -90,7 +90,7 @@
       institution: 'BITS Pilani Hyderabad Campus',
       sport: 'football',
       pool: 'Conference Alpha',
-      color: '#38bdf8',
+      color: '#24438c',
       captain: 'Zeeshan Ali',
       played: 3, won: 3, lost: 0, pts: 9, nrr: '+7 GD',
       members: [
@@ -107,7 +107,7 @@
       institution: 'NMIMS Hyderabad STME',
       sport: 'football',
       pool: 'Conference Alpha',
-      color: '#e10600',
+      color: '#82a2e1',
       captain: 'Farhan Shaikh',
       played: 3, won: 2, lost: 1, pts: 6, nrr: '+4 GD',
       members: [
@@ -171,7 +171,7 @@
         institution: (teamData.institution || 'Inter-Collegiate League').trim(),
         sport: teamData.sport || 'cricket',
         pool: teamData.pool || (teamData.sport === 'cricket' ? 'Group Alpha' : 'Conference Alpha'),
-        color: teamData.color || '#e10600',
+        color: teamData.color || '#82a2e1',
         captain: teamData.captain || 'To Be Announced',
         played: 0, won: 0, lost: 0, pts: 0, nrr: '+0.000',
         members: []
@@ -315,7 +315,7 @@
         return `
           <div class="bg-surface-container p-space-sm transition-all border-l-4 ${isSelected ? 'border-primary-container bg-surface-container-high shadow-lg' : 'border-transparent hover:bg-surface-container-high/60'} flex items-center justify-between gap-space-sm cursor-pointer" onclick="selectTeamForRoster('${t.id}')">
             <div class="flex items-center gap-space-sm min-w-0">
-              <div class="w-10 h-10 shrink-0 bg-surface-container-lowest border border-outline-variant/40 flex items-center justify-center font-headline-sm text-sm uppercase text-on-surface" style="border-top: 2px solid ${t.color || '#e10600'}">
+              <div class="w-10 h-10 shrink-0 bg-surface-container-lowest border border-outline-variant/40 flex items-center justify-center font-headline-sm text-sm uppercase text-on-surface" style="border-top: 2px solid ${t.color || '#82a2e1'}">
                 ${t.shortCode || 'TM'}
               </div>
               <div class="min-w-0">
@@ -365,7 +365,7 @@
       <!-- Active Team Banner -->
       <div class="bg-surface-container-lowest p-space-md border border-outline-variant/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md">
         <div class="flex items-center gap-space-md">
-          <div class="w-14 h-14 bg-surface-container-high border-2 flex items-center justify-center font-headline-lg text-xl uppercase font-bold text-on-surface" style="border-color: ${selectedTeam.color || '#e10600'}">
+          <div class="w-14 h-14 bg-surface-container-high border-2 flex items-center justify-center font-headline-lg text-xl uppercase font-bold text-on-surface" style="border-color: ${selectedTeam.color || '#82a2e1'}">
             ${selectedTeam.shortCode}
           </div>
           <div>
