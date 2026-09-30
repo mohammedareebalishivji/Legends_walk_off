@@ -120,10 +120,12 @@ if [ -n "$NETWORK_IP" ]; then
   echo -e "  ➜  Network: http://$NETWORK_IP:$PORT/"
   echo ""
   echo "📱 Connect from Mobile / Tablet / Other Devices on Same Wi-Fi:"
-  echo "   • Tournament Home: http://$NETWORK_IP:$PORT/"
-  echo "   • Player Auction:  http://$NETWORK_IP:$PORT/auction.html"
-  echo "   • Live Score HUD:  http://$NETWORK_IP:$PORT/live-scores.html"
-  echo "   • Mobile Console:  http://$NETWORK_IP:$PORT/mobile-live.html"
+  echo "   • Tournament Home:     http://$NETWORK_IP:$PORT/"
+  echo "   • MPH Stage Screen:    http://$NETWORK_IP:$PORT/mph-screen.html"
+  echo "   • Captains Console:    http://$NETWORK_IP:$PORT/captain-dashboard.html"
+  echo "   • Player Auction Hub:  http://$NETWORK_IP:$PORT/auction.html"
+  echo "   • Live Score Broadcast:http://$NETWORK_IP:$PORT/live-scores.html"
+  echo "   • Mobile Live Scores:  http://$NETWORK_IP:$PORT/mobile-live.html"
 else
   echo -e "  ➜  Network: (Connect to Wi-Fi to generate network link)"
 fi
