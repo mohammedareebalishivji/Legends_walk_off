@@ -16,6 +16,13 @@
   const STORAGE_KEY_AUCTION = 'legends_auction_state_v1';
   const STORAGE_KEY_ROLE = 'legends_auction_active_role_v1';
 
+  let syncChannel = null;
+  try {
+    if (typeof BroadcastChannel !== 'undefined') {
+      syncChannel = new BroadcastChannel('legends_auction_sync_channel');
+    }
+  } catch (e) {}
+
   // 1. DEFAULT TEAMS & SALARY CAPS (Total Purse: ₹1.00 Crore / 100 Lakhs per team)
   const INITIAL_TEAMS = [
     {
@@ -31,6 +38,12 @@
       spentPurse: 2850000,  // ₹28.50 L
       remainingPurse: 7150000, // ₹71.50 L
       squadLimit: 15,
+      retainedMembers: [
+        { name: 'Vikramaditya', role: 'Captain & Top-Order Batsman', type: 'Captain', jersey: 7 },
+        { name: 'Rohan Verma', role: 'Wicket-Keeper Batsman', type: 'Retained Squad', jersey: 45 },
+        { name: 'Siddharth Nair', role: 'Fast-Bowling All-Rounder', type: 'Retained Squad', jersey: 12 },
+        { name: 'Dhruv Rao', role: 'Spin Bowler (Left-Arm)', type: 'Retained Squad', jersey: 24 }
+      ],
       acquiredPlayers: [
         { id: 'sold-1', name: 'Arjun Sharma', role: 'Opening Batsman', price: 1850000, time: '10:14 AM' },
         { id: 'sold-2', name: 'K. Reddy', role: 'Pace Bowler', price: 1000000, time: '10:32 AM' }
@@ -49,6 +62,10 @@
       spentPurse: 3400000, // ₹34.00 L
       remainingPurse: 6600000, // ₹66.00 L
       squadLimit: 15,
+      retainedMembers: [
+        { name: 'Pranav K.', role: 'Captain & Middle-Order Batsman', type: 'Captain', jersey: 10 },
+        { name: 'Nikhil Kumar', role: 'Pace Bowler (Right-Arm Fast)', type: 'Retained Squad', jersey: 17 }
+      ],
       acquiredPlayers: [
         { id: 'sold-3', name: 'Abhishek Roy', role: 'All-Rounder', price: 2200000, time: '10:45 AM' },
         { id: 'sold-4', name: 'Varun Teja', role: 'Opening Batsman', price: 1200000, time: '11:02 AM' }
@@ -67,6 +84,10 @@
       spentPurse: 1900000, // ₹19.00 L
       remainingPurse: 8100000, // ₹81.00 L
       squadLimit: 15,
+      retainedMembers: [
+        { name: 'Rahul Sen', role: 'Captain & Fast Bowler', type: 'Captain', jersey: 1 },
+        { name: 'Manish V.', role: 'Slow Left-Arm All-Rounder', type: 'Retained Squad', jersey: 5 }
+      ],
       acquiredPlayers: [
         { id: 'sold-5', name: 'Karthik Rao', role: 'Top-order Batsman', price: 1900000, time: '11:20 AM' }
       ]
@@ -84,6 +105,9 @@
       spentPurse: 4200000, // ₹42.00 L
       remainingPurse: 5800000, // ₹58.00 L
       squadLimit: 15,
+      retainedMembers: [
+        { name: 'Anish Mathur', role: 'Captain & Top-Order Batsman', type: 'Captain', jersey: 9 }
+      ],
       acquiredPlayers: [
         { id: 'sold-6', name: 'Sameer Jha', role: 'Wicket-keeper Batsman', price: 2600000, time: '11:35 AM' },
         { id: 'sold-7', name: 'Tanmay Saxena', role: 'Pace Bowler', price: 1600000, time: '11:48 AM' }
@@ -102,6 +126,10 @@
       spentPurse: 2500000,
       remainingPurse: 7500000,
       squadLimit: 18,
+      retainedMembers: [
+        { name: 'Farhan Shaikh', role: 'Captain & Left Winger (LW)', type: 'Captain', jersey: 7 },
+        { name: 'Surya Teja', role: 'Goalkeeper (GK)', type: 'Retained Squad', jersey: 1 }
+      ],
       acquiredPlayers: [
         { id: 'sold-8', name: 'Neil Mukherjee', role: 'Right Winger (RW)', price: 2500000, time: '12:05 PM' }
       ]
@@ -119,6 +147,11 @@
       spentPurse: 3100000,
       remainingPurse: 6900000,
       squadLimit: 18,
+      retainedMembers: [
+        { name: 'Zeeshan Ali', role: 'Captain & Centre Forward (ST)', type: 'Captain', jersey: 10 },
+        { name: 'Aditya Pillai', role: 'Centre-Back (CB)', type: 'Retained Squad', jersey: 4 },
+        { name: 'Rishi Paul', role: 'Central Midfielder (CM)', type: 'Retained Squad', jersey: 8 }
+      ],
       acquiredPlayers: [
         { id: 'sold-9', name: 'Kabir Das', role: 'Goalkeeper (GK)', price: 3100000, time: '12:22 PM' }
       ]
@@ -315,6 +348,12 @@
     saveState: function (state) {
       try {
         localStorage.setItem(STORAGE_KEY_AUCTION, JSON.stringify(state));
+        if (syncChannel) {
+          syncChannel.postMessage({ type: 'AUCTION_STATE_UPDATED', timestamp: Date.now() });
+        }
+        if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+          window.dispatchEvent(new CustomEvent('legends_auction_updated', { detail: state }));
+        }
       } catch (e) {
         console.error('Error saving auction state', e);
       }
@@ -398,18 +437,102 @@
       return state.teams.find(t => t.id === teamId) || null;
     },
 
-    // Get all registered teams with current purse statuses
+    // Return all members for a team (both initial retained squad + auction acquired)
+    getTeamAllMembers: function (teamId) {
+      const team = this.getTeam(teamId);
+      if (!team) return [];
+      const list = [];
+      if (team.retainedMembers && Array.isArray(team.retainedMembers)) {
+        team.retainedMembers.forEach(m => list.push({
+          id: 'ret-' + m.name.toLowerCase().replace(/[^a-z0-9]/g, '-'),
+          name: m.name,
+          role: m.role,
+          type: m.type || 'Retained Squad',
+          jersey: m.jersey || null,
+          price: 0,
+          isRetained: true
+        }));
+      }
+      if (team.acquiredPlayers && Array.isArray(team.acquiredPlayers)) {
+        team.acquiredPlayers.forEach(p => list.push({
+          id: p.id,
+          name: p.name,
+          role: p.role,
+          type: 'Auction Drafted',
+          jersey: null,
+          price: p.price,
+          time: p.time,
+          isRetained: false
+        }));
+      }
+      return list;
+    },
+
+    // Return all opponent teams with their remaining wallets and member rosters
+    getOpponents: function (myTeamId) {
+      const teams = this.getTeams();
+      const myTeam = teams.find(t => t.id === myTeamId);
+      return teams
+        .filter(t => t.id !== myTeamId)
+        .map(t => {
+          const allMembers = this.getTeamAllMembers(t.id);
+          return {
+            ...t,
+            membersCount: allMembers.length,
+            allMembers: allMembers,
+            purseDifference: myTeam ? (myTeam.remainingPurse - t.remainingPurse) : 0
+          };
+        });
+    },
+
+    // Get all registered teams with current purse statuses & member counts
     getTeams: function () {
       const state = this.getState();
       return state.teams.map(t => {
         const remaining = Math.max(0, t.totalPurse - t.spentPurse);
         const pctRemaining = Math.max(0, Math.min(100, (remaining / t.totalPurse) * 100));
+        const allMembers = this.getTeamAllMembers(t.id);
         return {
           ...t,
           remainingPurse: remaining,
-          pctRemaining: pctRemaining.toFixed(1)
+          pctRemaining: pctRemaining.toFixed(1),
+          allMembers: allMembers,
+          squadCount: allMembers.length
         };
       });
+    },
+
+    // Subscribe to cross-tab or cross-window auction updates
+    subscribe: function (callback) {
+      if (typeof window === 'undefined' || typeof callback !== 'function') return () => {};
+
+      const handleStorage = (ev) => {
+        if (ev.key === STORAGE_KEY_AUCTION) {
+          callback(this.getState());
+        }
+      };
+
+      const handleCustom = (ev) => {
+        callback(ev.detail || this.getState());
+      };
+
+      const handleBroadcast = () => {
+        callback(this.getState());
+      };
+
+      window.addEventListener('storage', handleStorage);
+      window.addEventListener('legends_auction_updated', handleCustom);
+      if (syncChannel) {
+        syncChannel.addEventListener('message', handleBroadcast);
+      }
+
+      return function unsubscribe() {
+        window.removeEventListener('storage', handleStorage);
+        window.removeEventListener('legends_auction_updated', handleCustom);
+        if (syncChannel) {
+          syncChannel.removeEventListener('message', handleBroadcast);
+        }
+      };
     },
 
     // Place a bid on the active lot

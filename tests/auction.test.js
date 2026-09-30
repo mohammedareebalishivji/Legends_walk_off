@@ -195,6 +195,25 @@ it('12. Format currency handles Lakhs and Crores accurately', () => {
   assert.strictEqual(Auction.formatCurrency(50000), '₹50,000');
 });
 
+it('13. getTeamAllMembers returns full roster combining retained squad and auction drafted players', () => {
+  const members = Auction.getTeamAllMembers('team-nmims-cricket');
+  assert.ok(Array.isArray(members));
+  assert.ok(members.length >= 4, 'Should contain at least 4 members');
+  assert.ok(members.some(m => m.name === 'Vikramaditya' && m.type === 'Captain'));
+  assert.ok(members.some(m => m.name === 'Rohan Verma' && m.isRetained));
+});
+
+it('14. getOpponents returns all 5 opponent franchises with wallets, differences and squad members', () => {
+  const opponents = Auction.getOpponents('team-nmims-cricket');
+  assert.strictEqual(opponents.length, 5, 'Should have exactly 5 opponents');
+  assert.ok(!opponents.some(t => t.id === 'team-nmims-cricket'), 'Should not include my own team');
+  opponents.forEach(opp => {
+    assert.ok(typeof opp.remainingPurse === 'number', 'Opponent should have remaining purse');
+    assert.ok(Array.isArray(opp.allMembers), 'Opponent should have allMembers array');
+    assert.ok(opp.allMembers.length > 0, 'Opponent should have squad members');
+  });
+});
+
 console.log('\n----------------------------------------------------');
 console.log(`Results: ${passedTests}/${totalTests} tests passed`);
 console.log('----------------------------------------------------');

@@ -154,7 +154,9 @@ const expectedFiles = [
   'admin-console.html',
   'login.html',
   'mobile-live.html',
-  'mobile-admin.html'
+  'mobile-admin.html',
+  'mph-screen.html',
+  'captain-dashboard.html'
 ];
 
 expectedFiles.forEach(file => {
