@@ -197,12 +197,18 @@
             <span class="font-label-badge text-label-badge text-primary uppercase tracking-widest font-bold">LIVE HAMMER ACTIVE</span>
           </div>
 
-          <div class="flex items-center gap-2">
-            <button onclick="resetAuctionData()" class="px-space-sm py-1 bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface text-xs font-label-badge uppercase tracking-wider rounded border border-outline/20 transition-all flex items-center gap-1">
-              <span class="material-symbols-outlined text-[14px]">refresh</span>Reset Defaults
+          <div class="flex items-center gap-2 flex-wrap">
+            <button onclick="window.LegendsAuction.downloadExcelCSV()" class="px-space-sm py-1 bg-surface-container hover:bg-secondary-container hover:text-on-secondary text-secondary-container text-xs font-headline-sm uppercase tracking-wider rounded border border-secondary-container/40 transition-all flex items-center gap-1 shadow-sm" title="Export entire auction summary, wallets, and squads to CSV/Excel">
+              <span class="material-symbols-outlined text-[15px]">download</span>Export Excel
             </button>
-            <button id="adminAddPlayerBtn" onclick="openAddPlayerModal()" class="hidden px-space-sm py-1 bg-secondary-container text-on-secondary text-xs font-headline-sm uppercase tracking-wider rounded transition-all flex items-center gap-1 shadow-sm">
+            <button id="adminSetupTeamsBtn" onclick="openTeamSetupModal()" class="px-space-sm py-1 bg-surface-container hover:bg-primary-container hover:text-on-primary-container text-primary text-xs font-headline-sm uppercase tracking-wider rounded border border-primary/30 transition-all flex items-center gap-1 shadow-sm" title="Admin manual entry of franchise names and starting purses">
+              <span class="material-symbols-outlined text-[15px]">tune</span>Setup Teams &amp; Purses
+            </button>
+            <button id="adminAddPlayerBtn" onclick="openAddPlayerModal()" class="px-space-sm py-1 bg-secondary-container text-on-secondary text-xs font-headline-sm uppercase tracking-wider rounded transition-all flex items-center gap-1 shadow-sm">
               <span class="material-symbols-outlined text-[14px]">person_add</span>Add Player Lot
+            </button>
+            <button onclick="resetAuctionData()" class="px-space-sm py-1 bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface text-xs font-label-badge uppercase tracking-wider rounded border border-outline/20 transition-all flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">refresh</span>Reset
             </button>
           </div>
         </div>
@@ -354,8 +360,8 @@
               </div>
               <div class="flex items-center gap-2">
                 <span class="material-symbols-outlined text-sm text-secondary-container">timer</span>
-                <span class="font-label-badge text-xs uppercase tracking-wider text-outline">Gavel Countdown:</span>
-                <span id="hammerTimerDisplay" class="font-label-numeric-md font-mono text-secondary-container font-bold">20s</span>
+                <span class="font-label-badge text-xs uppercase tracking-wider text-outline">STAGE CLOCK:</span>
+                <span id="hammerTimerDisplay" class="font-label-numeric-md font-mono text-secondary-container font-bold">00:45</span>
               </div>
             </div>
 
@@ -389,7 +395,7 @@
                 </p>
 
                 <!-- Stats Grid -->
-                <div id="activePlayerStatsGrid" class="grid grid-cols-4 gap-2 mt- space-md py-space-sm px-space-md bg-surface-container-lowest/80 rounded border border-outline/10 text-center">
+                <div id="activePlayerStatsGrid" class="grid grid-cols-4 gap-2 mt-2 py-space-sm px-space-md bg-surface-container-lowest/80 rounded border border-outline/10 text-center">
                   <div>
                     <span class="block font-label-numeric-md font-bold text-on-surface">18</span>
                     <span class="block font-label-badge text-[9px] uppercase text-outline">Matches</span>
@@ -408,8 +414,19 @@
                   </div>
                 </div>
 
+                <!-- Extra Player Scouting & Style Details (Requested) -->
+                <div class="mt-2.5 p-2 rounded-lg bg-surface-container-lowest/70 border border-outline/20 flex flex-col gap-1 text-xs text-left">
+                  <div class="flex flex-wrap items-center gap-3 text-on-surface">
+                    <span>🏏 <strong>Batting:</strong> <span id="activePlayerBatting" class="text-secondary-container">Right-Handed</span></span>
+                    <span>⚡ <strong>Bowling:</strong> <span id="activePlayerBowling" class="text-primary">Right-Arm Express (140+ km/h)</span></span>
+                  </div>
+                  <div class="text-[11px] text-on-surface-variant font-body-sm italic" id="activePlayerNotes">
+                    "Terrific pace off the deck. Consistently hits 142+ km/h with an unplayable toe-crusher yorker."
+                  </div>
+                </div>
+
                 <!-- Base Price Callout -->
-                <div class="mt-space-md flex items-center justify-between border-t border-outline/10 pt-2 text-xs">
+                <div class="mt-2.5 flex items-center justify-between border-t border-outline/10 pt-2 text-xs">
                   <span class="font-label-badge text-outline uppercase tracking-wider">Official Base Price:</span>
                   <span id="activeBasePriceDisplay" class="font-label-numeric-md text-on-surface font-semibold">₹10.00 Lakh</span>
                 </div>
@@ -497,35 +514,115 @@
                   </div>
                 </div>
 
-                <!-- ADMIN GAVEL CONTROLS (VISIBLE ONLY WHEN ADMIN) -->
-                <div id="adminGavelPanel" class="hidden flex flex-col gap-space-sm p-space-md rounded-lg bg-surface-container-high border-2 border-secondary-container shadow-[0_0_24px_rgba(168,117,89,0.3)]">
-                  <div class="flex items-center justify-between text-xs font-label-badge uppercase tracking-wider">
-                    <span class="text-secondary-container font-bold flex items-center gap-1">
-                      <span class="material-symbols-outlined text-sm">gavel</span>
-                      OFFICIAL GAVEL &amp; AUCTIONEER DESK
+                <!-- ADMIN GAVEL & BIDDING COMMAND (ADMIN BIDS ON BEHALF OF TEAMS) -->
+                <div id="adminGavelPanel" class="hidden flex flex-col gap-3 p-4 rounded-xl bg-surface-container-high border-2 border-secondary-container shadow-[0_0_30px_rgba(168,117,89,0.35)]">
+                  
+                  <!-- Admin Header -->
+                  <div class="flex items-center justify-between text-xs font-label-badge uppercase tracking-wider border-b border-outline/20 pb-2">
+                    <span class="text-secondary-container font-bold flex items-center gap-1.5">
+                      <span class="material-symbols-outlined text-base">gavel</span>
+                      OFFICIAL STAGE AUCTIONEER &amp; BIDDING COMMAND
                     </span>
-                    <span class="font-mono text-[10px] text-outline">STME IMPULSE AUTHORITY</span>
+                    <span class="font-mono text-[10px] text-primary">ADMIN BID MODE (PADDLE LOGGING)</span>
                   </div>
 
-                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    <button onclick="handleHammerSold()" class="py-3 px-space-md bg-secondary-container hover:bg-secondary-container/90 text-on-secondary-container font-headline-sm uppercase tracking-wider text-sm rounded transition-all flex items-center justify-center gap-1.5 shadow-[0_0_16px_rgba(168,117,89,0.5)]">
-                      <span class="material-symbols-outlined text-lg">check_circle</span>
-                      <span>SOLD TO HIGHEST!</span>
-                    </button>
-                    
-                    <button onclick="handleHammerUnsold()" class="py-3 px-space-md bg-surface-container-highest hover:bg-error-container hover:text-on-error-container text-on-surface font-headline-sm uppercase tracking-wider text-sm rounded transition-all flex items-center justify-center gap-1.5 border border-outline/30">
-                      <span class="material-symbols-outlined text-lg">close</span>
-                      <span>PASS / UNSOLD</span>
+                  <!-- 1. FRANCHISE SELECTION (Which team is raising the paddle?) -->
+                  <div class="flex flex-col gap-1.5">
+                    <div class="flex items-center justify-between text-[11px] font-label-badge uppercase text-outline">
+                      <span>1. SELECT BIDDING FRANCHISE (PADDLE RAISED):</span>
+                      <span id="selectedAdminTeamName" class="text-secondary-container font-bold">NMIMS STME Strikers</span>
+                    </div>
+                    <div id="adminTeamSelectorPills" class="flex items-center gap-1.5 overflow-x-auto pb-1">
+                      <!-- Dynamically populated or rendered -->
+                    </div>
+                  </div>
+
+                  <!-- 2. DYNAMIC TIER BIDDING BUTTONS & CUSTOM BID (USER RULES) -->
+                  <!-- Rule: 10L till 1Cr, 20L 1Cr-3Cr, 25L above 3Cr, Base: 10L -->
+                  <div class="p-3 rounded-lg bg-surface-container-lowest border border-outline-variant/30 flex flex-col gap-2">
+                    <div class="flex items-center justify-between text-[10px] font-label-badge uppercase text-outline">
+                      <span>2. TIERED STEP INCREMENT:</span>
+                      <span class="text-primary font-mono">10L &lt; 1Cr • 20L 1-3Cr • 25L &gt; 3Cr</span>
+                    </div>
+
+                    <!-- Recommended Dynamic Tier Button -->
+                    <button onclick="handleAdminPlaceBid(null)" id="adminDynamicBidBtn" class="w-full py-2.5 px-4 bg-primary hover:bg-primary-container text-black font-headline-sm text-sm uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(130,162,225,0.4)]">
+                      <span class="material-symbols-outlined text-lg">add_circle</span>
+                      <span id="adminDynamicBidText">LOG NEXT TIER BID (+₹10.00 LAKH)</span>
                     </button>
 
-                    <button onclick="handleResetTimer()" class="py-3 px-space-md bg-surface-container hover:bg-surface-container-low text-primary font-headline-sm uppercase tracking-wider text-sm rounded transition-all flex items-center justify-center gap-1.5 border border-primary/30">
-                      <span class="material-symbols-outlined text-lg">replay</span>
-                      <span>RESET 20S TIMER</span>
-                    </button>
+                    <!-- Quick Tier Steps -->
+                    <div class="grid grid-cols-4 gap-1.5">
+                      <button onclick="handleAdminPlaceBid(1000000)" class="py-1.5 px-2 rounded bg-surface-container hover:bg-surface-container-highest text-on-surface font-headline-sm text-xs uppercase border border-outline/20 transition-all flex flex-col items-center">
+                        <span>+₹10.00 L</span>
+                        <span class="text-[8px] font-label-badge text-outline">&lt;1Cr Step</span>
+                      </button>
+                      <button onclick="handleAdminPlaceBid(2000000)" class="py-1.5 px-2 rounded bg-surface-container hover:bg-surface-container-highest text-secondary-container font-headline-sm text-xs uppercase border border-outline/20 transition-all flex flex-col items-center">
+                        <span>+₹20.00 L</span>
+                        <span class="text-[8px] font-label-badge text-outline">1-3Cr Step</span>
+                      </button>
+                      <button onclick="handleAdminPlaceBid(2500000)" class="py-1.5 px-2 rounded bg-surface-container hover:bg-surface-container-highest text-primary font-headline-sm text-xs uppercase border border-outline/20 transition-all flex flex-col items-center">
+                        <span>+₹25.00 L</span>
+                        <span class="text-[8px] font-label-badge text-outline">&gt;3Cr Step</span>
+                      </button>
+                      <button onclick="handleAdminPlaceBid(5000000)" class="py-1.5 px-2 rounded bg-surface-container hover:bg-surface-container-highest text-cream font-headline-sm text-xs uppercase border border-outline/20 transition-all flex flex-col items-center">
+                        <span>+₹50.00 L</span>
+                        <span class="text-[8px] font-label-badge text-outline">Jump Step</span>
+                      </button>
+                    </div>
+
+                    <!-- Custom Bid Input (User Requirement: "Bid custom bhi rakho") -->
+                    <div class="flex items-center gap-2 pt-1 border-t border-outline/10">
+                      <div class="relative flex-1">
+                        <span class="absolute left-2.5 top-2 text-xs font-mono text-outline">₹</span>
+                        <input type="number" id="adminCustomBidAmount" placeholder="Exact Bid (e.g. 4500000 or in Lakhs)" class="w-full pl-6 pr-2 py-1.5 bg-surface-container-high text-on-surface text-xs rounded border border-outline/30 focus:border-primary focus:outline-none"/>
+                      </div>
+                      <button onclick="handleAdminCustomBid()" class="px-3 py-1.5 bg-surface-container-highest hover:bg-primary hover:text-black text-on-surface text-xs font-headline-sm uppercase tracking-wider rounded transition-all shrink-0">
+                        Set Custom Bid
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- 3. GAVEL HAMMER, NAVIGATION & UNDO CONTROLS -->
+                  <div class="flex flex-col gap-2 pt-1">
+                    <div class="grid grid-cols-2 gap-2">
+                      <button onclick="handleHammerSold()" class="py-2.5 px-3 bg-secondary-container hover:bg-secondary-container/90 text-on-secondary font-headline-sm uppercase tracking-wider text-xs sm:text-sm rounded-lg transition-all flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(168,117,89,0.5)]">
+                        <span class="material-symbols-outlined text-base">gavel</span>
+                        <span>SOLD TO HIGHEST!</span>
+                      </button>
+                      
+                      <button onclick="handleHammerUnsold()" class="py-2.5 px-3 bg-surface-container-highest hover:bg-error-container hover:text-on-error-container text-on-surface font-headline-sm uppercase tracking-wider text-xs sm:text-sm rounded-lg transition-all flex items-center justify-center gap-1.5 border border-outline/30">
+                        <span class="material-symbols-outlined text-base">close</span>
+                        <span>PASS / UNSOLD</span>
+                      </button>
+                    </div>
+
+                    <!-- Next Lot Navigation & Undo Actions (User Requirements: "Next click karne pe next aane chaiye", "Undo") -->
+                    <div class="grid grid-cols-4 gap-1.5">
+                      <button onclick="handlePrevLot()" class="py-2 px-2 bg-surface-container hover:bg-surface-container-highest text-on-surface font-headline-sm uppercase text-xs rounded transition-all flex items-center justify-center gap-1 border border-outline/20" title="Move back to previous player lot">
+                        <span class="material-symbols-outlined text-sm">arrow_back</span>
+                        <span>Prev Lot</span>
+                      </button>
+
+                      <button onclick="handleNextLot()" class="py-2 px-2 bg-primary-container text-on-primary-container hover:opacity-90 font-headline-sm uppercase text-xs rounded transition-all flex items-center justify-center gap-1 shadow-sm font-bold" title="Advance to next player lot in pool">
+                        <span>Next Lot</span>
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                      </button>
+
+                      <button onclick="handleUndoLastBid()" class="py-2 px-2 bg-surface-container hover:bg-surface-container-highest text-on-surface font-headline-sm uppercase text-xs rounded transition-all flex items-center justify-center gap-1 border border-outline/20" title="Undo the most recent bid">
+                        <span class="material-symbols-outlined text-sm">undo</span>
+                        <span>Undo Bid</span>
+                      </button>
+
+                      <button onclick="handleUndoHammer()" class="py-2 px-2 bg-surface-container hover:bg-surface-container-highest text-secondary-container font-headline-sm uppercase text-xs rounded transition-all flex items-center justify-center gap-1 border border-secondary-container/30" title="Revert last SOLD or UNSOLD action and refund purse">
+                        <span class="material-symbols-outlined text-sm">history</span>
+                        <span>Undo Hammer</span>
+                      </button>
+                    </div>
                   </div>
                   
-                  <div class="text-[11px] text-on-surface-variant text-center pt-1">
-                    Hammering <strong>SOLD</strong> will officially deduct the winning amount from the franchise's purse and add the player to their roster.
+                  <div class="text-[10px] text-on-surface-variant text-center border-t border-outline/10 pt-1.5 font-mono">
+                    Official Auction Protocol • Bidding stays open until Admin clicks SOLD, UNSOLD or Next Lot.
                   </div>
                 </div>
 
@@ -581,7 +678,7 @@
 
 <!-- ADD PLAYER MODAL (ADMIN ONLY) -->
 <div id="addPlayerModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-  <div class="w-full max-w-lg bg-surface-container border border-outline-variant/40 rounded-xl p-space-lg shadow-2xl flex flex-col gap-space-md">
+  <div class="w-full max-w-lg bg-surface-container border border-outline-variant/40 rounded-xl p-space-lg shadow-2xl flex flex-col gap-space-md max-h-[90vh] overflow-y-auto">
     <div class="flex items-center justify-between pb-2 border-b border-outline/10">
       <h3 class="font-headline-md text-headline-md uppercase text-on-surface tracking-wider">
         Add New Player to Draft
@@ -608,6 +705,7 @@
         <div>
           <label class="block font-label-badge text-xs uppercase text-on-surface-variant mb-1">Base Price (INR) *</label>
           <input type="number" id="newPlayerBasePrice" required value="1000000" step="100000" class="w-full bg-surface-container-lowest text-on-surface p-2.5 text-sm rounded border border-outline-variant/30 focus:border-secondary-container focus:outline-none"/>
+          <span class="text-[10px] text-outline">Default: ₹10.00 Lakh (10,00,000)</span>
         </div>
       </div>
 
@@ -616,9 +714,25 @@
         <input type="text" id="newPlayerRole" required placeholder="e.g. Cricket • Express Fast Bowler" class="w-full bg-surface-container-lowest text-on-surface p-2.5 text-sm rounded border border-outline-variant/30 focus:border-secondary-container focus:outline-none"/>
       </div>
 
+      <div class="grid grid-cols-2 gap-space-sm">
+        <div>
+          <label class="block font-label-badge text-xs uppercase text-on-surface-variant mb-1">Batting Style / Position</label>
+          <input type="text" id="newPlayerBatting" placeholder="e.g. Right-Handed Power Opener" class="w-full bg-surface-container-lowest text-on-surface p-2 text-xs rounded border border-outline-variant/30 focus:border-secondary-container focus:outline-none"/>
+        </div>
+        <div>
+          <label class="block font-label-badge text-xs uppercase text-on-surface-variant mb-1">Bowling Style / Attributes</label>
+          <input type="text" id="newPlayerBowling" placeholder="e.g. Right-Arm Fast (140+ km/h)" class="w-full bg-surface-container-lowest text-on-surface p-2 text-xs rounded border border-outline-variant/30 focus:border-secondary-container focus:outline-none"/>
+        </div>
+      </div>
+
       <div>
         <label class="block font-label-badge text-xs uppercase text-on-surface-variant mb-1">Collegiate Institution *</label>
         <input type="text" id="newPlayerInst" required placeholder="e.g. Vasavi College of Engineering" class="w-full bg-surface-container-lowest text-on-surface p-2.5 text-sm rounded border border-outline-variant/30 focus:border-secondary-container focus:outline-none"/>
+      </div>
+
+      <div>
+        <label class="block font-label-badge text-xs uppercase text-on-surface-variant mb-1">Scouting Notes / Bio</label>
+        <textarea id="newPlayerNotes" rows="2" placeholder="e.g. Lethal yorkers in death overs, high boundary percentage in powerplay." class="w-full bg-surface-container-lowest text-on-surface p-2 text-xs rounded border border-outline-variant/30 focus:border-secondary-container focus:outline-none"></textarea>
       </div>
 
       <div class="flex items-center justify-end gap-2 pt-2 border-t border-outline/10">
@@ -626,6 +740,100 @@
         <button type="submit" class="px-space-md py-2 bg-primary-container text-on-primary-container font-headline-sm uppercase text-xs rounded">Create &amp; Queue</button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- SETUP TEAMS & PURSES MODAL (ADMIN ONLY) -->
+<!-- User Requirement: "Ek kaam kar purse aur team ka naam manually enter karenge kal admin se" -->
+<div id="setupTeamsModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+  <div class="w-full max-w-2xl bg-surface-container border-2 border-primary/50 rounded-2xl p-6 shadow-2xl flex flex-col gap-4 max-h-[92vh] overflow-y-auto">
+    <div class="flex items-center justify-between pb-3 border-b border-outline/20">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-2xl">account_balance_wallet</span>
+        <div>
+          <h3 class="font-headline-md text-lg uppercase text-on-surface tracking-wider">
+            Admin Franchise &amp; Purse Setup
+          </h3>
+          <span class="text-xs text-on-surface-variant font-body-sm">
+            Manually enter or edit franchise team names, captains, and starting salary purses.
+          </span>
+        </div>
+      </div>
+      <button onclick="closeTeamSetupModal()" class="text-on-surface-variant hover:text-on-surface p-1">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <!-- 1. ADD / REGISTER NEW TEAM FORM -->
+    <form id="createTeamForm" onsubmit="handleAdminCreateTeam(event)" class="p-4 rounded-xl bg-surface-container-lowest border border-outline-variant/30 flex flex-col gap-3">
+      <span class="font-label-badge text-xs uppercase text-primary font-bold tracking-wider">
+        + REGISTER NEW FRANCHISE
+      </span>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block font-label-badge text-[11px] uppercase text-outline mb-1">Franchise Team Name *</label>
+          <input type="text" id="setupTeamName" required placeholder="e.g. STME Strikers" class="w-full bg-surface-container-high text-on-surface p-2 text-xs rounded border border-outline/20 focus:border-primary focus:outline-none"/>
+        </div>
+
+        <div>
+          <label class="block font-label-badge text-[11px] uppercase text-outline mb-1">Captain Name *</label>
+          <input type="text" id="setupTeamCaptain" required placeholder="e.g. Vikramaditya" class="w-full bg-surface-container-high text-on-surface p-2 text-xs rounded border border-outline/20 focus:border-primary focus:outline-none"/>
+        </div>
+
+        <div>
+          <label class="block font-label-badge text-[11px] uppercase text-outline mb-1">Short Code (3-4 Letters)</label>
+          <input type="text" id="setupTeamCode" placeholder="e.g. STME" maxlength="6" class="w-full bg-surface-container-high text-on-surface p-2 text-xs rounded border border-outline/20 uppercase focus:border-primary focus:outline-none"/>
+        </div>
+
+        <div>
+          <label class="block font-label-badge text-[11px] uppercase text-outline mb-1">Starting Purse (INR) *</label>
+          <input type="number" id="setupTeamPurse" required value="10000000" step="500000" class="w-full bg-surface-container-high text-on-surface p-2 text-xs rounded border border-outline/20 focus:border-primary focus:outline-none"/>
+          <span class="text-[10px] text-outline font-mono">10000000 = ₹1.00 Crore</span>
+        </div>
+
+        <div>
+          <label class="block font-label-badge text-[11px] uppercase text-outline mb-1">Sport Discipline</label>
+          <select id="setupTeamSport" class="w-full bg-surface-container-high text-on-surface p-2 text-xs rounded border border-outline/20 focus:border-primary focus:outline-none">
+            <option value="cricket">Cricket</option>
+            <option value="football">Football</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-label-badge text-[11px] uppercase text-outline mb-1">Team Color Accent</label>
+          <input type="color" id="setupTeamColor" value="#82a2e1" class="w-full h-8 bg-surface-container-high rounded cursor-pointer border border-outline/20 p-1"/>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2">
+        <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary-container text-black font-headline-sm uppercase text-xs tracking-wider rounded-lg transition-all shadow-sm">
+          + Add Team to Auction
+        </button>
+      </div>
+    </form>
+
+    <!-- 2. CURRENT TEAMS LIST & EDIT / DELETE -->
+    <div class="flex flex-col gap-2">
+      <div class="flex items-center justify-between text-xs font-label-badge uppercase text-outline">
+        <span>CURRENT REGISTERED FRANCHISES:</span>
+        <button onclick="handleAdminClearAllTeams()" class="text-error hover:underline flex items-center gap-1 font-bold">
+          <span class="material-symbols-outlined text-xs">delete_sweep</span>
+          Clear All &amp; Enter Fresh
+        </button>
+      </div>
+
+      <div id="adminTeamsManagerList" class="flex flex-col gap-2 max-h-60 overflow-y-auto pr-1">
+        <!-- Dynamically rendered via renderAdminTeamsList -->
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between pt-3 border-t border-outline/10 text-xs">
+      <span class="text-outline">Changes apply instantly to MPH Stage &amp; Captains Console.</span>
+      <button onclick="closeTeamSetupModal()" class="px-4 py-2 bg-surface-container-highest text-on-surface font-headline-sm uppercase tracking-wider rounded-lg">
+        Done
+      </button>
+    </div>
   </div>
 </div>
 
@@ -650,11 +858,18 @@
 
 <script>
   let timerInterval = null;
+  let elapsedTimerSeconds = 45;
+  let selectedAdminTeamId = 'team-nmims-cricket';
 
   // Initialize UI on DOM Ready
   document.addEventListener('DOMContentLoaded', function () {
     renderAll();
-    startCountdownTimer();
+    startStageStopwatch();
+
+    // Subscribe to cross-device / cross-tab updates
+    window.LegendsAuction.subscribe(() => {
+      renderAll();
+    });
   });
 
   function renderAll() {
@@ -663,6 +878,8 @@
     renderActiveLot();
     renderBidLog();
     renderUpcomingLots();
+    renderAdminTeamSelectorPills();
+    renderAdminTeamsList();
   }
 
   // 1. Render Active Role and Control Panels
@@ -683,6 +900,7 @@
     const captainPanel = document.getElementById('captainBiddingPanel');
     const adminPanel = document.getElementById('adminGavelPanel');
     const adminAddBtn = document.getElementById('adminAddPlayerBtn');
+    const adminSetupBtn = document.getElementById('adminSetupTeamsBtn');
 
     // Reset button states
     document.querySelectorAll('.role-switch-btn').forEach(btn => {
@@ -692,21 +910,23 @@
     if (role.role === 'guest') {
       badge.textContent = '👁️ Guest Spectator (View-Only)';
       badge.className = 'font-bold text-on-surface-variant px-2 py-0.5 rounded bg-surface-container-high';
-      noticeText.innerHTML = 'You are currently in <strong>Guest Spectator Mode</strong>. You can view all live bids, upcoming lots, and the remaining purse balance of every registered team. Bidding is restricted to verified Team Captains.';
+      noticeText.innerHTML = 'You are currently in <strong>Guest Spectator Mode</strong>. You can view all live bids, upcoming lots, and the remaining purse balance of every registered team.';
       guestLock.classList.remove('hidden');
       captainPanel.classList.add('hidden');
       adminPanel.classList.add('hidden');
       if (adminAddBtn) adminAddBtn.classList.add('hidden');
+      if (adminSetupBtn) adminSetupBtn.classList.add('hidden');
       document.getElementById('roleBtnGuest').classList.add('ring-2', 'ring-secondary-container');
     } else if (role.role === 'captain') {
       const team = window.LegendsAuction.getTeam(role.teamId);
       badge.textContent = `🏏 ${role.title}`;
       badge.className = 'font-bold text-primary px-2 py-0.5 rounded bg-primary-container/20 border border-primary/40';
-      noticeText.innerHTML = `Authenticated as <strong>${role.captainName} (${team ? team.shortCode : 'Captain'})</strong>. You have full franchise authority to bid using your team's available purse of <strong>${window.LegendsAuction.formatCurrency(team ? team.remainingPurse : 0)}</strong>.`;
+      noticeText.innerHTML = `Authenticated as <strong>${role.captainName} (${team ? team.shortCode : 'Captain'})</strong>. Available purse: <strong>${window.LegendsAuction.formatCurrency(team ? team.remainingPurse : 0)}</strong>. Bids are logged by Stage Admin upon paddle raise.`;
       guestLock.classList.add('hidden');
       captainPanel.classList.remove('hidden');
       adminPanel.classList.add('hidden');
       if (adminAddBtn) adminAddBtn.classList.add('hidden');
+      if (adminSetupBtn) adminSetupBtn.classList.add('hidden');
 
       const purseBadge = document.getElementById('captainPurseBadge');
       if (purseBadge && team) {
@@ -717,13 +937,14 @@
       else if (role.teamId === 'team-cbit-cricket') document.getElementById('roleBtnCbit').classList.add('ring-2', 'ring-secondary-container');
       else if (role.teamId === 'team-bits-cricket') document.getElementById('roleBtnBits').classList.add('ring-2', 'ring-secondary-container');
     } else if (role.role === 'admin') {
-      badge.textContent = '⚖️ Official Auctioneer & Admin';
+      badge.textContent = '⚖️ Official Stage Auctioneer';
       badge.className = 'font-bold text-secondary-container px-2 py-0.5 rounded bg-secondary-container/20 border border-secondary-container/40';
-      noticeText.innerHTML = 'Logged in with <strong>Full Gavel Authority</strong>. You have permission to strike the hammer (SOLD / UNSOLD), nominate upcoming lots, reset auction clocks, and add player entries.';
+      noticeText.innerHTML = 'Logged in with <strong>Full Stage Auctioneer Authority</strong>. Select the franchise raising the paddle to log bids, strike hammer (SOLD/UNSOLD), undo bids, navigate next lot, or setup team purses.';
       guestLock.classList.add('hidden');
       captainPanel.classList.add('hidden');
       adminPanel.classList.remove('hidden');
       if (adminAddBtn) adminAddBtn.classList.remove('hidden');
+      if (adminSetupBtn) adminSetupBtn.classList.remove('hidden');
       document.getElementById('roleBtnAdmin').classList.add('ring-2', 'ring-secondary-container');
     }
   }
@@ -830,6 +1051,14 @@
     document.getElementById('activeLeadingTeamName').textContent = lot.highestBidderTeamName || 'No Active Bid';
     document.getElementById('activeLeadingCaptain').textContent = lot.highestBidderCaptain ? `Bidded by Captain ${lot.highestBidderCaptain}` : 'Awaiting Opening Bid';
 
+    // Extra details
+    const batEl = document.getElementById('activePlayerBatting');
+    if (batEl) batEl.textContent = lot.battingStyle || 'Right-Handed';
+    const bowlEl = document.getElementById('activePlayerBowling');
+    if (bowlEl) bowlEl.textContent = lot.bowlingStyle || 'Right-Arm Pacer';
+    const notesEl = document.getElementById('activePlayerNotes');
+    if (notesEl) notesEl.textContent = `"${lot.scoutingNotes || 'High impact varsity tournament player.'}"`;
+
     const tag = document.getElementById('bidStatusTag');
     if (tag) {
       tag.textContent = lot.status.toUpperCase();
@@ -844,6 +1073,14 @@
       colorIndicator.style.backgroundColor = team ? team.color : '#7a798f';
     }
 
+    // Dynamic Tier Increment Button Label Update (User Rules)
+    const dynInc = window.LegendsAuction.getDynamicIncrement(lot.currentBid);
+    const tierName = lot.currentBid < 10000000 ? '<1Cr' : (lot.currentBid < 30000000 ? '1-3Cr' : '>3Cr');
+    const dynamicBtnText = document.getElementById('adminDynamicBidText');
+    if (dynamicBtnText) {
+      dynamicBtnText.textContent = `LOG NEXT TIER BID (+${window.LegendsAuction.formatCurrency(dynInc)} • ${tierName})`;
+    }
+
     // Stats Grid
     const statsGrid = document.getElementById('activePlayerStatsGrid');
     if (statsGrid && lot.stats) {
@@ -853,12 +1090,6 @@
           <span class="block font-label-badge text-[9px] uppercase text-outline">${k}</span>
         </div>
       `).join('');
-    }
-
-    // Update next bid text
-    const nextBidLabel = document.getElementById('nextBidLabel');
-    if (nextBidLabel) {
-      nextBidLabel.textContent = `Next Min Step: ${window.LegendsAuction.formatCurrency(lot.currentBid + 50000)}`;
     }
   }
 
@@ -938,20 +1169,130 @@
     `).join('');
   }
 
-  // 6. Interactive Handlers
-  function handlePlaceBid(inc) {
+  // 6. Admin Team Selector Pills (For Admin Paddle Logging)
+  function renderAdminTeamSelectorPills() {
+    const container = document.getElementById('adminTeamSelectorPills');
+    if (!container) return;
+    const teams = window.LegendsAuction.getTeams();
+    if (!teams.length) {
+      container.innerHTML = '<span class="text-xs text-outline">No teams registered yet. Use "Setup Teams" above.</span>';
+      return;
+    }
+
+    // Default to first team if current selection not found
+    if (!teams.some(t => t.id === selectedAdminTeamId)) {
+      selectedAdminTeamId = teams[0].id;
+    }
+
+    const curTeam = teams.find(t => t.id === selectedAdminTeamId);
+    const selNameEl = document.getElementById('selectedAdminTeamName');
+    if (selNameEl && curTeam) {
+      selNameEl.textContent = `${curTeam.name} (Purse: ${window.LegendsAuction.formatCurrency(curTeam.remainingPurse)})`;
+    }
+
+    container.innerHTML = teams.map(t => {
+      const isSel = t.id === selectedAdminTeamId;
+      const activeClass = isSel
+        ? 'bg-primary text-black font-bold border-primary shadow-md'
+        : 'bg-surface-container text-on-surface-variant hover:text-on-surface border-outline/20';
+
+      return `
+        <button onclick="selectAdminTeam('${t.id}')" class="px-2.5 py-1 rounded text-xs font-headline-sm uppercase tracking-wider border shrink-0 transition-all flex items-center gap-1.5 ${activeClass}">
+          <span class="w-2 h-2 rounded-full" style="background-color: ${t.color}"></span>
+          <span>${t.shortCode || t.name.substring(0, 4)}</span>
+        </button>
+      `;
+    }).join('');
+  }
+
+  function selectAdminTeam(teamId) {
+    selectedAdminTeamId = teamId;
+    renderAdminTeamSelectorPills();
+  }
+
+  // 7. Interactive Admin Bidding Handlers (User Rule: Admin bid, no captain bid)
+  function handleAdminPlaceBid(inc) {
     try {
-      const res = window.LegendsAuction.placeBid(inc);
+      const res = window.LegendsAuction.placeAdminBid(selectedAdminTeamId, inc);
       renderAll();
       if (window.LegendsApp) {
-        window.LegendsApp.showToast(`Bid Placed: ${window.LegendsAuction.formatCurrency(res.newBid)} by ${res.team.name}!`, 'success');
+        window.LegendsApp.showToast(`Bid Logged: ${window.LegendsAuction.formatCurrency(res.newBid)} for ${res.team.name}!`, 'success');
       }
     } catch (err) {
-      if (window.LegendsApp) {
-        window.LegendsApp.showToast(err.message, 'error');
-      } else {
-        alert(err.message);
+      alert(err.message);
+    }
+  }
+
+  function handleAdminCustomBid() {
+    try {
+      const input = document.getElementById('adminCustomBidAmount');
+      if (!input || !input.value) return;
+      let val = Number(input.value);
+      // If user typed 45 (expecting Lakhs) vs 4500000
+      if (val < 1000) {
+        val = val * 100000;
       }
+      const res = window.LegendsAuction.placeAdminBid(selectedAdminTeamId, val, true);
+      input.value = '';
+      renderAll();
+      if (window.LegendsApp) {
+        window.LegendsApp.showToast(`Custom Bid Placed: ${window.LegendsAuction.formatCurrency(res.newBid)} for ${res.team.name}!`, 'success');
+      }
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  // 8. Navigation & Undo Handlers (User Rule: Next click karne pe next, Undo)
+  function handleNextLot() {
+    const res = window.LegendsAuction.nextLot();
+    if (res.success) {
+      elapsedTimerSeconds = 0;
+      renderAll();
+      if (window.LegendsApp) {
+        window.LegendsApp.showToast(`Advanced to next lot: ${res.lot.name}`, 'info');
+      }
+    } else {
+      alert(res.message);
+    }
+  }
+
+  function handlePrevLot() {
+    const res = window.LegendsAuction.prevLot();
+    if (res.success) {
+      elapsedTimerSeconds = 0;
+      renderAll();
+      if (window.LegendsApp) {
+        window.LegendsApp.showToast(`Moved to previous lot: ${res.lot.name}`, 'info');
+      }
+    } else {
+      alert(res.message);
+    }
+  }
+
+  function handleUndoLastBid() {
+    try {
+      const res = window.LegendsAuction.undoLastBid();
+      renderAll();
+      if (window.LegendsApp) {
+        window.LegendsApp.showToast(`Last bid undone! Current: ${window.LegendsAuction.formatCurrency(res.revertedBid || res.currentBid)}`, 'info');
+      }
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  function handleUndoHammer() {
+    try {
+      const res = window.LegendsAuction.undoLastAction();
+      renderAll();
+      if (window.LegendsApp) {
+        window.LegendsApp.showToast(res.message, 'success');
+      } else {
+        alert(res.message);
+      }
+    } catch (err) {
+      alert(err.message);
     }
   }
 
@@ -960,7 +1301,7 @@
       const res = window.LegendsAuction.hammerSold();
       renderAll();
       if (window.LegendsApp) {
-        window.LegendsApp.showToast(`SOLD! ${res.lot.name} acquired by ${res.team.name} for ${window.LegendsAuction.formatCurrency(res.price)}!`, 'success');
+        window.LegendsApp.showToast(`SOLD! ${res.lot.name} goes to ${res.team.name} for ${window.LegendsAuction.formatCurrency(res.price)}!`, 'success');
       } else {
         alert(`🎉 SOLD!\n${res.lot.name} goes to ${res.team.name} for ${window.LegendsAuction.formatCurrency(res.price)}!`);
       }
@@ -984,23 +1325,13 @@
   function handleNominate(lotId) {
     try {
       const res = window.LegendsAuction.nominateLot(lotId);
+      elapsedTimerSeconds = 0;
       renderAll();
       if (window.LegendsApp) {
         window.LegendsApp.showToast(`Active Lot set to: ${res.lot.name}`, 'info');
       }
     } catch (err) {
       alert(err.message);
-    }
-  }
-
-  function handleResetTimer() {
-    const state = window.LegendsAuction.getState();
-    state.timerSeconds = 20;
-    window.LegendsAuction.saveState(state);
-    const timerDisplay = document.getElementById('hammerTimerDisplay');
-    if (timerDisplay) timerDisplay.textContent = '20s';
-    if (window.LegendsApp) {
-      window.LegendsApp.showToast('Hammer clock reset to 20 seconds.', 'info');
     }
   }
 
@@ -1014,7 +1345,95 @@
     }
   }
 
-  // 7. Modal Handlers
+  // 9. Team Setup Modal Handlers (Admin Manual Entry)
+  function openTeamSetupModal() {
+    renderAdminTeamsList();
+    document.getElementById('setupTeamsModal').classList.remove('hidden');
+  }
+
+  function closeTeamSetupModal() {
+    document.getElementById('setupTeamsModal').classList.add('hidden');
+    renderAll();
+  }
+
+  function renderAdminTeamsList() {
+    const list = document.getElementById('adminTeamsManagerList');
+    if (!list) return;
+    const teams = window.LegendsAuction.getTeams();
+
+    if (!teams.length) {
+      list.innerHTML = '<div class="p-3 text-center text-xs text-outline italic">No teams registered yet. Use the form above to add franchises.</div>';
+      return;
+    }
+
+    list.innerHTML = teams.map(t => `
+      <div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-high/80 border border-outline/20 text-xs">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded flex items-center justify-center font-headline-sm text-xs font-bold text-black" style="background-color: ${t.color}">
+            ${t.shortCode}
+          </div>
+          <div>
+            <span class="font-headline-sm uppercase text-on-surface block">${t.name}</span>
+            <span class="text-[10px] text-outline">Captain: ${t.captain} • Starting: ${window.LegendsAuction.formatCurrency(t.totalPurse)}</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="font-mono text-primary font-bold">${window.LegendsAuction.formatCurrency(t.remainingPurse)}</span>
+          <button onclick="handleAdminDeleteTeam('${t.id}')" class="p-1 text-outline hover:text-error rounded" title="Delete Franchise">
+            <span class="material-symbols-outlined text-base">delete</span>
+          </button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function handleAdminCreateTeam(e) {
+    e.preventDefault();
+    try {
+      const name = document.getElementById('setupTeamName').value;
+      const captain = document.getElementById('setupTeamCaptain').value;
+      const shortCode = document.getElementById('setupTeamCode').value;
+      const purse = document.getElementById('setupTeamPurse').value;
+      const sport = document.getElementById('setupTeamSport').value;
+      const color = document.getElementById('setupTeamColor').value;
+
+      window.LegendsAuction.createTeam({
+        name: name,
+        captain: captain,
+        shortCode: shortCode || name.substring(0, 4),
+        totalPurse: Number(purse) || 10000000,
+        sport: sport,
+        color: color
+      });
+
+      document.getElementById('createTeamForm').reset();
+      renderAdminTeamsList();
+      renderAll();
+      if (window.LegendsApp) {
+        window.LegendsApp.showToast(`Franchise "${name}" registered with ${window.LegendsAuction.formatCurrency(purse)} purse!`, 'success');
+      }
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  function handleAdminDeleteTeam(teamId) {
+    if (confirm('Delete this franchise from the auction?')) {
+      window.LegendsAuction.deleteTeam(teamId);
+      renderAdminTeamsList();
+      renderAll();
+    }
+  }
+
+  function handleAdminClearAllTeams() {
+    if (confirm('⚠️ Clear all franchise teams? You will be able to enter all teams and starting purses fresh.')) {
+      window.LegendsAuction.clearTeams();
+      renderAdminTeamsList();
+      renderAll();
+    }
+  }
+
+  // 10. Add Player Modal Handlers
   function openAddPlayerModal() {
     document.getElementById('addPlayerModal').classList.remove('hidden');
   }
@@ -1030,15 +1449,21 @@
       const sport = document.getElementById('newPlayerSport').value;
       const basePrice = document.getElementById('newPlayerBasePrice').value;
       const role = document.getElementById('newPlayerRole').value;
+      const batting = document.getElementById('newPlayerBatting').value;
+      const bowling = document.getElementById('newPlayerBowling').value;
       const inst = document.getElementById('newPlayerInst').value;
+      const notes = document.getElementById('newPlayerNotes').value;
 
       window.LegendsAuction.addPlayerLot({
         name: name,
         sport: sport,
-        basePrice: Number(basePrice),
+        basePrice: Number(basePrice) || 1000000,
         category: role,
         specialism: role,
-        institution: inst
+        battingStyle: batting || 'Right-Handed',
+        bowlingStyle: bowling || 'Right-Arm Pacer',
+        institution: inst,
+        scoutingNotes: notes
       });
 
       closeAddPlayerModal();
@@ -1052,26 +1477,19 @@
     }
   }
 
-  // 8. Countdown Timer Loop
-  function startCountdownTimer() {
+  // 11. Stopwatch Loop (User Rule: Time limit nhi hogi)
+  function startStageStopwatch() {
     if (timerInterval) clearInterval(timerInterval);
     timerInterval = setInterval(() => {
-      const state = window.LegendsAuction.getState();
       const lot = window.LegendsAuction.getActiveLot();
       if (!lot || lot.status !== 'active') return;
 
-      if (state.timerSeconds > 0) {
-        state.timerSeconds -= 1;
-        window.LegendsAuction.saveState(state);
-        const timerDisplay = document.getElementById('hammerTimerDisplay');
-        if (timerDisplay) {
-          timerDisplay.textContent = `${state.timerSeconds}s`;
-          if (state.timerSeconds <= 5) {
-            timerDisplay.classList.add('text-error', 'animate-pulse');
-          } else {
-            timerDisplay.classList.remove('text-error', 'animate-pulse');
-          }
-        }
+      elapsedTimerSeconds += 1;
+      const mins = String(Math.floor(elapsedTimerSeconds / 60)).padStart(2, '0');
+      const secs = String(elapsedTimerSeconds % 60).padStart(2, '0');
+      const timerDisplay = document.getElementById('hammerTimerDisplay');
+      if (timerDisplay) {
+        timerDisplay.textContent = `${mins}:${secs}`;
       }
     }, 1000);
   }

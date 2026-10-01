@@ -214,6 +214,114 @@ it('14. getOpponents returns all 5 opponent franchises with wallets, differences
   });
 });
 
+it('15. Dynamic bidding increments calculate 10L (<1Cr), 20L (1Cr-3Cr), and 25L (>3Cr)', () => {
+  // Below 1 Cr -> +10 Lakhs
+  assert.strictEqual(Auction.getDynamicIncrement(1000000), 1000000); // at 10L -> +10L
+  assert.strictEqual(Auction.getDynamicIncrement(5000000), 1000000); // at 50L -> +10L
+  assert.strictEqual(Auction.getDynamicIncrement(9000000), 1000000); // at 90L -> +10L
+
+  // 1 Cr to 3 Cr -> +20 Lakhs
+  assert.strictEqual(Auction.getDynamicIncrement(10000000), 2000000); // at 1 Cr -> +20L
+  assert.strictEqual(Auction.getDynamicIncrement(20000000), 2000000); // at 2 Cr -> +20L
+  assert.strictEqual(Auction.getDynamicIncrement(28000000), 2000000); // at 2.8 Cr -> +20L
+
+  // Above 3 Cr -> +25 Lakhs
+  assert.strictEqual(Auction.getDynamicIncrement(30000000), 2500000); // at 3 Cr -> +25L
+  assert.strictEqual(Auction.getDynamicIncrement(45000000), 2500000); // at 4.5 Cr -> +25L
+});
+
+it('16. Admin can place bids on behalf of teams with dynamic increments and custom exact bids', () => {
+  // Nominate fresh lot
+  Auction.setActiveRole('admin');
+  Auction.nominateLot('lot-104');
+  const lot = Auction.getActiveLot();
+  assert.strictEqual(lot.id, 'lot-104');
+  const startBid = lot.currentBid;
+
+  // Place dynamic tier bid for STME
+  const res1 = Auction.placeAdminBid('team-nmims-cricket');
+  assert.ok(res1.success);
+  assert.strictEqual(res1.newBid, startBid + 1000000); // +10L
+  assert.strictEqual(res1.lot.highestBidderTeamId, 'team-nmims-cricket');
+
+  // Place exact custom bid for CBIT
+  const res2 = Auction.placeAdminBid('team-cbit-cricket', 3500000, true);
+  assert.ok(res2.success);
+  assert.strictEqual(res2.newBid, 3500000);
+  assert.strictEqual(res2.lot.highestBidderTeamId, 'team-cbit-cricket');
+});
+
+it('17. Undo last bid reverts bid amount and previous highest bidder', () => {
+  Auction.setActiveRole('admin');
+  const lotBefore = Auction.getActiveLot();
+  assert.strictEqual(lotBefore.currentBid, 3500000);
+
+  // Undo the 35L bid
+  const undoRes = Auction.undoLastBid();
+  assert.ok(undoRes.success);
+  const lotAfter = Auction.getActiveLot();
+  assert.strictEqual(lotAfter.highestBidderTeamId, 'team-nmims-cricket');
+  assert(lotAfter.currentBid < 3500000);
+});
+
+it('18. Undo hammer reverts sold player status and refunds team purse', () => {
+  Auction.setActiveRole('admin');
+  const lot = Auction.getActiveLot();
+  const winningTeamId = lot.highestBidderTeamId;
+  const teamBefore = Auction.getTeam(winningTeamId);
+  const purseBefore = teamBefore.remainingPurse;
+
+  // Hammer sold
+  const soldRes = Auction.hammerSold();
+  assert.ok(soldRes.success);
+  const teamAfterSold = Auction.getTeam(winningTeamId);
+  assert.strictEqual(teamAfterSold.remainingPurse, purseBefore - soldRes.price);
+
+  // Undo hammer
+  const undoAction = Auction.undoLastAction();
+  assert.ok(undoAction.success);
+  const teamAfterUndo = Auction.getTeam(winningTeamId);
+  assert.strictEqual(teamAfterUndo.remainingPurse, purseBefore, 'Purse should be completely refunded');
+  assert.strictEqual(Auction.getActiveLot().status, 'active', 'Lot should be restored to active');
+});
+
+it('19. Admin can manually create, update, and manage teams and custom purses', () => {
+  // Create a new team
+  const newTeam = Auction.createTeam({
+    name: 'VNR Mavericks',
+    shortCode: 'MAV',
+    captain: 'Harsha Vardhan',
+    totalPurse: 15000000, // ₹1.50 Cr
+    color: '#a87559'
+  });
+
+  assert.ok(newTeam.id);
+  assert.strictEqual(newTeam.name, 'VNR Mavericks');
+  assert.strictEqual(newTeam.totalPurse, 15000000);
+  assert.strictEqual(newTeam.remainingPurse, 15000000);
+
+  // Update team
+  const updated = Auction.updateTeam(newTeam.id, {
+    captain: 'Harsha V. (Captain)',
+    totalPurse: 20000000 // Increase to 2 Cr
+  });
+  assert.strictEqual(updated.captain, 'Harsha V. (Captain)');
+  assert.strictEqual(updated.totalPurse, 20000000);
+
+  // Clean up
+  const deleted = Auction.deleteTeam(newTeam.id);
+  assert.strictEqual(deleted, true);
+});
+
+it('20. Excel CSV export generates valid report with wallets, squads, and player lots', () => {
+  const csv = Auction.exportToExcelCSV();
+  assert.ok(typeof csv === 'string');
+  assert.ok(csv.includes('LEGENDS WALK OFF 2026 - OFFICIAL AUCTION MASTER REPORT'));
+  assert.ok(csv.includes('SECTION 1: FRANCHISE WALLETS & SALARY CAPS'));
+  assert.ok(csv.includes('SECTION 2: COMPLETE TEAM SQUADS & ACQUISITIONS'));
+  assert.ok(csv.includes('SECTION 3: AUCTION PLAYER POOL & OUTCOMES'));
+});
+
 console.log('\n----------------------------------------------------');
 console.log(`Results: ${passedTests}/${totalTests} tests passed`);
 console.log('----------------------------------------------------');

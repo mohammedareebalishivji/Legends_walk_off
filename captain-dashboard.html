@@ -301,19 +301,19 @@
           </div>
         </div>
 
-        <!-- Gavel Countdown Clock -->
+        <!-- Stage Stopwatch Clock -->
         <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-lowest border border-outline/20 self-start sm:self-auto">
           <span class="material-symbols-outlined text-secondary-container text-base">timer</span>
-          <span class="font-label-badge text-xs uppercase text-outline">HAMMER CLOCK:</span>
-          <span id="captainTimerDisplay" class="font-label-numeric-lg text-lg font-bold text-secondary-container font-mono">20s</span>
+          <span class="font-label-badge text-xs uppercase text-outline">STAGE CLOCK:</span>
+          <span id="captainTimerDisplay" class="font-label-numeric-lg text-lg font-bold text-secondary-container font-mono">00:45</span>
         </div>
       </div>
 
-      <!-- Active Player + Bidding Engine Grid -->
+      <!-- Active Player + Telemetry Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
         
-        <!-- Player Snapshot Card (Col 5) -->
-        <div class="lg:col-span-5 flex items-center gap-4 bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30">
+        <!-- Player Snapshot Card with Extra Details (Col 5) -->
+        <div class="lg:col-span-5 flex items-start gap-4 bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30">
           <div class="relative w-24 h-32 sm:w-28 sm:h-36 rounded-lg overflow-hidden shrink-0 border border-primary/40 bg-black">
             <img id="activePlayerAvatar" class="w-full h-full object-cover object-center" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" alt="Player Lot"/>
             <div class="absolute bottom-0 inset-x-0 bg-black/80 px-1 py-0.5 text-center">
@@ -338,7 +338,13 @@
               IIT Hyderabad • 18 Matches • 34 Wickets
             </p>
 
-            <div class="mt-2.5 flex items-center justify-between text-xs font-label-badge border-t border-outline/10 pt-1.5">
+            <!-- Extra Player Attributes (Requested) -->
+            <div class="mt-2 text-[11px] text-on-surface flex flex-col gap-0.5 border-t border-outline/10 pt-1.5">
+              <div>🏏 <strong>Bat:</strong> <span id="activeCaptainBatting" class="text-secondary-container">Right-Handed</span></div>
+              <div>⚡ <strong>Bowl:</strong> <span id="activeCaptainBowling" class="text-primary">Right-Arm Express (140+ km/h)</span></div>
+            </div>
+
+            <div class="mt-2 flex items-center justify-between text-xs font-label-badge border-t border-outline/10 pt-1">
               <span class="text-outline uppercase">Base Price:</span>
               <span id="activePlayerBasePrice" class="font-label-numeric-md text-cream font-bold">₹10.00 Lakh</span>
             </div>
@@ -365,37 +371,34 @@
           </div>
         </div>
 
-        <!-- Bidding Paddle Buttons (Col 4) -->
+        <!-- Tier Rules & Live Monitor (Col 4) -->
         <div class="lg:col-span-4 flex flex-col gap-2">
-          <span class="font-label-badge text-[11px] uppercase tracking-wider text-outline text-center lg:text-left">
-            PLACE NEXT BID INCREMENT (ONE-CLICK PADDLE)
-          </span>
-
-          <div class="grid grid-cols-3 gap-2">
-            <button onclick="handleCaptainBid(25000)" class="bid-paddle-btn px-2 py-2.5 rounded-lg bg-surface-container-high hover:bg-primary-container hover:text-on-primary-container text-on-surface font-headline-sm text-xs uppercase tracking-wider transition-all border border-outline/20 shadow-sm flex flex-col items-center">
-              <span>+₹25 K</span>
-              <span class="text-[9px] font-label-badge text-outline group-hover:text-black">QUICK</span>
-            </button>
-            <button onclick="handleCaptainBid(50000)" class="bid-paddle-btn px-2 py-2.5 rounded-lg bg-surface-container-high hover:bg-primary-container hover:text-on-primary-container text-on-surface font-headline-sm text-xs uppercase tracking-wider transition-all border border-outline/20 shadow-sm flex flex-col items-center">
-              <span>+₹50 K</span>
-              <span class="text-[9px] font-label-badge text-outline">STANDARD</span>
-            </button>
-            <button onclick="handleCaptainBid(100000)" class="bid-paddle-btn px-2 py-2.5 rounded-lg bg-surface-container-highest hover:bg-secondary-container hover:text-on-secondary text-white font-headline-sm text-xs uppercase tracking-wider transition-all border border-secondary-container/40 shadow-sm flex flex-col items-center">
-              <span>+₹1.00 L</span>
-              <span class="text-[9px] font-label-badge text-secondary-container">POWER</span>
-            </button>
-            <button onclick="handleCaptainBid(200000)" class="bid-paddle-btn px-2 py-2.5 rounded-lg bg-surface-container-high hover:bg-primary-container hover:text-on-primary-container text-on-surface font-headline-sm text-xs uppercase tracking-wider transition-all border border-outline/20 shadow-sm flex flex-col items-center">
-              <span>+₹2.00 L</span>
-              <span class="text-[9px] font-label-badge text-outline">JUMP</span>
-            </button>
-            <button onclick="handleCaptainBid(500000)" class="bid-paddle-btn px-2 py-2.5 rounded-lg bg-surface-container-high hover:bg-primary-container hover:text-on-primary-container text-on-surface font-headline-sm text-xs uppercase tracking-wider transition-all border border-outline/20 shadow-sm flex flex-col items-center col-span-2">
-              <span>+₹5.00 LAKH AGGRESSIVE BID</span>
-            </button>
+          <div class="p-3 rounded-xl bg-surface-container-lowest border border-outline-variant/30 flex flex-col gap-1.5 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="font-label-badge text-[11px] uppercase tracking-wider text-primary font-bold">
+                DYNAMIC TIER RULES:
+              </span>
+              <span class="font-mono text-[10px] text-outline">BASE ₹10.0L</span>
+            </div>
+            <div class="text-[11px] text-on-surface-variant flex flex-col gap-1 font-mono">
+              <div class="flex items-center justify-between py-0.5 border-b border-outline/10">
+                <span>Tier 1 (&lt; ₹1.00 Cr):</span>
+                <span class="text-primary font-bold">+₹10.00 Lakh</span>
+              </div>
+              <div class="flex items-center justify-between py-0.5 border-b border-outline/10">
+                <span>Tier 2 (₹1.00 Cr - ₹3.00 Cr):</span>
+                <span class="text-secondary-container font-bold">+₹20.00 Lakh</span>
+              </div>
+              <div class="flex items-center justify-between py-0.5">
+                <span>Tier 3 (&gt; ₹3.00 Cr):</span>
+                <span class="text-cream font-bold">+₹25.00 Lakh</span>
+              </div>
+            </div>
           </div>
 
-          <!-- Bid Feedback Banner -->
-          <div id="bidFeedbackMessage" class="hidden p-2 rounded text-xs font-label-badge text-center uppercase tracking-wider">
-            <!-- Alert message -->
+          <div class="p-2 rounded-lg bg-surface-container-high border border-outline/20 text-[11px] text-center text-outline">
+            <span class="material-symbols-outlined text-sm align-middle text-secondary-container mr-1">campaign</span>
+            Official Auction Hall: Captains raise physical paddles in the MPH. Stage Admin logs bids live.
           </div>
         </div>
 
@@ -485,24 +488,18 @@
         handleRealtimeStateUpdate(state);
       });
 
-      // 5. Local Timer countdown loop
+      // 5. Stage Stopwatch loop (No auto lock - Admin controls bidding)
+      let captainElapsedSeconds = 45;
       setInterval(() => {
-        const state = window.LegendsAuction.getState();
         const lot = window.LegendsAuction.getActiveLot();
         if (!lot || lot.status !== 'active') return;
 
-        if (state.timerSeconds > 0) {
-          state.timerSeconds -= 1;
-          window.LegendsAuction.saveState(state);
-          const tEl = document.getElementById('captainTimerDisplay');
-          if (tEl) {
-            tEl.textContent = `${state.timerSeconds}s`;
-            if (state.timerSeconds <= 5) {
-              tEl.classList.add('text-error', 'animate-ping');
-            } else {
-              tEl.classList.remove('text-error', 'animate-ping');
-            }
-          }
+        captainElapsedSeconds += 1;
+        const mins = String(Math.floor(captainElapsedSeconds / 60)).padStart(2, '0');
+        const secs = String(captainElapsedSeconds % 60).padStart(2, '0');
+        const tEl = document.getElementById('captainTimerDisplay');
+        if (tEl) {
+          tEl.textContent = `${mins}:${secs}`;
         }
       }, 1000);
     });
@@ -664,6 +661,12 @@
 
         const basePriceEl = document.getElementById('activePlayerBasePrice');
         if (basePriceEl) basePriceEl.textContent = window.LegendsAuction.formatCurrency(lot.basePrice);
+
+        const battingEl = document.getElementById('activeCaptainBatting');
+        if (battingEl) battingEl.textContent = lot.battingStyle || 'Right-Handed';
+
+        const bowlingEl = document.getElementById('activeCaptainBowling');
+        if (bowlingEl) bowlingEl.textContent = lot.bowlingStyle || 'Right-Arm Pacer';
 
         const currentBidEl = document.getElementById('activeCurrentBidAmount');
         if (currentBidEl) currentBidEl.textContent = window.LegendsAuction.formatCurrency(lot.currentBid);
