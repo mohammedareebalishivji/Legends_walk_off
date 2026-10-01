@@ -73,6 +73,18 @@
         'audit:edit'
       ]
     },
+    captain: {
+      id: 'captain',
+      title: 'Franchise Team Captain',
+      badgeClass: 'bg-amber-900/40 text-secondary-container border border-secondary-container/40',
+      description: 'Authorized franchise team captain: real-time wallet audits, opponent squad intelligence, and arena paddle participation.',
+      permissions: [
+        'wallet:view',
+        'roster:view',
+        'auction:view',
+        'paddle:participate'
+      ]
+    },
     viewer: {
       id: 'viewer',
       title: 'Public Viewer / Athlete',
@@ -95,6 +107,19 @@
       institution: 'NMIMS Hyderabad STME Impulse',
       phone: '+91 98765 49821',
       phoneHint: '•••• 9821'
+    },
+    {
+      email: 'captain@nmims.edu.in',
+      altEmails: ['captain.stme@nmims.edu.in', 'captains@nmims.edu.in', 'captain.cbit@nmims.edu.in'],
+      password: 'Captain@Legends2026',
+      aliases: ['captain2026', 'captain123', 'captain', 'cap2026'],
+      role: 'captain',
+      name: 'Vikramaditya (Captain)',
+      title: 'Franchise Team Captain',
+      institution: 'NMIMS STME Strikers',
+      phone: '+91 98850 11234',
+      phoneHint: '•••• 1234',
+      teamId: 'team-nmims-cricket'
     },
     {
       email: 'cricket@nmims.edu.in',
@@ -192,7 +217,8 @@
             name: account.name,
             title: account.title,
             institution: account.institution,
-            phoneHint: account.phoneHint
+            phoneHint: account.phoneHint,
+            teamId: account.teamId || null
           }
         };
       }
@@ -311,19 +337,21 @@
     },
 
     // Login user (stores session)
-    login: function (email, roleId, rememberMe, optionalName) {
+    login: function (email, roleId, rememberMe, optionalName, optionalTeamId) {
       const cleanEmail = (email || 'officer@nmims.edu.in').trim();
       const account = this.findAccountByEmail(cleanEmail);
       const roleConfig = ROLES[roleId] || (account ? ROLES[account.role] : ROLES.committee);
       
       const displayName = optionalName || (account ? account.name : (cleanEmail.split('@')[0].toUpperCase() + ' (Official)'));
       const institution = account ? account.institution : 'NMIMS Hyderabad STME Impulse';
+      const teamId = optionalTeamId || (account ? account.teamId : (roleId === 'captain' ? 'team-nmims-cricket' : null));
 
       const user = {
         email: cleanEmail,
         name: displayName,
         role: roleConfig.id,
         institution: institution,
+        teamId: teamId,
         token: 'AUTH-' + Math.random().toString(36).substring(2, 10).toUpperCase(),
         loginTime: new Date().toISOString(),
         rememberMe: rememberMe !== false
@@ -333,7 +361,43 @@
       localStorage.setItem('legends_admin_logged_in', 'true');
       localStorage.setItem('legends_admin_email', user.email);
 
+      // Sync with LegendsAuction if active
+      if (window.LegendsAuction && typeof window.LegendsAuction.setActiveRole === 'function') {
+        window.LegendsAuction.setActiveRole(roleConfig.id === 'committee' ? 'admin' : roleConfig.id, teamId);
+      }
+
       window.dispatchEvent(new CustomEvent('legends_auth_changed', { detail: user }));
+      return user;
+    },
+
+    // Set or switch active role with optional franchise teamId (for Team Captains)
+    setRole: function (roleId, teamId) {
+      const roleConfig = ROLES[roleId] || ROLES.viewer;
+      let user = this.getCurrentUser();
+      if (!user) {
+        user = {
+          email: `${roleId}@nmims.edu.in`,
+          name: roleConfig.title,
+          institution: 'Legends Walk Off 2026',
+          token: 'AUTH-' + Math.random().toString(36).substring(2, 10).toUpperCase(),
+          loginTime: new Date().toISOString(),
+          rememberMe: true
+        };
+      }
+      user.role = roleId;
+      if (teamId) {
+        user.teamId = teamId;
+      }
+      localStorage.setItem('legends_auth_session', JSON.stringify(user));
+      if (roleId !== 'viewer') {
+        localStorage.setItem('legends_admin_logged_in', 'true');
+        localStorage.setItem('legends_admin_email', user.email);
+      }
+      if (window.LegendsAuction && typeof window.LegendsAuction.setActiveRole === 'function') {
+        window.LegendsAuction.setActiveRole(roleId === 'committee' ? 'admin' : roleId, teamId);
+      }
+      window.dispatchEvent(new CustomEvent('legends_auth_changed', { detail: user }));
+      this.applyUI();
       return user;
     },
 
@@ -370,6 +434,7 @@
       if (!isProtectedPage) return true;
 
       const isAuthed = this.isAuthenticated();
+      const user = this.getCurrentUser();
       const gate = document.getElementById('rbac-auth-gate');
       const mainContent = document.querySelector('main');
 
@@ -386,6 +451,24 @@
         } else {
           // If gate element is missing, redirect immediately to login
           window.location.href = 'login.html';
+        }
+        return false;
+      }
+
+      // If user is Captain, restrict access to official scoring engine
+      if (user && user.role === 'captain') {
+        if (mainContent) {
+          mainContent.style.filter = 'blur(12px)';
+          mainContent.style.pointerEvents = 'none';
+          mainContent.style.userSelect = 'none';
+        }
+        if (gate) {
+          gate.classList.remove('hidden');
+          gate.classList.add('flex');
+          const title = gate.querySelector('h2') || gate.querySelector('.font-headline-sm');
+          if (title) title.textContent = 'RESTRICTED TO MATCH SCORING OFFICIALS';
+          const msg = gate.querySelector('p');
+          if (msg) msg.innerHTML = 'Team Captains have squad and wallet auditing privileges. Live match scoring is restricted to certified Field Scorers and Committee Admins.<br><a href="captain-dashboard.html" class="inline-block mt-3 px-4 py-2 bg-primary text-black font-bold uppercase rounded text-xs">Open Captains Dashboard</a>';
         }
         return false;
       }
@@ -461,11 +544,16 @@
             container.insertBefore(existingChip, container.firstChild);
           }
           existingChip.classList.remove('hidden');
+          const isCaptain = user.role === 'captain';
+          const linkTarget = isCaptain ? 'captain-dashboard.html' : 'admin-console.html';
+          const linkText = isCaptain ? 'Captain Hub' : 'Console';
+          const badgeText = isCaptain ? 'CAPTAIN' : roleConfig.title.split(' ')[0];
+
           existingChip.innerHTML = `
-            <span class="w-2 h-2 rounded-full bg-tertiary animate-ping"></span>
-            <span class="font-label-badge text-label-badge uppercase font-bold text-secondary-container hidden sm:inline">${roleConfig.title.split(' ')[0]}</span>
-            <a href="admin-console.html" class="font-headline-sm text-xs text-primary hover:text-white uppercase tracking-wider ml-1" title="Open Scoring Engine">Console</a>
-            <button onclick="window.LegendsRBAC.logout()" class="text-on-surface-variant hover:text-error ml-1 transition-colors p-0.5" title="Exit Admin Session">
+            <span class="w-2 h-2 rounded-full ${isCaptain ? 'bg-secondary-container animate-pulse' : 'bg-tertiary animate-ping'}"></span>
+            <span class="font-label-badge text-label-badge uppercase font-bold text-secondary-container hidden sm:inline">${badgeText}</span>
+            <a href="${linkTarget}" class="font-headline-sm text-xs text-primary hover:text-white uppercase tracking-wider ml-1" title="Open ${isCaptain ? 'Captain Dashboard' : 'Scoring Engine'}">${linkText}</a>
+            <button onclick="window.LegendsRBAC.logout()" class="text-on-surface-variant hover:text-error ml-1 transition-colors p-0.5" title="Exit Session">
               <span class="material-symbols-outlined text-[15px] align-middle">logout</span>
             </button>
           `;

@@ -61,9 +61,20 @@ const RBAC = global.window.LegendsRBAC;
 
 console.log('--- 1. ROLE DEFINITION & PERMISSION CHECKS ---');
 
-it('Should contain 5 configured roles', () => {
+it('Should contain 6 configured roles', () => {
   const roles = Object.keys(RBAC.roles);
-  assert.deepStrictEqual(roles.sort(), ['committee', 'cricket', 'football', 'referees', 'viewer'].sort());
+  assert.deepStrictEqual(roles.sort(), ['captain', 'committee', 'cricket', 'football', 'referees', 'viewer'].sort());
+});
+
+it('Team Captain role must have wallet, roster, and auction viewing permissions, but not scoring', () => {
+  const captain = RBAC.roles.captain;
+  assert.ok(captain.permissions.includes('wallet:view'));
+  assert.ok(captain.permissions.includes('roster:view'));
+  assert.ok(captain.permissions.includes('auction:view'));
+  assert.ok(captain.permissions.includes('paddle:participate'));
+  assert.strictEqual(captain.permissions.includes('cricket:score'), false);
+  assert.strictEqual(captain.permissions.includes('football:score'), false);
+  assert.strictEqual(captain.permissions.includes('match:finalize'), false);
 });
 
 it('Committee Admin role must have all core permissions', () => {
@@ -141,6 +152,28 @@ it('Admin user passes page guard and accesses scoring console', () => {
   assert.strictEqual(RBAC.isAuthenticated(), true);
   const allowed = RBAC.enforcePageGuard();
   assert.strictEqual(allowed, true);
+});
+
+it('Logging in as team captain saves session with captain role and teamId', () => {
+  const cap = RBAC.login('captain.stme@nmims.edu.in', 'captain', true, 'Vikramaditya', 'team-nmims-cricket');
+  assert.strictEqual(cap.role, 'captain');
+  assert.strictEqual(cap.teamId, 'team-nmims-cricket');
+  assert.strictEqual(RBAC.hasPermission('wallet:view'), true);
+  assert.strictEqual(RBAC.hasPermission('cricket:score'), false);
+});
+
+it('setRole dynamically switches captain role and franchise identity', () => {
+  const user = RBAC.setRole('captain', 'team-cbit-cricket');
+  assert.strictEqual(user.role, 'captain');
+  assert.strictEqual(user.teamId, 'team-cbit-cricket');
+  assert.strictEqual(RBAC.getCurrentUser().teamId, 'team-cbit-cricket');
+});
+
+it('Team Captain is guarded from official match scoring console', () => {
+  RBAC.setRole('captain', 'team-nmims-cricket');
+  assert.strictEqual(RBAC.isAuthenticated(), true);
+  const allowed = RBAC.enforcePageGuard();
+  assert.strictEqual(allowed, false, 'Captain must be blocked from admin scoring console');
 });
 
 console.log('\n--- 3. HTML CODEBASE INTEGRITY ---');

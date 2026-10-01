@@ -194,13 +194,20 @@
         </span>
         <span class="font-label-badge text-[9px] text-outline uppercase font-mono">STME PASS: legends2026</span>
       </div>
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
         <button type="button" onclick="quickFillAccount('committee')" class="p-2 rounded bg-surface-container-high hover:bg-surface-bright border border-secondary-container/30 hover:border-secondary-container text-left transition-all group flex flex-col justify-between">
           <div class="flex items-center gap-1 text-secondary-container font-headline-sm text-xs uppercase">
             <span class="material-symbols-outlined text-sm">shield</span>
             <span>Admin</span>
           </div>
           <div class="font-body-sm text-[10px] text-on-surface-variant truncate mt-1">admin@nmims.edu.in</div>
+        </button>
+        <button type="button" onclick="quickFillAccount('captain')" class="p-2 rounded bg-surface-container-high hover:bg-surface-bright border border-amber-600/40 hover:border-secondary-container text-left transition-all group flex flex-col justify-between">
+          <div class="flex items-center gap-1 text-secondary-container font-headline-sm text-xs uppercase">
+            <span class="material-symbols-outlined text-sm">badge</span>
+            <span>Captain</span>
+          </div>
+          <div class="font-body-sm text-[10px] text-on-surface-variant truncate mt-1">captain@nmims.edu.in</div>
         </button>
         <button type="button" onclick="quickFillAccount('cricket')" class="p-2 rounded bg-surface-container-high hover:bg-surface-bright border border-primary/30 hover:border-primary text-left transition-all group flex flex-col justify-between">
           <div class="flex items-center gap-1 text-primary font-headline-sm text-xs uppercase">
@@ -271,6 +278,7 @@
             <span class="material-symbols-outlined absolute left-3 text-on-surface-variant pointer-events-none text-lg">sports_score</span>
             <select class="w-full pl-10 pr-10 py-2.5 rounded-lg bg-surface-container-highest text-on-surface font-body-md text-body-md focus:outline-none focus:bg-surface-bright focus:ring-1 focus:ring-secondary-container transition-all appearance-none cursor-pointer" id="adminRole">
               <option value="committee" selected>Committee Executive Admin (Full Arena Control)</option>
+              <option value="captain">Franchise Team Captain (Wallet &amp; Squad Console)</option>
               <option value="cricket">Official Scorer (Cricket Match Telemetry)</option>
               <option value="football">Official Scorer (Football Match Telemetry)</option>
               <option value="referees">Referees Panel (Audit &amp; DLS Calculations)</option>
@@ -413,6 +421,7 @@
   // 2. Role descriptions dictionary
   const roleDescriptions = {
     committee: 'Executive Super-Admin: Unrestricted arena control, emergency broadcast announcements, sponsor curation, and match finalization.',
+    captain: 'Franchise Team Captain: Live purse wallet audits, opponent squad scouting intelligence, and arena paddle participation.',
     cricket: 'Official Field Scorer: Real-time ball-by-ball delivery, wicket recording, extras, and striker swap.',
     football: 'Official Match Scorer: Goals, penalty cards, fouls, half-time clock management, and substitutions.',
     referees: 'Match Referees Panel: Audit log adjudication, referee override, DLS target calculations, and match verification.'
@@ -437,6 +446,7 @@
 
     const accounts = {
       committee: { email: 'admin@nmims.edu.in', pass: 'legends2026' },
+      captain: { email: 'captain@nmims.edu.in', pass: 'captain2026' },
       cricket: { email: 'cricket@nmims.edu.in', pass: 'cricket2026' },
       football: { email: 'football@nmims.edu.in', pass: 'football2026' },
       referees: { email: 'referee@nmims.edu.in', pass: 'referee2026' }
@@ -620,7 +630,8 @@
 
       setTimeout(() => {
         const urlParams = new URLSearchParams(window.location.search);
-        const redirect = urlParams.get('redirect') || 'admin-console.html';
+        const defaultRedirect = role === 'captain' ? 'captain-dashboard.html' : 'admin-console.html';
+        const redirect = urlParams.get('redirect') || defaultRedirect;
         window.location.href = redirect;
       }, 600);
     }, 700);

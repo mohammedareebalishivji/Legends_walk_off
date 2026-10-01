@@ -471,6 +471,15 @@
               title: auth.name || 'Official Auctioneer Admin',
               teamId: null
             };
+          } else if (auth && auth.role === 'captain') {
+            const team = state.teams.find(t => t.id === auth.teamId) || state.teams[0];
+            return {
+              role: 'captain',
+              title: `${team.captain} (Captain • ${team.shortCode})`,
+              teamId: team.id,
+              teamName: team.name,
+              captainName: team.captain
+            };
           }
         }
       } catch (e) {}
@@ -995,7 +1004,132 @@
       };
     },
 
-    // Undo last hammer action (reverts Sold or Unsold)
+    // Admin directly puts a player into a franchise squad and deducts amount from their wallet
+    // (Requested: "allow admin to put players in the team and deduct amount from their wallet")
+    adminDirectAssignPlayer: function (options) {
+      const role = this.getActiveRole();
+      if (role.role !== 'admin') {
+        throw new Error('PERMISSION DENIED: Only Admin can directly assign players and deduct purse.');
+      }
+
+      if (!options || typeof options !== 'object') {
+        throw new Error('Assignment options are required.');
+      }
+
+      const { teamId, playerName, playerCategory, institution, battingStyle, bowlingStyle, price, lotId, notes } = options;
+
+      if (!teamId) throw new Error('Target franchise team must be selected.');
+      const state = this.getState();
+      const team = state.teams.find(t => t.id === teamId);
+      if (!team) throw new Error(`Franchise team '${teamId}' not found.`);
+
+      if (!playerName || !playerName.trim()) throw new Error('Player name is required.');
+      const cleanName = playerName.trim();
+
+      const numPrice = Number(price);
+      if (isNaN(numPrice) || numPrice < 0) {
+        throw new Error('A valid non-negative purchase price / deduction amount is required.');
+      }
+
+      // Check remaining purse
+      const remaining = Math.max(0, team.totalPurse - team.spentPurse);
+      if (numPrice > remaining) {
+        throw new Error(`Insufficient purse balance! ${team.name} has only ${this.formatCurrency(remaining)} remaining, but requested deduction is ${this.formatCurrency(numPrice)}.`);
+      }
+
+      // Check squad limit
+      const currentSquad = this.getTeamAllMembers(team.id);
+      if (currentSquad.length >= team.squadLimit) {
+        throw new Error(`Squad limit reached! ${team.name} already has ${currentSquad.length}/${team.squadLimit} players.`);
+      }
+
+      // 1. Deduct amount from team wallet
+      team.spentPurse += numPrice;
+      team.remainingPurse = Math.max(0, team.totalPurse - team.spentPurse);
+
+      // 2. Put player in team acquiredPlayers
+      if (!Array.isArray(team.acquiredPlayers)) team.acquiredPlayers = [];
+      const assignedId = lotId || ('direct-' + Date.now());
+      const timeStr = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+      const squadMember = {
+        id: assignedId,
+        name: cleanName,
+        role: playerCategory || 'Assigned Player',
+        price: numPrice,
+        time: timeStr,
+        institution: institution || 'STME Registered',
+        battingStyle: battingStyle || 'Right-Handed',
+        bowlingStyle: bowlingStyle || 'Right-Arm Pacer',
+        notes: notes || 'Admin Direct Assignment',
+        directAssignment: true
+      };
+      team.acquiredPlayers.push(squadMember);
+
+      // 3. If lotId provided or matched an existing lot, mark it sold
+      let matchedLot = null;
+      if (lotId) {
+        matchedLot = state.lots.find(l => l.id === lotId);
+      } else {
+        matchedLot = state.lots.find(l => l.name.toLowerCase() === cleanName.toLowerCase());
+      }
+
+      if (matchedLot) {
+        matchedLot.status = 'sold';
+        matchedLot.currentBid = numPrice;
+        matchedLot.highestBidderTeamId = team.id;
+        matchedLot.highestBidderTeamName = team.name;
+        matchedLot.highestBidderCaptain = team.captain;
+        
+        // If this was the active lot, advance activeLotId
+        if (state.activeLotId === matchedLot.id) {
+          const nextActive = state.lots.find(l => l.id !== matchedLot.id && l.status === 'active');
+          if (nextActive) {
+            state.activeLotId = nextActive.id;
+          }
+        }
+      }
+
+      // 4. Record action in actionHistory for undo
+      if (!Array.isArray(state.actionHistory)) state.actionHistory = [];
+      state.actionHistory.push({
+        action: 'direct_assign',
+        teamId: team.id,
+        playerId: assignedId,
+        price: numPrice,
+        lotId: matchedLot ? matchedLot.id : null,
+        playerName: cleanName
+      });
+
+      // 5. Record in bidLog
+      state.bidLog.unshift({
+        time: timeStr,
+        team: team.name,
+        shortCode: team.shortCode,
+        captain: team.captain,
+        amount: numPrice,
+        type: 'sold',
+        player: `${cleanName} (Direct Assigned)`
+      });
+
+      state.lastSold = {
+        player: cleanName,
+        team: team.name,
+        shortCode: team.shortCode,
+        price: numPrice,
+        category: squadMember.role
+      };
+
+      this.saveState(state);
+      return {
+        success: true,
+        team: team,
+        player: squadMember,
+        remainingPurse: team.remainingPurse
+      };
+    },
+
+    // Undo last hammer action (reverts Sold, Unsold, or Direct Assignment)
     undoLastAction: function () {
       const role = this.getActiveRole();
       if (role.role !== 'admin') throw new Error('PERMISSION DENIED: Admin only.');
@@ -1006,25 +1140,50 @@
       }
 
       const last = state.actionHistory.pop();
-      const lot = state.lots.find(l => l.id === last.lotId);
-      if (!lot) throw new Error('Associated lot not found.');
 
       if (last.action === 'sold') {
+        const lot = state.lots.find(l => l.id === last.lotId);
         const team = state.teams.find(t => t.id === last.teamId);
         if (team) {
           team.spentPurse = Math.max(0, team.spentPurse - last.price);
           team.remainingPurse = Math.max(0, team.totalPurse - team.spentPurse);
-          team.acquiredPlayers = team.acquiredPlayers.filter(p => p.id !== last.lotId);
+          team.acquiredPlayers = (team.acquiredPlayers || []).filter(p => p.id !== last.lotId);
         }
-        lot.status = 'active';
-        state.activeLotId = lot.id;
+        if (lot) {
+          lot.status = 'active';
+          state.activeLotId = lot.id;
+        }
+        this.saveState(state);
+        return { success: true, message: `Reverted SOLD for ${lot ? lot.name : 'player'}` };
       } else if (last.action === 'unsold') {
-        lot.status = 'active';
-        state.activeLotId = lot.id;
+        const lot = state.lots.find(l => l.id === last.lotId);
+        if (lot) {
+          lot.status = 'active';
+          state.activeLotId = lot.id;
+        }
+        this.saveState(state);
+        return { success: true, message: `Reverted UNSOLD for ${lot ? lot.name : 'lot'}` };
+      } else if (last.action === 'direct_assign') {
+        const team = state.teams.find(t => t.id === last.teamId);
+        if (team) {
+          team.spentPurse = Math.max(0, team.spentPurse - last.price);
+          team.remainingPurse = Math.max(0, team.totalPurse - team.spentPurse);
+          if (Array.isArray(team.acquiredPlayers)) {
+            team.acquiredPlayers = team.acquiredPlayers.filter(p => p.id !== last.playerId);
+          }
+        }
+        if (last.lotId) {
+          const lot = state.lots.find(l => l.id === last.lotId);
+          if (lot) {
+            lot.status = 'active';
+          }
+        }
+        this.saveState(state);
+        return { success: true, message: `Reverted direct assignment of ${last.playerName || 'player'} and refunded ${this.formatCurrency(last.price)} to ${team ? team.name : 'team'}.` };
       }
 
       this.saveState(state);
-      return { success: true, message: `Reverted ${last.action.toUpperCase()} for ${lot.name}` };
+      return { success: true, message: 'Action undone.' };
     },
 
     // Next Lot Navigation (Requested: "Next click karne pe next aane chaiye")

@@ -322,6 +322,87 @@ it('20. Excel CSV export generates valid report with wallets, squads, and player
   assert.ok(csv.includes('SECTION 3: AUCTION PLAYER POOL & OUTCOMES'));
 });
 
+it('21. Admin can directly put player into team and deduct amount from their wallet', () => {
+  Auction.setActiveRole('admin');
+  const teamId = 'team-cbit-cricket';
+  const teamBefore = Auction.getTeam(teamId);
+  const remainingBefore = teamBefore.remainingPurse;
+  const deductionPrice = 2500000; // ₹25.00 Lakh
+
+  const result = Auction.adminDirectAssignPlayer({
+    teamId: teamId,
+    playerName: 'Rishabh Pant (Guest Star)',
+    playerCategory: 'Wicket-Keeper Batsman',
+    institution: 'Delhi Capitals / Guest',
+    battingStyle: 'Left-Handed Explosive',
+    bowlingStyle: 'N/A',
+    price: deductionPrice
+  });
+
+  assert.ok(result.success);
+  const teamAfter = Auction.getTeam(teamId);
+  assert.strictEqual(teamAfter.remainingPurse, remainingBefore - deductionPrice, 'Purse must be exactly deducted');
+  assert.strictEqual(teamAfter.spentPurse, teamBefore.spentPurse + deductionPrice);
+
+  const squad = Auction.getTeamAllMembers(teamId);
+  const assigned = squad.find(m => m.name === 'Rishabh Pant (Guest Star)');
+  assert.ok(assigned, 'Player must be present in squad');
+  assert.strictEqual(assigned.price, deductionPrice);
+});
+
+it('22. Direct assignment strictly enforces purse limit', () => {
+  Auction.setActiveRole('admin');
+  const teamId = 'team-vnr-cricket';
+  const team = Auction.getTeam(teamId);
+  const excessivePrice = team.remainingPurse + 5000000; // 50L more than remaining
+
+  assert.throws(() => {
+    Auction.adminDirectAssignPlayer({
+      teamId: teamId,
+      playerName: 'Overpriced Star',
+      price: excessivePrice
+    });
+  }, /Insufficient purse balance/);
+});
+
+it('23. Undo direct assignment refunds the franchise purse and removes player', () => {
+  Auction.setActiveRole('admin');
+  const teamId = 'team-cbit-cricket';
+  const teamBeforeUndo = Auction.getTeam(teamId);
+  const purseBeforeUndo = teamBeforeUndo.remainingPurse;
+
+  const undoRes = Auction.undoLastAction();
+  assert.ok(undoRes.success);
+  assert.ok(undoRes.message.includes('Reverted direct assignment'));
+
+  const teamAfterUndo = Auction.getTeam(teamId);
+  assert.strictEqual(teamAfterUndo.remainingPurse, purseBeforeUndo + 2500000, 'Purse should be completely refunded');
+
+  const squad = Auction.getTeamAllMembers(teamId);
+  const found = squad.find(m => m.name === 'Rishabh Pant (Guest Star)');
+  assert.strictEqual(found, undefined, 'Player should be removed from squad');
+});
+
+it('24. Non-admin users (captains and guests) are strictly blocked from direct player assignment', () => {
+  Auction.setActiveRole('captain', 'team-nmims-cricket');
+  assert.throws(() => {
+    Auction.adminDirectAssignPlayer({
+      teamId: 'team-nmims-cricket',
+      playerName: 'Captain Self Assign',
+      price: 1000000
+    });
+  }, /PERMISSION DENIED: Only Admin/);
+
+  Auction.setActiveRole('guest');
+  assert.throws(() => {
+    Auction.adminDirectAssignPlayer({
+      teamId: 'team-nmims-cricket',
+      playerName: 'Guest Assign',
+      price: 1000000
+    });
+  }, /PERMISSION DENIED: Only Admin/);
+});
+
 console.log('\n----------------------------------------------------');
 console.log(`Results: ${passedTests}/${totalTests} tests passed`);
 console.log('----------------------------------------------------');

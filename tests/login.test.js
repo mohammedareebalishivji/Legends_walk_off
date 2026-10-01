@@ -80,18 +80,22 @@ const RBAC = global.window.LegendsRBAC;
 assert(RBAC, 'LegendsRBAC must be attached to window');
 
 // TEST CASES
-it('1. Official verified accounts are registered for all 4 tournament official roles', () => {
+it('1. Official verified accounts are registered for all 5 tournament roles including Captain', () => {
   const accounts = RBAC.getOfficialAccounts();
   assert(Array.isArray(accounts), 'Should return an array of accounts');
-  assert.strictEqual(accounts.length, 4, 'Should have exactly 4 official accounts');
+  assert.strictEqual(accounts.length, 5, 'Should have exactly 5 official accounts');
 
   const committee = accounts.find(a => a.role === 'committee');
+  const captain = accounts.find(a => a.role === 'captain');
   const cricket = accounts.find(a => a.role === 'cricket');
   const football = accounts.find(a => a.role === 'football');
   const referees = accounts.find(a => a.role === 'referees');
 
   assert(committee, 'Committee Admin account must exist');
   assert.strictEqual(committee.email, 'admin@nmims.edu.in');
+
+  assert(captain, 'Team Captain account must exist');
+  assert.strictEqual(captain.email, 'captain@nmims.edu.in');
 
   assert(cricket, 'Cricket Scorer account must exist');
   assert.strictEqual(cricket.email, 'cricket@nmims.edu.in');
@@ -136,6 +140,14 @@ it('6. Referees Panel authenticates with referee credentials', () => {
   assert.strictEqual(res.success, true);
   assert.strictEqual(res.account.role, 'referees');
   assert(res.account.name.includes('Ramanathan'));
+});
+
+it('6b. Team Captain authenticates with captain credentials and receives captain role', () => {
+  const res = RBAC.verifyCredentials('captain@nmims.edu.in', 'captain2026', 'captain');
+  assert.strictEqual(res.success, true);
+  assert.strictEqual(res.account.role, 'captain');
+  assert(res.account.name.includes('Vikramaditya'));
+  assert.strictEqual(res.account.teamId, 'team-nmims-cricket');
 });
 
 it('7. Rejects invalid password for registered official', () => {
