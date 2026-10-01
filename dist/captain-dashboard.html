@@ -155,6 +155,11 @@
           </a>
         </div>
 
+        <!-- Authenticated User / Session Chip -->
+        <div id="captainHeaderAuthChip" class="flex items-center gap-2">
+          <!-- Dynamically populated -->
+        </div>
+
         <!-- Live Sync Status Indicator -->
         <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-lowest border border-outline-variant/30">
           <span class="w-2 h-2 rounded-full bg-primary-container animate-ping"></span>
@@ -165,6 +170,18 @@
       </div>
     </div>
   </header>
+
+  <!-- GUEST SPECTATOR ALERT BANNER (SHOWN IF NOT AUTHENTICATED) -->
+  <div id="guestSpectatorBanner" class="hidden bg-surface-container border-b border-secondary-container/40 px-4 lg:px-8 py-2.5 text-xs text-on-surface flex items-center justify-between gap-3 shadow-md">
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-secondary-container text-base">visibility</span>
+      <span><strong>SPECTATOR MODE:</strong> You are viewing franchise wallet telemetry and squad logs in read-only mode. Official bidding requires verified Team Captain authentication.</span>
+    </div>
+    <a href="login.html?redirect=captain-dashboard.html" class="px-3 py-1 bg-secondary-container hover:bg-secondary text-on-secondary rounded font-headline-sm uppercase text-[11px] tracking-wider transition-all flex items-center gap-1 shrink-0 shadow-sm">
+      <span class="material-symbols-outlined text-sm">login</span>
+      <span>Sign In as Captain</span>
+    </a>
+  </div>
 
   <!-- FRANCHISE CAPTAIN SELECTOR BAR -->
   <!-- Allows switching captain identity to test/operate any of the 6 teams -->
@@ -464,31 +481,45 @@
     let currentCaptainTeamId = 'team-nmims-cricket';
 
     document.addEventListener('DOMContentLoaded', () => {
-      // 1. Check for URL parameter ?team=team-cbit-cricket
-      const urlParams = new URLSearchParams(window.location.search);
-      const teamParam = urlParams.get('team');
-      if (teamParam) {
-        currentCaptainTeamId = teamParam;
+      // 1. Session & franchise initialization
+      const authedUser = window.LegendsRBAC && window.LegendsRBAC.getCurrentUser();
+      const isAuthed = window.LegendsRBAC && window.LegendsRBAC.isAuthenticated();
+
+      if (isAuthed && authedUser) {
+        if (authedUser.role === 'captain' && authedUser.teamId) {
+          currentCaptainTeamId = authedUser.teamId;
+        } else {
+          const urlParams = new URLSearchParams(window.location.search);
+          const teamParam = urlParams.get('team');
+          if (teamParam) {
+            currentCaptainTeamId = teamParam;
+          } else {
+            const savedTeam = localStorage.getItem('legends_active_captain_team');
+            if (savedTeam) currentCaptainTeamId = savedTeam;
+          }
+        }
       } else {
-        const savedTeam = localStorage.getItem('legends_active_captain_team');
-        if (savedTeam) currentCaptainTeamId = savedTeam;
+        const urlParams = new URLSearchParams(window.location.search);
+        const teamParam = urlParams.get('team');
+        if (teamParam) {
+          currentCaptainTeamId = teamParam;
+        } else {
+          const savedTeam = localStorage.getItem('legends_active_captain_team');
+          if (savedTeam) currentCaptainTeamId = savedTeam;
+        }
       }
 
-      // 2. Set current session role to captain
-      if (window.LegendsRBAC) {
-        window.LegendsRBAC.setRole('captain', currentCaptainTeamId);
-      }
-
-      // 3. Render all sections
+      // 2. Render all sections & auth chip
+      renderCaptainAuthChip();
       renderCaptainSelector();
       renderCaptainDashboard();
 
-      // 4. Subscribe to cross-tab / cross-device live updates
+      // 3. Subscribe to cross-tab / cross-device live updates
       window.LegendsAuction.subscribe((state) => {
         handleRealtimeStateUpdate(state);
       });
 
-      // 5. Stage Stopwatch loop (No auto lock - Admin controls bidding)
+      // 4. Stage Stopwatch loop (No auto lock - Admin controls bidding)
       let captainElapsedSeconds = 45;
       setInterval(() => {
         const lot = window.LegendsAuction.getActiveLot();
@@ -503,6 +534,52 @@
         }
       }, 1000);
     });
+
+    // Render Auth Status Chip in Header
+    function renderCaptainAuthChip() {
+      const chipContainer = document.getElementById('captainHeaderAuthChip');
+      const guestBanner = document.getElementById('guestSpectatorBanner');
+      if (!chipContainer) return;
+
+      const user = window.LegendsRBAC && window.LegendsRBAC.getCurrentUser();
+      const isAuthed = window.LegendsRBAC && window.LegendsRBAC.isAuthenticated();
+
+      if (isAuthed && user) {
+        if (guestBanner) guestBanner.classList.add('hidden');
+        const isCaptain = user.role === 'captain';
+        const roleLabel = isCaptain ? 'CAPTAIN' : 'ADMIN';
+        const nameLabel = isCaptain ? (user.name || 'Franchise Captain') : 'Committee Admin';
+        const badgeColor = isCaptain ? 'bg-primary-container text-on-primary-container' : 'bg-secondary-container text-on-secondary';
+
+        chipContainer.innerHTML = `
+          <div class="flex items-center gap-2 bg-surface-container-high px-2.5 py-1 rounded border border-outline/30 shadow-sm">
+            <span class="w-2 h-2 rounded-full ${isCaptain ? 'bg-primary animate-pulse' : 'bg-secondary-container'}"></span>
+            <span class="font-label-badge text-[10px] uppercase font-bold px-1 rounded ${badgeColor}">${roleLabel}</span>
+            <span class="font-headline-sm text-xs text-on-surface truncate hidden sm:inline max-w-[130px]">${nameLabel}</span>
+            <button onclick="handleCaptainLogout()" class="text-outline hover:text-error transition-colors p-0.5 ml-1" title="Sign Out">
+              <span class="material-symbols-outlined text-[15px] align-middle">logout</span>
+            </button>
+          </div>
+        `;
+      } else {
+        if (guestBanner) guestBanner.classList.remove('hidden');
+        chipContainer.innerHTML = `
+          <a href="login.html?redirect=captain-dashboard.html" class="px-3 py-1.5 bg-secondary-container hover:bg-secondary text-on-secondary text-xs font-headline-sm uppercase tracking-wider rounded transition-all flex items-center gap-1.5 shadow-sm">
+            <span class="material-symbols-outlined text-[15px]">login</span>
+            <span>Captain Login</span>
+          </a>
+        `;
+      }
+    }
+
+    function handleCaptainLogout() {
+      if (window.LegendsRBAC) {
+        window.LegendsRBAC.logout();
+      } else {
+        localStorage.removeItem('legends_auth_session');
+        window.location.reload();
+      }
+    }
 
     // Render Captain Team Switcher Buttons
     function renderCaptainSelector() {
@@ -527,14 +604,19 @@
 
     // Switch Captain Identity
     function selectCaptainTeam(teamId) {
+      const user = window.LegendsRBAC && window.LegendsRBAC.getCurrentUser();
+      const isAuthed = window.LegendsRBAC && window.LegendsRBAC.isAuthenticated();
+
+      if (isAuthed && user && user.role === 'captain' && user.teamId && user.teamId !== teamId) {
+        showBidFeedback(`Audit Note: You are logged in as Captain of ${window.LegendsAuction.getTeam(user.teamId)?.name}. Inspecting ${window.LegendsAuction.getTeam(teamId)?.name}.`, 'info');
+      }
+
       currentCaptainTeamId = teamId;
       localStorage.setItem('legends_active_captain_team', teamId);
-      if (window.LegendsRBAC) {
-        window.LegendsRBAC.setRole('captain', teamId);
-      }
+
       renderCaptainSelector();
       renderCaptainDashboard();
-      showBidFeedback(`Switched perspective to ${window.LegendsAuction.getTeam(teamId)?.name}`, 'info');
+      renderCaptainAuthChip();
     }
 
     // Main Render Function for Captain Console
@@ -813,8 +895,24 @@
 
     // Captain One-Click Bid Handler
     function handleCaptainBid(increment) {
-      // Ensure role is captain with my selected team
-      if (window.LegendsRBAC) {
+      if (!window.LegendsRBAC || !window.LegendsRBAC.isAuthenticated()) {
+        showBidFeedback('Authentication Required: Please log in as a verified Team Captain to place official bids.', 'error');
+        setTimeout(() => {
+          window.location.href = 'login.html?redirect=captain-dashboard.html';
+        }, 1500);
+        return;
+      }
+
+      const user = window.LegendsRBAC.getCurrentUser();
+      if (user && user.role === 'captain' && user.teamId && user.teamId !== currentCaptainTeamId) {
+        showBidFeedback(`Paddle Locked: You are authorized for ${window.LegendsAuction.getTeam(user.teamId)?.name || 'your franchise'}. You cannot bid for another franchise.`, 'error');
+        return;
+      }
+
+      // Synchronize role with bidding engine
+      if (user && user.role === 'committee') {
+        window.LegendsAuction.setActiveRole('admin');
+      } else {
         window.LegendsRBAC.setRole('captain', currentCaptainTeamId);
       }
 

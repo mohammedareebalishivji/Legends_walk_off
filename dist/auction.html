@@ -201,16 +201,16 @@
             <button onclick="window.LegendsAuction.downloadExcelCSV()" class="px-space-sm py-1 bg-surface-container hover:bg-secondary-container hover:text-on-secondary text-secondary-container text-xs font-headline-sm uppercase tracking-wider rounded border border-secondary-container/40 transition-all flex items-center gap-1 shadow-sm" title="Export entire auction summary, wallets, and squads to CSV/Excel">
               <span class="material-symbols-outlined text-[15px]">download</span>Export Excel
             </button>
-            <button id="adminDirectAssignBtn" onclick="openDirectAssignModal()" class="px-space-sm py-1 bg-surface-container hover:bg-emerald-600 hover:text-white text-emerald-400 text-xs font-headline-sm uppercase tracking-wider rounded border border-emerald-500/40 transition-all flex items-center gap-1 shadow-sm" title="Admin directly assign a player to a team and deduct amount from their wallet">
+            <button id="adminDirectAssignBtn" onclick="openDirectAssignModal()" class="hidden px-space-sm py-1 bg-surface-container hover:bg-emerald-600 hover:text-white text-emerald-400 text-xs font-headline-sm uppercase tracking-wider rounded border border-emerald-500/40 transition-all flex items-center gap-1 shadow-sm" title="Admin directly assign a player to a team and deduct amount from their wallet">
               <span class="material-symbols-outlined text-[15px]">how_to_reg</span>Assign to Team
             </button>
-            <button id="adminSetupTeamsBtn" onclick="openTeamSetupModal()" class="px-space-sm py-1 bg-surface-container hover:bg-primary-container hover:text-on-primary-container text-primary text-xs font-headline-sm uppercase tracking-wider rounded border border-primary/30 transition-all flex items-center gap-1 shadow-sm" title="Admin manual entry of franchise names and starting purses">
+            <button id="adminSetupTeamsBtn" onclick="openTeamSetupModal()" class="hidden px-space-sm py-1 bg-surface-container hover:bg-primary-container hover:text-on-primary-container text-primary text-xs font-headline-sm uppercase tracking-wider rounded border border-primary/30 transition-all flex items-center gap-1 shadow-sm" title="Admin manual entry of franchise names and starting purses">
               <span class="material-symbols-outlined text-[15px]">tune</span>Setup Teams &amp; Purses
             </button>
-            <button id="adminAddPlayerBtn" onclick="openAddPlayerModal()" class="px-space-sm py-1 bg-secondary-container text-on-secondary text-xs font-headline-sm uppercase tracking-wider rounded transition-all flex items-center gap-1 shadow-sm">
+            <button id="adminAddPlayerBtn" onclick="openAddPlayerModal()" class="hidden px-space-sm py-1 bg-secondary-container text-on-secondary text-xs font-headline-sm uppercase tracking-wider rounded transition-all flex items-center gap-1 shadow-sm">
               <span class="material-symbols-outlined text-[14px]">person_add</span>Add Player Lot
             </button>
-            <button onclick="resetAuctionData()" class="px-space-sm py-1 bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface text-xs font-label-badge uppercase tracking-wider rounded border border-outline/20 transition-all flex items-center gap-1">
+            <button id="adminResetBtn" onclick="resetAuctionData()" class="hidden px-space-sm py-1 bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface text-xs font-label-badge uppercase tracking-wider rounded border border-outline/20 transition-all flex items-center gap-1">
               <span class="material-symbols-outlined text-[14px]">refresh</span>Reset
             </button>
           </div>
@@ -226,31 +226,26 @@
             </p>
           </div>
 
-          <!-- ROLE SWITCHER INTERACTIVE BAR -->
-          <div class="bg-surface-container-low border border-outline/20 p-space-sm rounded-xl flex flex-col gap-2 shrink-0">
+          <!-- AUTHENTICATED SESSION CONTROL PANEL -->
+          <div id="authSessionControlCard" class="bg-surface-container-low border border-outline/20 p-space-sm rounded-xl flex flex-col gap-2 shrink-0 min-w-[310px] max-w-sm">
             <div class="flex items-center justify-between text-xs font-label-badge uppercase tracking-wider">
-              <span class="text-outline">Active Persona:</span>
+              <span class="text-outline flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px] text-secondary-container">verified_user</span>
+                Auth Session:
+              </span>
               <span id="roleIndicatorBadge" class="font-bold text-secondary-container px-2 py-0.5 rounded bg-surface-container-high">
                 Guest Spectator (View-Only)
               </span>
             </div>
             
-            <div class="flex items-center gap-1.5 flex-wrap">
-              <button onclick="switchRole('guest')" id="roleBtnGuest" class="role-switch-btn px-2.5 py-1 text-xs font-headline-sm uppercase rounded bg-primary-container text-on-primary-container transition-all">
-                👁️ Guest (View)
-              </button>
-              <button onclick="switchRole('captain', 'team-nmims-cricket')" id="roleBtnStme" class="role-switch-btn px-2.5 py-1 text-xs font-headline-sm uppercase rounded bg-surface-container hover:bg-surface-container-high text-on-surface transition-all">
-                🏏 STME Cap
-              </button>
-              <button onclick="switchRole('captain', 'team-cbit-cricket')" id="roleBtnCbit" class="role-switch-btn px-2.5 py-1 text-xs font-headline-sm uppercase rounded bg-surface-container hover:bg-surface-container-high text-on-surface transition-all">
-                🏏 CBIT Cap
-              </button>
-              <button onclick="switchRole('captain', 'team-bits-cricket')" id="roleBtnBits" class="role-switch-btn px-2.5 py-1 text-xs font-headline-sm uppercase rounded bg-surface-container hover:bg-surface-container-high text-on-surface transition-all">
-                🏏 BITS Cap
-              </button>
-              <button onclick="switchRole('admin')" id="roleBtnAdmin" class="role-switch-btn px-2.5 py-1 text-xs font-headline-sm uppercase rounded bg-surface-container hover:bg-secondary-container hover:text-on-secondary text-secondary-container transition-all">
-                ⚖️ Admin
-              </button>
+            <div id="authAccountDetails" class="text-xs text-on-surface-variant flex items-center justify-between gap-2 border-y border-outline/10 py-1.5 my-0.5">
+              <span id="authAccountText" class="truncate font-mono text-[11px] text-outline">Viewing Live Telemetry (No Session)</span>
+              <span id="authStatusPill" class="px-1.5 py-0.5 rounded bg-surface-container text-[10px] font-label-badge uppercase text-outline shrink-0">VIEW-ONLY</span>
+            </div>
+
+            <!-- Dynamic Session Action Buttons & Quick Controls -->
+            <div id="authSessionActions" class="flex items-center gap-1.5 flex-wrap">
+              <!-- Dynamically populated by renderRoleUI() -->
             </div>
           </div>
         </div>
@@ -468,15 +463,25 @@
               <!-- BIDDING CONTROLS / GUEST LOCK / ADMIN GAVEL PANEL -->
               <div class="mt-2">
                 <!-- GUEST VIEW-ONLY STATE (VISIBLE ONLY WHEN GUEST) -->
-                <div id="guestLockPanel" class="p-space-md rounded-lg bg-surface-container-low border border-outline/20 text-center flex flex-col items-center gap-2">
-                  <div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-outline">
-                    <span class="material-symbols-outlined text-xl">lock</span>
+                <div id="guestLockPanel" class="p-space-md rounded-xl bg-surface-container-low border border-outline/20 text-center flex flex-col items-center gap-3">
+                  <div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-outline">
+                    <span class="material-symbols-outlined text-2xl text-secondary-container">lock</span>
                   </div>
                   <div>
-                    <h4 class="font-headline-sm text-sm uppercase text-on-surface tracking-wider">SPECTATOR VIEW-ONLY MODE</h4>
-                    <p class="font-body-sm text-xs text-on-surface-variant max-w-md mx-auto mt-0.5">
-                      Guests can observe the live auction room and track remaining team budgets. To place bids, select a <strong>Team Captain</strong> persona in the header switcher above.
+                    <h4 class="font-headline-sm text-base uppercase text-on-surface tracking-wider">SPECTATOR VIEW-ONLY MODE</h4>
+                    <p class="font-body-sm text-xs text-on-surface-variant max-w-md mx-auto mt-1">
+                      You are observing the live auction room in real-time. Remaining purse balances and player lots are displayed below. To place bids or administer the hammer, please sign in with your verified tournament account.
                     </p>
+                  </div>
+                  <div class="flex items-center gap-2 mt-1">
+                    <a href="login.html?redirect=auction.html" class="px-4 py-2 bg-secondary-container hover:bg-secondary text-on-secondary font-headline-sm text-xs uppercase tracking-wider rounded-lg shadow-md transition-all flex items-center gap-1.5">
+                      <span class="material-symbols-outlined text-[16px]">login</span>
+                      <span>Sign In with NMIMS Credentials</span>
+                    </a>
+                    <a href="captain-dashboard.html" class="px-3 py-2 bg-surface-container-high hover:bg-surface-bright text-primary font-headline-sm text-xs uppercase tracking-wider rounded-lg border border-primary/30 transition-all flex items-center gap-1.5">
+                      <span class="material-symbols-outlined text-[16px]">sports_cricket</span>
+                      <span>Captains Suite</span>
+                    </a>
                   </div>
                 </div>
 
@@ -1030,6 +1035,15 @@
   }
 
   // 1. Render Active Role and Control Panels
+  function handleLogout() {
+    if (window.LegendsRBAC) {
+      window.LegendsRBAC.logout();
+    } else {
+      window.LegendsAuction.setActiveRole('guest');
+      window.location.reload();
+    }
+  }
+
   function switchRole(roleType, teamId) {
     window.LegendsAuction.setActiveRole(roleType, teamId);
     renderAll();
@@ -1046,8 +1060,13 @@
     const guestLock = document.getElementById('guestLockPanel');
     const captainPanel = document.getElementById('captainBiddingPanel');
     const adminPanel = document.getElementById('adminGavelPanel');
-    const adminAddBtn = document.getElementById('adminAddPlayerBtn');
+    const adminDirectAssignBtn = document.getElementById('adminDirectAssignBtn');
     const adminSetupBtn = document.getElementById('adminSetupTeamsBtn');
+    const adminAddBtn = document.getElementById('adminAddPlayerBtn');
+    const adminResetBtn = document.getElementById('adminResetBtn');
+    const authAccountText = document.getElementById('authAccountText');
+    const authStatusPill = document.getElementById('authStatusPill');
+    const authSessionActions = document.getElementById('authSessionActions');
 
     // Reset button states
     document.querySelectorAll('.role-switch-btn').forEach(btn => {
@@ -1057,13 +1076,38 @@
     if (role.role === 'guest') {
       badge.textContent = '👁️ Guest Spectator (View-Only)';
       badge.className = 'font-bold text-on-surface-variant px-2 py-0.5 rounded bg-surface-container-high';
-      noticeText.innerHTML = 'You are currently in <strong>Guest Spectator Mode</strong>. You can view all live bids, upcoming lots, and the remaining purse balance of every registered team.';
+      noticeText.innerHTML = 'You are currently in <strong>Guest Spectator Mode</strong>. You can view all live bids, upcoming lots, and the remaining purse balance of every registered team. Sign in with official credentials to place bids or administer auction.';
       guestLock.classList.remove('hidden');
       captainPanel.classList.add('hidden');
       adminPanel.classList.add('hidden');
+      if (adminDirectAssignBtn) adminDirectAssignBtn.classList.add('hidden');
       if (adminAddBtn) adminAddBtn.classList.add('hidden');
       if (adminSetupBtn) adminSetupBtn.classList.add('hidden');
-      document.getElementById('roleBtnGuest').classList.add('ring-2', 'ring-secondary-container');
+      if (adminResetBtn) adminResetBtn.classList.add('hidden');
+
+      if (authAccountText) authAccountText.textContent = 'Viewing Live Telemetry (No Session)';
+      if (authStatusPill) {
+        authStatusPill.textContent = 'GUEST';
+        authStatusPill.className = 'px-1.5 py-0.5 rounded bg-surface-container text-outline text-[10px] font-label-badge uppercase';
+      }
+      if (authSessionActions) {
+        authSessionActions.innerHTML = `
+          <a href="login.html?redirect=auction.html" class="px-3 py-1 bg-secondary-container hover:bg-secondary text-on-secondary text-xs font-headline-sm uppercase tracking-wider rounded transition-all flex items-center gap-1 shadow-sm">
+            <span class="material-symbols-outlined text-[14px]">login</span>
+            <span>Sign In to Bid / Administer</span>
+          </a>
+          <select onchange="if(this.value){ const parts=this.value.split(':'); switchRole(parts[0], parts[1]||undefined); }" class="bg-surface-container text-on-surface-variant hover:text-on-surface text-xs font-label-badge uppercase p-1 rounded border border-outline/20 focus:outline-none cursor-pointer">
+            <option value="" selected>Simulate (Dev Mode)...</option>
+            <option value="guest">👁️ Guest (View-Only)</option>
+            <option value="captain:team-nmims-cricket">🏏 STME Captain</option>
+            <option value="captain:team-cbit-cricket">🏏 CBIT Captain</option>
+            <option value="captain:team-bits-cricket">🏏 BITS Captain</option>
+            <option value="admin:">⚖️ Committee Admin</option>
+          </select>
+        `;
+      }
+      const btnG = document.getElementById('roleBtnGuest');
+      if (btnG) btnG.classList.add('ring-2', 'ring-secondary-container');
     } else if (role.role === 'captain') {
       const team = window.LegendsAuction.getTeam(role.teamId);
       badge.textContent = `🏏 ${role.title}`;
@@ -1072,17 +1116,52 @@
       guestLock.classList.add('hidden');
       captainPanel.classList.remove('hidden');
       adminPanel.classList.add('hidden');
+      if (adminDirectAssignBtn) adminDirectAssignBtn.classList.add('hidden');
       if (adminAddBtn) adminAddBtn.classList.add('hidden');
       if (adminSetupBtn) adminSetupBtn.classList.add('hidden');
+      if (adminResetBtn) adminResetBtn.classList.add('hidden');
+
+      if (authAccountText) authAccountText.textContent = `${role.captainName} (${team ? team.shortCode : 'Captain'})`;
+      if (authStatusPill) {
+        authStatusPill.textContent = 'CAPTAIN';
+        authStatusPill.className = 'px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container text-[10px] font-label-badge uppercase font-bold';
+      }
+      if (authSessionActions) {
+        authSessionActions.innerHTML = `
+          <a href="captain-dashboard.html" class="px-2.5 py-1 bg-primary-container hover:brightness-110 text-on-primary-container text-xs font-headline-sm uppercase tracking-wider rounded transition-all flex items-center gap-1 shadow-sm">
+            <span class="material-symbols-outlined text-[14px]">dashboard</span>
+            <span>Captains Suite ↗</span>
+          </a>
+          <button onclick="handleLogout()" class="px-2.5 py-1 bg-surface-container hover:bg-error hover:text-white text-on-surface-variant text-xs font-headline-sm uppercase tracking-wider rounded border border-outline/20 transition-all flex items-center gap-1">
+            <span class="material-symbols-outlined text-[14px]">logout</span>
+            <span>Sign Out</span>
+          </button>
+          <select onchange="if(this.value){ const parts=this.value.split(':'); switchRole(parts[0], parts[1]||undefined); }" class="bg-surface-container text-on-surface-variant hover:text-on-surface text-xs font-label-badge uppercase p-1 rounded border border-outline/20 focus:outline-none cursor-pointer">
+            <option value="">Switch Persona...</option>
+            <option value="guest">👁️ Guest (View-Only)</option>
+            <option value="captain:team-nmims-cricket" ${role.teamId === 'team-nmims-cricket' ? 'selected' : ''}>🏏 STME Captain</option>
+            <option value="captain:team-cbit-cricket" ${role.teamId === 'team-cbit-cricket' ? 'selected' : ''}>🏏 CBIT Captain</option>
+            <option value="captain:team-bits-cricket" ${role.teamId === 'team-bits-cricket' ? 'selected' : ''}>🏏 BITS Captain</option>
+            <option value="admin:">⚖️ Committee Admin</option>
+          </select>
+        `;
+      }
 
       const purseBadge = document.getElementById('captainPurseBadge');
       if (purseBadge && team) {
         purseBadge.textContent = `Your Available Purse: ${window.LegendsAuction.formatCurrency(team.remainingPurse)}`;
       }
 
-      if (role.teamId === 'team-nmims-cricket') document.getElementById('roleBtnStme').classList.add('ring-2', 'ring-secondary-container');
-      else if (role.teamId === 'team-cbit-cricket') document.getElementById('roleBtnCbit').classList.add('ring-2', 'ring-secondary-container');
-      else if (role.teamId === 'team-bits-cricket') document.getElementById('roleBtnBits').classList.add('ring-2', 'ring-secondary-container');
+      if (role.teamId === 'team-nmims-cricket') {
+        const b = document.getElementById('roleBtnStme');
+        if (b) b.classList.add('ring-2', 'ring-secondary-container');
+      } else if (role.teamId === 'team-cbit-cricket') {
+        const b = document.getElementById('roleBtnCbit');
+        if (b) b.classList.add('ring-2', 'ring-secondary-container');
+      } else if (role.teamId === 'team-bits-cricket') {
+        const b = document.getElementById('roleBtnBits');
+        if (b) b.classList.add('ring-2', 'ring-secondary-container');
+      }
     } else if (role.role === 'admin') {
       badge.textContent = '⚖️ Official Stage Auctioneer';
       badge.className = 'font-bold text-secondary-container px-2 py-0.5 rounded bg-secondary-container/20 border border-secondary-container/40';
@@ -1090,9 +1169,39 @@
       guestLock.classList.add('hidden');
       captainPanel.classList.add('hidden');
       adminPanel.classList.remove('hidden');
+      if (adminDirectAssignBtn) adminDirectAssignBtn.classList.remove('hidden');
       if (adminAddBtn) adminAddBtn.classList.remove('hidden');
       if (adminSetupBtn) adminSetupBtn.classList.remove('hidden');
-      document.getElementById('roleBtnAdmin').classList.add('ring-2', 'ring-secondary-container');
+      if (adminResetBtn) adminResetBtn.classList.remove('hidden');
+
+      if (authAccountText) authAccountText.textContent = `Official Auctioneer (${role.email || 'admin@nmims.edu.in'})`;
+      if (authStatusPill) {
+        authStatusPill.textContent = 'ADMIN';
+        authStatusPill.className = 'px-1.5 py-0.5 rounded bg-secondary-container text-on-secondary text-[10px] font-label-badge uppercase font-bold';
+      }
+      if (authSessionActions) {
+        authSessionActions.innerHTML = `
+          <a href="admin-console.html" class="px-2.5 py-1 bg-surface-container hover:bg-surface-container-high text-on-surface text-xs font-headline-sm uppercase tracking-wider rounded border border-outline/20 transition-all flex items-center gap-1 shadow-sm">
+            <span class="material-symbols-outlined text-[14px]">terminal</span>
+            <span>Scoring Console ↗</span>
+          </a>
+          <button onclick="handleLogout()" class="px-2.5 py-1 bg-surface-container hover:bg-error hover:text-white text-on-surface-variant text-xs font-headline-sm uppercase tracking-wider rounded border border-outline/20 transition-all flex items-center gap-1">
+            <span class="material-symbols-outlined text-[14px]">logout</span>
+            <span>Sign Out</span>
+          </button>
+          <select onchange="if(this.value){ const parts=this.value.split(':'); switchRole(parts[0], parts[1]||undefined); }" class="bg-surface-container text-on-surface-variant hover:text-on-surface text-xs font-label-badge uppercase p-1 rounded border border-outline/20 focus:outline-none cursor-pointer">
+            <option value="">Switch Persona...</option>
+            <option value="guest">👁️ Guest (View-Only)</option>
+            <option value="captain:team-nmims-cricket">🏏 STME Captain</option>
+            <option value="captain:team-cbit-cricket">🏏 CBIT Captain</option>
+            <option value="captain:team-bits-cricket">🏏 BITS Captain</option>
+            <option value="admin:" selected>⚖️ Committee Admin</option>
+          </select>
+        `;
+      }
+
+      const btnA = document.getElementById('roleBtnAdmin');
+      if (btnA) btnA.classList.add('ring-2', 'ring-secondary-container');
     }
   }
 
@@ -1489,6 +1598,10 @@
   }
 
   function resetAuctionData() {
+    if (!window.LegendsAuction.canAdmin()) {
+      alert('PERMISSION DENIED: You must be logged in as an official Tournament Admin to reset auction data.');
+      return;
+    }
     if (confirm('Reset entire auction room, team purses, and lots back to baseline?')) {
       window.LegendsAuction.resetToDefaults();
       renderAll();
@@ -1500,6 +1613,10 @@
 
   // 9. Team Setup Modal Handlers (Admin Manual Entry)
   function openTeamSetupModal() {
+    if (!window.LegendsAuction.canAdmin()) {
+      alert('PERMISSION DENIED: You must be logged in as an official Tournament Admin to manage teams and purses.');
+      return;
+    }
     renderAdminTeamsList();
     document.getElementById('setupTeamsModal').classList.remove('hidden');
   }
@@ -1588,6 +1705,10 @@
 
   // 10. Add Player Modal Handlers
   function openAddPlayerModal() {
+    if (!window.LegendsAuction.canAdmin()) {
+      alert('PERMISSION DENIED: You must be logged in as an official Tournament Admin to add player lots.');
+      return;
+    }
     document.getElementById('addPlayerModal').classList.remove('hidden');
   }
 
@@ -1651,6 +1772,10 @@
   let preselectedAssignLotId = null;
 
   function openDirectAssignModal(optionalLotId) {
+    if (!window.LegendsAuction.canAdmin()) {
+      alert('PERMISSION DENIED: You must be logged in as an official Tournament Admin to directly assign players.');
+      return;
+    }
     preselectedAssignLotId = optionalLotId || null;
     const modal = document.getElementById('directAssignModal');
     if (!modal) return;

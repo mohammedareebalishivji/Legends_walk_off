@@ -286,6 +286,28 @@
             <span class="material-symbols-outlined absolute right-3 text-on-surface-variant pointer-events-none text-lg">unfold_more</span>
           </div>
 
+          <!-- Optional Franchise Selector for Captain Role -->
+          <div id="captainFranchiseSelectGroup" class="hidden flex-col gap-1.5 mt-1.5 p-2.5 rounded-lg bg-surface-container-highest/70 border border-secondary-container/40">
+            <label class="font-label-badge text-[11px] text-secondary-container uppercase tracking-wider font-bold flex items-center gap-1" for="captainTeamSelect">
+              <span class="material-symbols-outlined text-sm">shield</span>
+              <span>Select Your Assigned Franchise Team:</span>
+            </label>
+            <div class="relative flex items-center">
+              <select class="w-full pl-3 pr-10 py-2 rounded bg-surface-container text-on-surface text-xs font-headline-sm uppercase focus:outline-none focus:ring-1 focus:ring-secondary-container appearance-none cursor-pointer border border-outline/30" id="captainTeamSelect">
+                <option value="team-nmims-cricket" selected>NMIMS STME Strikers (Capt. Vikramaditya)</option>
+                <option value="team-cbit-cricket">CBIT Thunder (Capt. Siddharth)</option>
+                <option value="team-bits-cricket">BITS Hyderabad (Capt. Rohan)</option>
+                <option value="team-vnr-cricket">VNR Warriors (Capt. Pranav)</option>
+                <option value="team-griet-cricket">GRIET Titans (Capt. Aditya)</option>
+                <option value="team-vasavi-cricket">Vasavi Spartans (Capt. Karthik)</option>
+              </select>
+              <span class="material-symbols-outlined absolute right-3 text-outline pointer-events-none text-base">unfold_more</span>
+            </div>
+            <span class="text-[10px] text-outline font-body-sm">
+              Your auction paddle and dashboard will be permanently locked to this franchise.
+            </span>
+          </div>
+
           <div id="roleDescriptionBox" class="mt-1 p-space-xs bg-surface-container-high border-l-2 border-secondary-container text-xs text-on-surface-variant flex items-start gap-2">
             <span class="material-symbols-outlined text-sm text-secondary-container mt-0.5">info</span>
             <span id="roleDescriptionText">Executive Super-Admin: Unrestricted arena control, emergency broadcast announcements, sponsor curation, and match finalization.</span>
@@ -429,9 +451,24 @@
 
   const roleSelect = document.getElementById('adminRole');
   const roleDesc = document.getElementById('roleDescriptionText');
-  if (roleSelect && roleDesc) {
+  const capGroup = document.getElementById('captainFranchiseSelectGroup');
+
+  function updateRoleUiState(roleValue) {
+    if (roleDesc) roleDesc.textContent = roleDescriptions[roleValue] || '';
+    if (capGroup) {
+      if (roleValue === 'captain') {
+        capGroup.classList.remove('hidden');
+        capGroup.classList.add('flex');
+      } else {
+        capGroup.classList.add('hidden');
+        capGroup.classList.remove('flex');
+      }
+    }
+  }
+
+  if (roleSelect) {
     roleSelect.addEventListener('change', function() {
-      roleDesc.textContent = roleDescriptions[this.value] || '';
+      updateRoleUiState(this.value);
     });
   }
 
@@ -440,7 +477,6 @@
     const emailInput = document.getElementById('adminEmail');
     const pwdInput = document.getElementById('adminPassword');
     const roleSelect = document.getElementById('adminRole');
-    const roleDesc = document.getElementById('roleDescriptionText');
 
     hideAuthError();
 
@@ -458,7 +494,7 @@
       if (pwdInput) pwdInput.value = target.pass;
       if (roleSelect) {
         roleSelect.value = role;
-        if (roleDesc) roleDesc.textContent = roleDescriptions[role] || '';
+        updateRoleUiState(role);
       }
 
       if (window.LegendsApp) {
@@ -559,6 +595,9 @@
           return;
         }
 
+        const capTeamInput = document.getElementById('captainTeamSelect');
+        const selectedTeamId = (role === 'captain' && capTeamInput) ? capTeamInput.value : (verifyResult.account && verifyResult.account.teamId ? verifyResult.account.teamId : null);
+
         // Valid credentials! Check if 2FA is requested
         if (is2fa) {
           // Switch to 2FA view
@@ -573,7 +612,8 @@
               name: verifyResult.account.name,
               rememberMe: remember,
               phoneHint: twoFaData.phoneHint,
-              demoCode: twoFaData.demoCode
+              demoCode: twoFaData.demoCode,
+              teamId: selectedTeamId
             };
 
             document.getElementById('twoFactorPhoneTarget').textContent = twoFaData.phoneHint;
@@ -599,14 +639,14 @@
           }, 600);
         } else {
           // Direct login without 2FA
-          completeLogin(email, role, remember, verifyResult.account.name);
+          completeLogin(email, role, remember, verifyResult.account.name, selectedTeamId);
         }
       }
     });
   }
 
   // 6. Complete Login & Redirect
-  function completeLogin(email, role, rememberMe, displayName) {
+  function completeLogin(email, role, rememberMe, displayName, teamId) {
     const btn = document.getElementById('submitBtn');
     if (btn) {
       btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">progress_activity</span><span>VERIFYING AUTHORIZATION...</span>';
@@ -615,7 +655,7 @@
 
     setTimeout(() => {
       if (window.LegendsRBAC) {
-        window.LegendsRBAC.login(email, role, rememberMe, displayName);
+        window.LegendsRBAC.login(email, role, rememberMe, displayName, teamId);
       }
 
       if (btn) {
@@ -729,16 +769,18 @@
           window.LegendsApp.showToast('2FA Verified! Establishing session...', 'success');
         }
 
+        const defaultRedirect = pendingAuthData.role === 'captain' ? 'captain-dashboard.html' : 'admin-console.html';
         window.LegendsRBAC.login(
           pendingAuthData.email,
           pendingAuthData.role,
           pendingAuthData.rememberMe,
-          pendingAuthData.name
+          pendingAuthData.name,
+          pendingAuthData.teamId
         );
 
         setTimeout(() => {
           const urlParams = new URLSearchParams(window.location.search);
-          const redirect = urlParams.get('redirect') || 'admin-console.html';
+          const redirect = urlParams.get('redirect') || defaultRedirect;
           window.location.href = redirect;
         }, 500);
       }

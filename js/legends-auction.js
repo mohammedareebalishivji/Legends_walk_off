@@ -453,14 +453,12 @@
     // -------------------------------------------------------------
     // ROLES & AUTH
     // -------------------------------------------------------------
+    // ROLES & AUTH (LOGIN-BASED CONTROL SYSTEM)
+    // -------------------------------------------------------------
     getActiveRole: function () {
-      try {
-        const customRole = localStorage.getItem(STORAGE_KEY_ROLE);
-        if (customRole) {
-          return JSON.parse(customRole);
-        }
-      } catch (e) {}
+      const state = this.getState();
 
+      // 1. Primary Authority: Authenticated Login Session (LegendsRBAC)
       try {
         const rbacSession = localStorage.getItem('legends_auth_session');
         if (rbacSession) {
@@ -469,7 +467,9 @@
             return {
               role: 'admin',
               title: auth.name || 'Official Auctioneer Admin',
-              teamId: null
+              teamId: null,
+              isLoggedIn: true,
+              email: auth.email
             };
           } else if (auth && auth.role === 'captain') {
             const team = state.teams.find(t => t.id === auth.teamId) || state.teams[0];
@@ -478,29 +478,55 @@
               title: `${team.captain} (Captain • ${team.shortCode})`,
               teamId: team.id,
               teamName: team.name,
-              captainName: team.captain
+              captainName: team.captain,
+              isLoggedIn: true,
+              email: auth.email
             };
           }
         }
       } catch (e) {}
 
+      // 2. Secondary / Explicit Override (for programmatic test compatibility)
+      try {
+        const customRole = localStorage.getItem(STORAGE_KEY_ROLE);
+        if (customRole) {
+          const parsed = JSON.parse(customRole);
+          if (parsed && parsed.role !== 'guest') {
+            return { ...parsed, isLoggedIn: true };
+          }
+        }
+      } catch (e) {}
+
+      // 3. Default: Unauthenticated Guest (Strict View-Only)
       return {
         role: 'guest',
-        title: 'Guest / Spectator (View-Only)',
-        teamId: null
+        title: 'Guest Spectator (View-Only)',
+        teamId: null,
+        isLoggedIn: false
       };
     },
 
     setActiveRole: function (roleType, teamId) {
-      let roleObj = { role: 'guest', title: 'Guest / Spectator (View-Only)', teamId: null };
+      let roleObj = { role: 'guest', title: 'Guest Spectator (View-Only)', teamId: null, isLoggedIn: false };
       const state = this.getState();
 
       if (roleType === 'admin') {
         roleObj = {
           role: 'admin',
           title: 'Official Auctioneer & Committee Admin',
-          teamId: null
+          teamId: null,
+          isLoggedIn: true
         };
+        const session = {
+          role: 'committee',
+          email: 'admin@nmims.edu.in',
+          name: 'Committee Admin',
+          institution: 'NMIMS Hyderabad STME Impulse',
+          token: 'AUTH-ADMIN-MOCK'
+        };
+        localStorage.setItem('legends_auth_session', JSON.stringify(session));
+        localStorage.setItem('legends_admin_logged_in', 'true');
+        localStorage.setItem('legends_admin_email', session.email);
       } else if (roleType === 'captain') {
         const team = state.teams.find(t => t.id === teamId) || state.teams[0];
         roleObj = {
@@ -508,12 +534,45 @@
           title: `${team.captain} (Captain • ${team.shortCode})`,
           teamId: team.id,
           teamName: team.name,
-          captainName: team.captain
+          captainName: team.captain,
+          isLoggedIn: true
         };
+        const session = {
+          role: 'captain',
+          teamId: team.id,
+          email: `captain.${team.shortCode.toLowerCase()}@nmims.edu.in`,
+          name: `${team.captain} (Captain)`,
+          institution: `${team.name} Franchise`,
+          token: 'AUTH-CAP-MOCK'
+        };
+        localStorage.setItem('legends_auth_session', JSON.stringify(session));
+        localStorage.setItem('legends_admin_logged_in', 'true');
+        localStorage.setItem('legends_admin_email', session.email);
+      } else {
+        localStorage.removeItem(STORAGE_KEY_ROLE);
+        localStorage.removeItem('legends_auth_session');
+        localStorage.removeItem('legends_admin_logged_in');
+        localStorage.removeItem('legends_admin_email');
       }
 
       localStorage.setItem(STORAGE_KEY_ROLE, JSON.stringify(roleObj));
       return roleObj;
+    },
+
+    // Login-based permission helpers
+    canAdmin: function () {
+      const active = this.getActiveRole();
+      return active.role === 'admin';
+    },
+
+    canBid: function () {
+      const active = this.getActiveRole();
+      return active.role === 'captain' || active.role === 'admin';
+    },
+
+    isAuthenticated: function () {
+      const active = this.getActiveRole();
+      return active.role !== 'guest' && !!active.isLoggedIn;
     },
 
     // -------------------------------------------------------------
@@ -713,6 +772,10 @@
     // amountOrIncrement: number (e.g. 1000000 for +10L, or custom exact amount)
     // isExactAmount: boolean (if true, sets lot.currentBid directly to amountOrIncrement)
     placeAdminBid: function (targetTeamId, amountOrIncrement, isExactAmount) {
+      if (!this.canAdmin()) {
+        throw new Error('PERMISSION DENIED: You must be logged in as an official Tournament Admin to log bids.');
+      }
+
       const state = this.getState();
       const lot = state.lots.find(l => l.id === state.activeLotId);
       if (!lot) throw new Error('No player lot is currently under the hammer.');
