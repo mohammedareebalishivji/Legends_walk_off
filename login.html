@@ -192,7 +192,7 @@
           <span class="material-symbols-outlined text-xs text-secondary-container">touch_app</span>
           Quick-Fill Official Accounts (1-Click Fill)
         </span>
-        <span class="font-label-badge text-[9px] text-outline uppercase font-mono">STME PASS: legends2026</span>
+        <span class="font-label-badge text-[9px] text-outline uppercase font-mono">STME PASS: <span class="normal-case text-secondary-container">legends2026</span></span>
       </div>
       <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
         <button type="button" onclick="quickFillAccount('committee')" class="p-2 rounded bg-surface-container-high hover:bg-surface-bright border border-secondary-container/30 hover:border-secondary-container text-left transition-all group flex flex-col justify-between">
@@ -200,35 +200,35 @@
             <span class="material-symbols-outlined text-sm">shield</span>
             <span>Admin</span>
           </div>
-          <div class="font-body-sm text-[10px] text-on-surface-variant truncate mt-1">admin@nmims.edu.in</div>
+          <div class="font-body-sm text-[9px] leading-tight text-on-surface-variant break-words mt-1">admin<wbr>@nmims.edu.in</div>
         </button>
         <button type="button" onclick="quickFillAccount('captain')" class="p-2 rounded bg-surface-container-high hover:bg-surface-bright border border-amber-600/40 hover:border-secondary-container text-left transition-all group flex flex-col justify-between">
           <div class="flex items-center gap-1 text-secondary-container font-headline-sm text-xs uppercase">
             <span class="material-symbols-outlined text-sm">badge</span>
             <span>Captain</span>
           </div>
-          <div class="font-body-sm text-[10px] text-on-surface-variant truncate mt-1">captain@nmims.edu.in</div>
+          <div class="font-body-sm text-[9px] leading-tight text-on-surface-variant break-words mt-1">captain<wbr>@nmims.edu.in</div>
         </button>
         <button type="button" onclick="quickFillAccount('cricket')" class="p-2 rounded bg-surface-container-high hover:bg-surface-bright border border-primary/30 hover:border-primary text-left transition-all group flex flex-col justify-between">
           <div class="flex items-center gap-1 text-primary font-headline-sm text-xs uppercase">
             <span class="material-symbols-outlined text-sm">sports_cricket</span>
             <span>Cricket</span>
           </div>
-          <div class="font-body-sm text-[10px] text-on-surface-variant truncate mt-1">cricket@nmims.edu.in</div>
+          <div class="font-body-sm text-[9px] leading-tight text-on-surface-variant break-words mt-1">cricket<wbr>@nmims.edu.in</div>
         </button>
         <button type="button" onclick="quickFillAccount('football')" class="p-2 rounded bg-surface-container-high hover:bg-surface-bright border border-tertiary/30 hover:border-tertiary text-left transition-all group flex flex-col justify-between">
           <div class="flex items-center gap-1 text-tertiary font-headline-sm text-xs uppercase">
             <span class="material-symbols-outlined text-sm">sports_soccer</span>
             <span>Football</span>
           </div>
-          <div class="font-body-sm text-[10px] text-on-surface-variant truncate mt-1">football@nmims.edu.in</div>
+          <div class="font-body-sm text-[9px] leading-tight text-on-surface-variant break-words mt-1">football<wbr>@nmims.edu.in</div>
         </button>
-        <button type="button" onclick="quickFillAccount('referees')" class="p-2 rounded bg-surface-container-high hover:bg-surface-bright border border-outline/30 hover:border-outline text-left transition-all group flex flex-col justify-between">
+        <button type="button" onclick="quickFillAccount('referees')" class="p-2 rounded bg-surface-container-high hover:bg-surface-bright border border-outline/30 hover:border-outline text-left transition-all group flex flex-col justify-between" title="Referees Panel: referee@nmims.edu.in (Pass: legends2026)">
           <div class="flex items-center gap-1 text-on-surface font-headline-sm text-xs uppercase">
             <span class="material-symbols-outlined text-sm">gavel</span>
             <span>Referees</span>
           </div>
-          <div class="font-body-sm text-[10px] text-on-surface-variant truncate mt-1">referee@nmims.edu.in</div>
+          <div class="font-body-sm text-[9px] leading-tight text-on-surface-variant break-words mt-1">referee<wbr>@nmims.edu.in</div>
         </button>
       </div>
     </div>
@@ -294,12 +294,7 @@
             </label>
             <div class="relative flex items-center">
               <select class="w-full pl-3 pr-10 py-2 rounded bg-surface-container text-on-surface text-xs font-headline-sm uppercase focus:outline-none focus:ring-1 focus:ring-secondary-container appearance-none cursor-pointer border border-outline/30" id="captainTeamSelect">
-                <option value="team-nmims-cricket" selected>NMIMS STME Strikers (Capt. Vikramaditya)</option>
-                <option value="team-cbit-cricket">CBIT Thunder (Capt. Siddharth)</option>
-                <option value="team-bits-cricket">BITS Hyderabad (Capt. Rohan)</option>
-                <option value="team-vnr-cricket">VNR Warriors (Capt. Pranav)</option>
-                <option value="team-griet-cricket">GRIET Titans (Capt. Aditya)</option>
-                <option value="team-vasavi-cricket">Vasavi Spartans (Capt. Karthik)</option>
+                <!-- Filled from the auction's registered teams on page load -->
               </select>
               <span class="material-symbols-outlined absolute right-3 text-outline pointer-events-none text-base">unfold_more</span>
             </div>
@@ -472,6 +467,53 @@
     });
   }
 
+  // Captain franchise list: registered teams of both auctions, grouped by sport
+  const CAPTAIN_SPORTS = [['cricket', '🏏 Cricket'], ['football', '⚽ Football']];
+
+  function populateCaptainTeams() {
+    const select = document.getElementById('captainTeamSelect');
+    if (!select || !window.LegendsAuction) return;
+    select.innerHTML = '';
+    CAPTAIN_SPORTS.forEach(([sport, label]) => {
+      const teams = window.LegendsAuction.getTeamsForSport(sport);
+      if (!teams.length) return;
+      const group = document.createElement('optgroup');
+      group.label = label;
+      teams.forEach(t => group.appendChild(new Option(`${t.shortCode} – ${t.name} (Capt. ${t.captain})`, t.id)));
+      select.appendChild(group);
+    });
+    if (!select.options.length) select.appendChild(new Option('No teams registered yet', ''));
+  }
+  document.addEventListener('DOMContentLoaded', populateCaptainTeams);
+
+  // Which sport a team belongs to, and the team itself (team ids are unique across sports)
+  function findCaptainTeamAnySport(teamId) {
+    if (!window.LegendsAuction || !teamId) return null;
+    for (const [sport] of CAPTAIN_SPORTS) {
+      const team = window.LegendsAuction.getTeamsForSport(sport).find(t => t.id === teamId);
+      if (team) return { sport, team };
+    }
+    return null;
+  }
+
+  // Captains go to their own sport's dashboard
+  function captainHome(teamId) {
+    const match = findCaptainTeamAnySport(teamId);
+    return match && match.sport === 'football' ? 'captain-dashboard?sport=football' : 'captain-dashboard.html';
+  }
+
+  // Keep role in sync when a registered official email is typed manually
+  const emailField = document.getElementById('adminEmail');
+  if (emailField && roleSelect) {
+    emailField.addEventListener('input', function() {
+      const account = window.LegendsRBAC && window.LegendsRBAC.findAccountByEmail(this.value);
+      if (account && roleSelect.value !== account.role) {
+        roleSelect.value = account.role;
+        updateRoleUiState(account.role);
+      }
+    });
+  }
+
   // 3. Quick Fill Official Accounts
   window.quickFillAccount = function(role) {
     const emailInput = document.getElementById('adminEmail');
@@ -482,10 +524,10 @@
 
     const accounts = {
       committee: { email: 'admin@nmims.edu.in', pass: 'legends2026' },
-      captain: { email: 'captain@nmims.edu.in', pass: 'captain2026' },
-      cricket: { email: 'cricket@nmims.edu.in', pass: 'cricket2026' },
-      football: { email: 'football@nmims.edu.in', pass: 'football2026' },
-      referees: { email: 'referee@nmims.edu.in', pass: 'referee2026' }
+      captain: { email: 'captain@nmims.edu.in', pass: 'legends2026' },
+      cricket: { email: 'cricket@nmims.edu.in', pass: 'legends2026' },
+      football: { email: 'football@nmims.edu.in', pass: 'legends2026' },
+      referees: { email: 'referee@nmims.edu.in', pass: 'legends2026' }
     };
 
     const target = accounts[role];
@@ -498,7 +540,7 @@
       }
 
       if (window.LegendsApp) {
-        window.LegendsApp.showToast('Selected official profile: ' + role.toUpperCase(), 'info');
+        window.LegendsApp.showToast('Selected official profile: ' + role.toUpperCase() + ' (Pass: legends2026)', 'info');
       }
     }
   };
@@ -597,6 +639,8 @@
 
         const capTeamInput = document.getElementById('captainTeamSelect');
         const selectedTeamId = (role === 'captain' && capTeamInput) ? capTeamInput.value : (verifyResult.account && verifyResult.account.teamId ? verifyResult.account.teamId : null);
+        const captainMatch = role === 'captain' ? findCaptainTeamAnySport(selectedTeamId) : null;
+        const displayName = captainMatch ? `${captainMatch.team.captain} (Captain)` : verifyResult.account.name;
 
         // Valid credentials! Check if 2FA is requested
         if (is2fa) {
@@ -609,7 +653,7 @@
             pendingAuthData = {
               email: email,
               role: role,
-              name: verifyResult.account.name,
+              name: displayName,
               rememberMe: remember,
               phoneHint: twoFaData.phoneHint,
               demoCode: twoFaData.demoCode,
@@ -628,10 +672,14 @@
             btn.innerHTML = '<span id="submitBtnText">AUTHENTICATE &amp; ENTER</span><span class="material-symbols-outlined text-lg" id="submitBtnIcon">bolt</span>';
             btn.classList.remove('opacity-80', 'pointer-events-none');
 
-            // Setup OTP countdown & focus first box
+            // Setup OTP countdown & pre-fill OTP boxes for seamless entry
             startOtpCountdown();
-            const firstBox = document.querySelector('.otp-box[data-index="0"]');
-            if (firstBox) firstBox.focus();
+            const demoCode = twoFaData.demoCode || '123456';
+            for (let i = 0; i < otpBoxes.length && i < demoCode.length; i++) {
+              otpBoxes[i].value = demoCode[i];
+            }
+            const verifyBtn = document.getElementById('verifyOtpBtn');
+            if (verifyBtn) verifyBtn.focus();
 
             if (window.LegendsApp) {
               window.LegendsApp.showToast(`2FA Code generated for ${twoFaData.phoneHint}`, 'info');
@@ -639,7 +687,7 @@
           }, 600);
         } else {
           // Direct login without 2FA
-          completeLogin(email, role, remember, verifyResult.account.name, selectedTeamId);
+          completeLogin(email, role, remember, displayName, selectedTeamId);
         }
       }
     });
@@ -670,7 +718,7 @@
 
       setTimeout(() => {
         const urlParams = new URLSearchParams(window.location.search);
-        const defaultRedirect = role === 'captain' ? 'captain-dashboard.html' : 'admin-console.html';
+        const defaultRedirect = role === 'captain' ? captainHome(teamId) : 'admin-console.html';
         const redirect = urlParams.get('redirect') || defaultRedirect;
         window.location.href = redirect;
       }, 600);
@@ -769,7 +817,7 @@
           window.LegendsApp.showToast('2FA Verified! Establishing session...', 'success');
         }
 
-        const defaultRedirect = pendingAuthData.role === 'captain' ? 'captain-dashboard.html' : 'admin-console.html';
+        const defaultRedirect = pendingAuthData.role === 'captain' ? captainHome(pendingAuthData.teamId) : 'admin-console.html';
         window.LegendsRBAC.login(
           pendingAuthData.email,
           pendingAuthData.role,
@@ -840,5 +888,6 @@
 </main>
 <script src="js/legends-core.js"></script>
 <script src="js/legends-rbac.js"></script>
+<script src="js/legends-auction.js"></script>
 </body>
 </html>

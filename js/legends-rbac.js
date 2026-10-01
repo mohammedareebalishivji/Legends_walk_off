@@ -100,7 +100,7 @@
       email: 'admin@nmims.edu.in',
       altEmails: ['committee@nmims.edu.in', 'superadmin@nmims.edu.in'],
       password: 'Admin@Legends2026',
-      aliases: ['legends2026', 'impulse2026', 'admin123', 'admin'],
+      aliases: ['legends2026', 'Admin@Legends2026', 'impulse2026', 'admin123', 'admin'],
       role: 'committee',
       name: 'Dr. Rajesh K.',
       title: 'Impulse Committee Executive Chairman',
@@ -112,20 +112,20 @@
       email: 'captain@nmims.edu.in',
       altEmails: ['captain.stme@nmims.edu.in', 'captains@nmims.edu.in', 'captain.cbit@nmims.edu.in'],
       password: 'Captain@Legends2026',
-      aliases: ['captain2026', 'captain123', 'captain', 'cap2026'],
+      aliases: ['legends2026', 'captain2026', 'Captain@Legends2026', 'captain123', 'captain', 'cap2026'],
       role: 'captain',
-      name: 'Vikramaditya (Captain)',
+      name: 'Krishna Patil (Captain)',
       title: 'Franchise Team Captain',
-      institution: 'NMIMS STME Strikers',
+      institution: 'Claude Super Kings',
       phone: '+91 98850 11234',
       phoneHint: '•••• 1234',
-      teamId: 'team-nmims-cricket'
+      teamId: 'team-csk'
     },
     {
       email: 'cricket@nmims.edu.in',
       altEmails: ['scorer.cricket@nmims.edu.in', 'cricket.scorer@nmims.edu.in'],
       password: 'Cricket@Scorer2026',
-      aliases: ['cricket2026', 'scorer123', 'cricket'],
+      aliases: ['legends2026', 'cricket2026', 'Cricket@Scorer2026', 'scorer123', 'cricket'],
       role: 'cricket',
       name: 'Arun Varma',
       title: 'BCCI Certified Cricket Scorer',
@@ -137,7 +137,7 @@
       email: 'football@nmims.edu.in',
       altEmails: ['scorer.football@nmims.edu.in', 'football.scorer@nmims.edu.in'],
       password: 'Football@Scorer2026',
-      aliases: ['football2026', 'scorer123', 'football'],
+      aliases: ['legends2026', 'football2026', 'Football@Scorer2026', 'scorer123', 'football'],
       role: 'football',
       name: 'Carlos Menezes',
       title: 'AIFF Match Official Scorer',
@@ -147,9 +147,9 @@
     },
     {
       email: 'referee@nmims.edu.in',
-      altEmails: ['panel@nmims.edu.in', 'referees@nmims.edu.in', 'judge@nmims.edu.in'],
+      altEmails: ['referee@nmims.ed', 'referee@nmims.edu', 'panel@nmims.edu.in', 'referees@nmims.edu.in', 'judge@nmims.edu.in'],
       password: 'Referee@Judge2026',
-      aliases: ['referee2026', 'judge123', 'referee'],
+      aliases: ['legends2026', 'referee2026', 'Referee@Judge2026', 'judge123', 'referee'],
       role: 'referees',
       name: 'Chief Referee S. Ramanathan',
       title: 'Match Referees Panel Head',
@@ -344,7 +344,7 @@
       
       const displayName = optionalName || (account ? account.name : (cleanEmail.split('@')[0].toUpperCase() + ' (Official)'));
       const institution = account ? account.institution : 'NMIMS Hyderabad STME Impulse';
-      const teamId = optionalTeamId || (account ? account.teamId : (roleId === 'captain' ? 'team-nmims-cricket' : null));
+      const teamId = optionalTeamId || (account ? account.teamId : (roleId === 'captain' ? 'team-csk' : null));
 
       const user = {
         email: cleanEmail,

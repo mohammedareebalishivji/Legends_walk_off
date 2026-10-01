@@ -39,16 +39,19 @@ global.window = {};
 require('../js/legends-auction.js');
 const Auction = global.window.LegendsAuction;
 
-it('1. Auction engine initializes with default teams, purses and player lots', () => {
+it('1. Auction engine initializes with the 10 League 2.0 teams, purses and player lots', () => {
   const state = Auction.getState();
-  assert(state.teams && state.teams.length >= 6, 'Should load at least 6 tournament teams');
+  assert.strictEqual(state.teams.length, 10, 'Should load the 10 League 2.0 franchises');
   assert(state.lots && state.lots.length >= 5, 'Should load auction player pool');
   assert(state.activeLotId, 'Should have an active lot ID on the hammer');
 
   const teams = Auction.getTeams();
-  const stme = teams.find(t => t.id === 'team-nmims-cricket');
-  assert(stme, 'NMIMS STME Strikers must exist');
-  assert.strictEqual(stme.totalPurse, 10000000, 'Total purse should be ₹1.00 Crore');
+  const stme = teams.find(t => t.id === 'team-csk');
+  assert(stme, 'Claude Super Kings must exist');
+  assert.strictEqual(stme.captain, 'Krishna Patil');
+  assert.strictEqual(stme.spentPurse, 0, 'New league teams start with a full purse');
+  assert.strictEqual(stme.totalPurse, 500000000, 'Total purse should be ₹50.00 Crore');
+  assert.strictEqual(Auction.formatCurrency(stme.totalPurse), '₹50.00 Cr');
   assert(stme.remainingPurse > 0, 'Remaining purse must be positive');
   assert.strictEqual(stme.remainingPurse, stme.totalPurse - stme.spentPurse);
 });
@@ -80,11 +83,11 @@ it('3. Guests can view remaining amounts and spent amounts of each team accurate
 });
 
 it('4. Registered team captain can place a valid bid on active lot', () => {
-  // Switch to Captain of CBIT Thunder
-  Auction.setActiveRole('captain', 'team-cbit-cricket');
+  // Switch to Captain of GitHub Titans
+  Auction.setActiveRole('captain', 'team-gt');
   const role = Auction.getActiveRole();
   assert.strictEqual(role.role, 'captain');
-  assert.strictEqual(role.teamId, 'team-cbit-cricket');
+  assert.strictEqual(role.teamId, 'team-gt');
 
   const beforeLot = Auction.getActiveLot();
   const prevBid = beforeLot.currentBid;
@@ -96,21 +99,21 @@ it('4. Registered team captain can place a valid bid on active lot', () => {
 
   const updatedLot = Auction.getActiveLot();
   assert.strictEqual(updatedLot.currentBid, prevBid + increment);
-  assert.strictEqual(updatedLot.highestBidderTeamId, 'team-cbit-cricket');
-  assert.strictEqual(updatedLot.highestBidderTeamName, 'CBIT Thunder');
+  assert.strictEqual(updatedLot.highestBidderTeamId, 'team-gt');
+  assert.strictEqual(updatedLot.highestBidderTeamName, 'GitHub Titans');
 });
 
 it('5. Team captain cannot bid consecutively if already the highest bidder', () => {
-  Auction.setActiveRole('captain', 'team-cbit-cricket');
+  Auction.setActiveRole('captain', 'team-gt');
   assert.throws(() => {
     Auction.placeBid(100000);
   }, /already the current highest bidder/);
 });
 
 it('6. Captain cannot bid more than their remaining team purse', () => {
-  // Switch to VNR Warriors captain
-  Auction.setActiveRole('captain', 'team-vnr-cricket');
-  const team = Auction.getTeam('team-vnr-cricket');
+  // Switch to Royal Challengers Blockchain captain
+  Auction.setActiveRole('captain', 'team-rcb');
+  const team = Auction.getTeam('team-rcb');
   const hugeIncrement = team.remainingPurse + 5000000; // Way above budget
 
   assert.throws(() => {
@@ -119,7 +122,7 @@ it('6. Captain cannot bid more than their remaining team purse', () => {
 });
 
 it('7. Non-admin users cannot strike hammer (SOLD or UNSOLD)', () => {
-  Auction.setActiveRole('captain', 'team-vnr-cricket');
+  Auction.setActiveRole('captain', 'team-rcb');
   assert.throws(() => {
     Auction.hammerSold();
   }, /PERMISSION DENIED/);
@@ -156,14 +159,14 @@ it('8. Admin can declare player SOLD, updating winning team purse and squad', ()
 
 it('9. Admin can nominate next player lot to active hammer', () => {
   Auction.setActiveRole('admin');
-  const res = Auction.nominateLot('lot-102');
+  const res = Auction.nominateLot('lot-203');
   assert(res.success);
-  assert.strictEqual(res.lot.id, 'lot-102');
+  assert.strictEqual(res.lot.id, 'lot-203');
   assert.strictEqual(res.lot.status, 'active');
 
   const active = Auction.getActiveLot();
-  assert.strictEqual(active.id, 'lot-102');
-  assert.strictEqual(active.name, 'Devansh Singhal');
+  assert.strictEqual(active.id, 'lot-203');
+  assert.strictEqual(active.name, 'Anant');
 });
 
 it('10. Admin can declare active player lot UNSOLD', () => {
@@ -196,17 +199,15 @@ it('12. Format currency handles Lakhs and Crores accurately', () => {
 });
 
 it('13. getTeamAllMembers returns full roster combining retained squad and auction drafted players', () => {
-  const members = Auction.getTeamAllMembers('team-nmims-cricket');
+  const members = Auction.getTeamAllMembers('team-csk');
   assert.ok(Array.isArray(members));
-  assert.ok(members.length >= 4, 'Should contain at least 4 members');
-  assert.ok(members.some(m => m.name === 'Vikramaditya' && m.type === 'Captain'));
-  assert.ok(members.some(m => m.name === 'Rohan Verma' && m.isRetained));
+  assert.ok(members.some(m => m.name === 'Krishna Patil' && m.type === 'Captain' && m.isRetained), 'Captain is the first squad member');
 });
 
-it('14. getOpponents returns all 5 opponent franchises with wallets, differences and squad members', () => {
-  const opponents = Auction.getOpponents('team-nmims-cricket');
-  assert.strictEqual(opponents.length, 5, 'Should have exactly 5 opponents');
-  assert.ok(!opponents.some(t => t.id === 'team-nmims-cricket'), 'Should not include my own team');
+it('14. getOpponents returns all 9 opponent franchises with wallets, differences and squad members', () => {
+  const opponents = Auction.getOpponents('team-csk');
+  assert.strictEqual(opponents.length, 9, 'Should have exactly 9 opponents');
+  assert.ok(!opponents.some(t => t.id === 'team-csk'), 'Should not include my own team');
   opponents.forEach(opp => {
     assert.ok(typeof opp.remainingPurse === 'number', 'Opponent should have remaining purse');
     assert.ok(Array.isArray(opp.allMembers), 'Opponent should have allMembers array');
@@ -233,22 +234,22 @@ it('15. Dynamic bidding increments calculate 10L (<1Cr), 20L (1Cr-3Cr), and 25L 
 it('16. Admin can place bids on behalf of teams with dynamic increments and custom exact bids', () => {
   // Nominate fresh lot
   Auction.setActiveRole('admin');
-  Auction.nominateLot('lot-104');
+  Auction.nominateLot('lot-205');
   const lot = Auction.getActiveLot();
-  assert.strictEqual(lot.id, 'lot-104');
+  assert.strictEqual(lot.id, 'lot-205');
   const startBid = lot.currentBid;
 
-  // Place dynamic tier bid for STME
-  const res1 = Auction.placeAdminBid('team-nmims-cricket');
+  // Place dynamic tier bid for CSK
+  const res1 = Auction.placeAdminBid('team-csk');
   assert.ok(res1.success);
   assert.strictEqual(res1.newBid, startBid + 1000000); // +10L
-  assert.strictEqual(res1.lot.highestBidderTeamId, 'team-nmims-cricket');
+  assert.strictEqual(res1.lot.highestBidderTeamId, 'team-csk');
 
-  // Place exact custom bid for CBIT
-  const res2 = Auction.placeAdminBid('team-cbit-cricket', 3500000, true);
+  // Place exact custom bid for GT
+  const res2 = Auction.placeAdminBid('team-gt', 3500000, true);
   assert.ok(res2.success);
   assert.strictEqual(res2.newBid, 3500000);
-  assert.strictEqual(res2.lot.highestBidderTeamId, 'team-cbit-cricket');
+  assert.strictEqual(res2.lot.highestBidderTeamId, 'team-gt');
 });
 
 it('17. Undo last bid reverts bid amount and previous highest bidder', () => {
@@ -260,7 +261,7 @@ it('17. Undo last bid reverts bid amount and previous highest bidder', () => {
   const undoRes = Auction.undoLastBid();
   assert.ok(undoRes.success);
   const lotAfter = Auction.getActiveLot();
-  assert.strictEqual(lotAfter.highestBidderTeamId, 'team-nmims-cricket');
+  assert.strictEqual(lotAfter.highestBidderTeamId, 'team-csk');
   assert(lotAfter.currentBid < 3500000);
 });
 
@@ -324,7 +325,7 @@ it('20. Excel CSV export generates valid report with wallets, squads, and player
 
 it('21. Admin can directly put player into team and deduct amount from their wallet', () => {
   Auction.setActiveRole('admin');
-  const teamId = 'team-cbit-cricket';
+  const teamId = 'team-gt';
   const teamBefore = Auction.getTeam(teamId);
   const remainingBefore = teamBefore.remainingPurse;
   const deductionPrice = 2500000; // ₹25.00 Lakh
@@ -352,7 +353,7 @@ it('21. Admin can directly put player into team and deduct amount from their wal
 
 it('22. Direct assignment strictly enforces purse limit', () => {
   Auction.setActiveRole('admin');
-  const teamId = 'team-vnr-cricket';
+  const teamId = 'team-rcb';
   const team = Auction.getTeam(teamId);
   const excessivePrice = team.remainingPurse + 5000000; // 50L more than remaining
 
@@ -367,7 +368,7 @@ it('22. Direct assignment strictly enforces purse limit', () => {
 
 it('23. Undo direct assignment refunds the franchise purse and removes player', () => {
   Auction.setActiveRole('admin');
-  const teamId = 'team-cbit-cricket';
+  const teamId = 'team-gt';
   const teamBeforeUndo = Auction.getTeam(teamId);
   const purseBeforeUndo = teamBeforeUndo.remainingPurse;
 
@@ -384,10 +385,10 @@ it('23. Undo direct assignment refunds the franchise purse and removes player', 
 });
 
 it('24. Non-admin users (captains and guests) are strictly blocked from direct player assignment', () => {
-  Auction.setActiveRole('captain', 'team-nmims-cricket');
+  Auction.setActiveRole('captain', 'team-csk');
   assert.throws(() => {
     Auction.adminDirectAssignPlayer({
-      teamId: 'team-nmims-cricket',
+      teamId: 'team-csk',
       playerName: 'Captain Self Assign',
       price: 1000000
     });
@@ -396,11 +397,251 @@ it('24. Non-admin users (captains and guests) are strictly blocked from direct p
   Auction.setActiveRole('guest');
   assert.throws(() => {
     Auction.adminDirectAssignPlayer({
-      teamId: 'team-nmims-cricket',
+      teamId: 'team-csk',
       playerName: 'Guest Assign',
       price: 1000000
     });
   }, /PERMISSION DENIED: Only Admin/);
+});
+
+it('25. Admin mass-imports players pasted from Google Sheets (tabs, mixed headers, lakh/crore prices, Drive photos)', () => {
+  Auction.setActiveRole('admin');
+  const sheet = [
+    'Timestamp\tPlayer Name\tCollege Name\tPlaying Role\tBase Price\tUpload your photo',
+    '1/10/2026\tRahul Mehta\tNMIMS STME\tBatsman\t10L\thttps://drive.google.com/open?id=1AbC_dEf-123',
+    '1/10/2026\tSahil Khan\tNMIMS SBM\tFast Bowler\t1.5 Cr\t',
+    '1/10/2026\tRahul Mehta\tNMIMS STME\tBatsman\t10L\t',
+    '1/10/2026\tAmit Roy\tNMIMS\tBowler\tabc\t',
+    '1/10/2026\t\tNMIMS\tBowler\t10\t'
+  ].join('\n');
+
+  const preview = Auction.previewImport(sheet);
+  assert.strictEqual(preview.playerRows, 5);
+  assert.strictEqual(preview.columns.name, 'Player Name');
+  assert.strictEqual(preview.columns.institution, 'College Name');
+
+  const res = Auction.importPlayers(sheet);
+  assert.strictEqual(res.added, 2);
+  assert.deepStrictEqual(res.skipped.map(s => s.row), [4, 5, 6], 'Duplicate, bad price and blank name rows are skipped');
+
+  const [rahul, sahil] = res.players;
+  assert.strictEqual(rahul.category, 'Cricket • Batsman');
+  assert.strictEqual(rahul.institution, 'NMIMS STME');
+  assert.strictEqual(rahul.basePrice, 1000000);
+  assert.strictEqual(rahul.currentBid, 1000000);
+  assert.strictEqual(rahul.avatar, 'https://drive.google.com/thumbnail?id=1AbC_dEf-123&sz=w800');
+  assert.strictEqual(sahil.basePrice, 15000000);
+  assert.ok(sahil.avatar.startsWith('data:image/svg+xml'), 'Players without a photo get an initials placeholder');
+  assert.notStrictEqual(rahul.id, sahil.id, 'Each imported lot gets a unique id');
+});
+
+it('26. Import handles quoted CSV cells, infers football roles, and can replace the unsold pool', () => {
+  Auction.setActiveRole('admin');
+  const soldBefore = Auction.getLots().filter(l => l.status === 'sold').length;
+  const csv = 'name,role,price\n"Dsouza, Neil","Striker, left foot",1200000\nVikram Rao,All-Rounder,\n';
+
+  const res = Auction.importPlayers(csv, { replacePool: true });
+  assert.strictEqual(res.added, 2);
+  const lots = Auction.getLots();
+  assert.strictEqual(lots.filter(l => l.status !== 'sold').length, 2, 'Only the imported players remain unsold');
+  assert.strictEqual(lots.filter(l => l.status === 'sold').length, soldBefore, 'Sold players stay with their teams');
+
+  const neil = lots.find(l => l.name === 'Dsouza, Neil');
+  assert.strictEqual(neil.sport, 'football');
+  assert.strictEqual(neil.category, 'Football • Striker, left foot');
+  assert.strictEqual(lots.find(l => l.name === 'Vikram Rao').basePrice, 1000000, 'Blank price uses the ₹10 Lakh default');
+  assert.strictEqual(Auction.getActiveLot().name, 'Dsouza, Neil', 'First imported player goes on the hammer');
+});
+
+it('27. Failed imports change nothing, and only admins can import', () => {
+  Auction.setActiveRole('admin');
+  const before = JSON.stringify(Auction.getState());
+  assert.throws(() => Auction.importPlayers('Role,Price\nBatsman,10L', { replacePool: true }), /Could not find a "Name" column/);
+  assert.throws(() => Auction.importPlayers('Name,Price\n,10L', { replacePool: true }), /No players were imported/);
+  assert.strictEqual(JSON.stringify(Auction.getState()), before);
+
+  Auction.setActiveRole('captain', 'team-csk');
+  assert.throws(() => Auction.importPlayers('Name\nSneaky Player'), /PERMISSION DENIED/);
+});
+
+it('28. Browsers holding the old ₹1 Cr purses are upgraded to ₹50 Cr without losing players or spend', () => {
+  const key = 'legends_auction_state_v2';
+  const state = JSON.parse(localStorage.getItem(key));
+  delete state.purse50CrApplied;
+  state.teams[0].totalPurse = 10000000;
+  state.teams[0].spentPurse = 2500000;
+  state.teams[0].acquiredPlayers = [{ id: 'sold-x', name: 'Kept Player', role: 'Batsman', price: 2500000, time: '1:00 PM' }];
+  state.teams[1].totalPurse = 70000000; // admin-customised purse stays as it is
+  localStorage.setItem(key, JSON.stringify(state));
+
+  const upgraded = Auction.getTeams();
+  assert.strictEqual(upgraded[0].totalPurse, 500000000);
+  assert.strictEqual(upgraded[0].spentPurse, 2500000);
+  assert.strictEqual(upgraded[0].remainingPurse, 497500000);
+  assert.ok(upgraded[0].acquiredPlayers.some(p => p.name === 'Kept Player'));
+  assert.strictEqual(upgraded[1].totalPurse, 70000000);
+  assert.strictEqual(Auction.getState().purse50CrApplied, true);
+});
+
+it('37. Admin empties the player pool; sold players stay with the franchises that bought them', () => {
+  Auction.setActiveRole('admin');
+  const before = Auction.getLots();
+  const soldBefore = before.filter(l => l.status === 'sold');
+  const bidableBefore = before.filter(l => l.status !== 'sold');
+  assert(bidableBefore.length > 0, 'Pool starts with players up for bidding');
+
+  const res = Auction.clearPlayerPool();
+  assert.strictEqual(res.removed, bidableBefore.length);
+  assert.strictEqual(res.keptSold, soldBefore.length);
+
+  const after = Auction.getLots();
+  assert.strictEqual(after.filter(l => l.status !== 'sold').length, 0, 'Nothing is left to bid on');
+  after.forEach(l => assert.strictEqual(l.status, 'sold', 'Only already-sold lots survive'));
+  assert.strictEqual(Auction.getActiveLot(), null, 'Hammer is empty');
+  assert.throws(() => Auction.hammerSold(), /No player lot found on hammer/);
+  assert.throws(() => Auction.placeAdminBid('team-csk'), /No player lot is currently under the hammer/);
+});
+
+it('38. Undo Hammer brings every cleared player lot back, in order and on the hammer', () => {
+  const res = Auction.undoLastAction();
+  assert(/Pool restored/.test(res.message));
+
+  const lots = Auction.getLots();
+  const bidable = lots.filter(l => l.status !== 'sold');
+  assert.strictEqual(bidable.length, 2, 'Both imported players are back');
+  assert.deepStrictEqual(bidable.map(l => l.name), ['Dsouza, Neil', 'Vikram Rao'], 'Original pool order preserved');
+  assert.strictEqual(Auction.getActiveLot().status, 'active', 'A lot is back on the hammer');
+
+  // Clearing and restoring repeatedly must not lose or duplicate lots
+  const total = lots.length;
+  Auction.clearPlayerPool();
+  Auction.undoLastAction();
+  assert.strictEqual(Auction.getLots().length, total, 'Restore is repeatable');
+});
+
+it('39. Only admins can empty the pool, and an already-empty pool is refused', () => {
+  Auction.setActiveRole('captain', 'team-csk');
+  assert.throws(() => Auction.clearPlayerPool(), /PERMISSION DENIED/);
+  Auction.setActiveRole('guest');
+  assert.throws(() => Auction.clearPlayerPool(), /PERMISSION DENIED/);
+
+  Auction.setActiveRole('admin');
+  Auction.clearPlayerPool();
+  assert.throws(() => Auction.clearPlayerPool(), /already empty/);
+  Auction.undoLastAction();
+});
+
+// ---------------------------------------------------------------
+// FOOTBALL AUCTION: same engine loaded the way football pages load it (?sport=football)
+// ---------------------------------------------------------------
+const cricketStateBefore = localStorage.getItem('legends_auction_state_v2');
+delete require.cache[require.resolve('../js/legends-auction.js')];
+global.window = { location: { search: '?sport=football', href: 'http://localhost:3001/auction?sport=football', origin: 'http://localhost:3001' } };
+require('../js/legends-auction.js');
+const Football = global.window.LegendsAuction;
+
+it('29. Football auction loads the 6 League 2.0 football clubs and captains with ₹50 Cr wallets', () => {
+  assert.strictEqual(Football.sport, 'football');
+  const teams = Football.getTeams();
+  assert.deepStrictEqual(teams.map(t => `${t.shortCode}:${t.captain}`), [
+    'MUN:Krishna Patil', 'ATM:Vedant Raj', 'MCI:Tanish Tiwari', 'FCB:Abhi Gupta', 'PSG:Utsav Baradwaj', 'RMA:Karnika Gupta'
+  ]);
+  const psg = Football.getTeam('team-psg');
+  assert.strictEqual(psg.name, 'Python Saint-Germain');
+  assert.strictEqual(psg.sport, 'football');
+  assert.strictEqual(psg.totalPurse, 500000000);
+  assert.strictEqual(psg.spentPurse, 0);
+});
+
+it('30. Football pool has all 77 registered players, first one on the hammer', () => {
+  const lots = Football.getLots();
+  assert.strictEqual(lots.length, 77);
+  assert.ok(lots.every(l => l.sport === 'football' && ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'].includes(l.specialism)));
+  ['Abhishek Rajput', 'Pranshu Sharma', 'Yash Kavar', 'Ayaan Patel'].forEach(name => {
+    assert.ok(lots.some(l => l.name === name), `${name} is a cricket captain but a football player`);
+  });
+  const smriti = lots.find(l => l.name === 'Smriti Patel');
+  assert.strictEqual(smriti.category, 'Football • Midfielder');
+  assert.strictEqual(smriti.institution, '1st Year • Female');
+  assert.strictEqual(smriti.basePrice, 1000000);
+  assert.strictEqual(Football.getActiveLot().name, 'Akhila');
+});
+
+it('31. Football uses the same bidding rules, and its wallets never touch the cricket auction', () => {
+  Football.setActiveRole('admin');
+  Football.placeAdminBid('team-psg');
+  assert.strictEqual(Football.getActiveLot().currentBid, 2000000, 'Same +10L tier step as cricket');
+  const sold = Football.hammerSold();
+  assert.strictEqual(sold.team.id, 'team-psg');
+  assert.strictEqual(Football.getTeam('team-psg').spentPurse, 2000000);
+  assert.ok(Football.getTeamAllMembers('team-psg').some(m => m.name === 'Akhila'));
+
+  assert.ok(localStorage.getItem('legends_football_auction_state_v2'), 'Football has its own saved state');
+  assert.strictEqual(localStorage.getItem('legends_auction_state_v2'), cricketStateBefore, 'Cricket state is untouched');
+});
+
+it('33. Captains land on their own team in each sport; cricket-only captains are view-only in football', () => {
+  const signIn = (teamId, name) => localStorage.setItem('legends_auth_session', JSON.stringify({ role: 'captain', teamId, name: `${name} (Captain)` }));
+
+  signIn('team-psg', 'Utsav Baradwaj');
+  assert.strictEqual(Football.getActiveRole().teamId, 'team-psg');
+
+  signIn('team-csk', 'Krishna Patil'); // signed in with the cricket team, captains MUN in football
+  assert.strictEqual(Football.getActiveRole().teamId, 'team-mun');
+
+  signIn('team-dc', 'Pranshu Sharma'); // DC cricket captain, only a player in football
+  assert.strictEqual(Football.getActiveRole().role, 'guest');
+  assert.throws(() => Football.placeBid(1000000), /GUEST ACCESS IS VIEW-ONLY/);
+  localStorage.removeItem('legends_auth_session');
+});
+
+it('34. Login page can list both sports’ teams', () => {
+  assert.strictEqual(Football.getTeamsForSport('cricket').length, 10);
+  assert.strictEqual(Football.getTeamsForSport('football').length, 6);
+  assert.strictEqual(Football.getTeamsForSport('football')[0].name, 'Metaverse United');
+  assert.deepStrictEqual(Football.getTeamsForSport('hockey'), []);
+});
+
+it('32. Links between auction pages keep the football sport', () => {
+  assert.strictEqual(Football.withSport('mph-screen.html'), 'mph-screen?sport=football');
+  assert.strictEqual(Football.withSport('captain-dashboard.html#squad'), 'captain-dashboard?sport=football#squad');
+  assert.strictEqual(Football.withSport('login.html?redirect=auction.html'), 'login?redirect=auction%3Fsport%3Dfootball');
+  assert.strictEqual(Football.withSport('standings.html'), 'standings.html', 'Non-auction pages are left alone');
+});
+
+it('35. Signing a captain in from the other sport keeps their real team (login page runs the cricket engine)', () => {
+  Football.setActiveRole('captain', 'team-csk'); // a cricket team, set while the football engine is loaded
+  const session = JSON.parse(localStorage.getItem('legends_auth_session'));
+  assert.strictEqual(session.teamId, 'team-csk');
+  assert.strictEqual(session.name, 'Krishna Patil (Captain)');
+  assert.strictEqual(Football.getActiveRole().teamId, 'team-mun', 'Krishna Patil captains MUN in football');
+  localStorage.removeItem('legends_auth_session');
+});
+
+it('36. Scorer logins are not wiped when the session is synced into the auction engine', () => {
+  localStorage.setItem('legends_auth_session', JSON.stringify({ role: 'cricket', email: 'cricket@nmims.edu.in', name: 'Arun Varma' }));
+  Football.setActiveRole('cricket');
+  assert.ok(localStorage.getItem('legends_auth_session'), 'Session survives');
+  assert.strictEqual(Football.getActiveRole().role, 'admin');
+  localStorage.removeItem('legends_auth_session');
+});
+
+it('40. Football pool empties independently, leaving the cricket auction untouched', () => {
+  Football.setActiveRole('admin');
+  const cricketLots = Auction.getLots().length;
+  const footballLots = Football.getLots().length;
+  assert.strictEqual(footballLots, 77);
+
+  const res = Football.clearPlayerPool();
+  assert.strictEqual(res.removed, 76);
+  assert.strictEqual(res.keptSold, 1, 'Akhila already went to PSG in test 31');
+  assert.strictEqual(Football.getLots().filter(l => l.status !== 'sold').length, 0, 'Football has nothing left to bid on');
+  assert.strictEqual(Football.getActiveLot(), null);
+  assert.strictEqual(Auction.getLots().length, cricketLots, 'Cricket pool is unaffected');
+
+  Football.undoLastAction();
+  assert.strictEqual(Football.getLots().length, footballLots, 'Football pool fully restored');
+  assert.strictEqual(Football.getActiveLot().status, 'active');
 });
 
 console.log('\n----------------------------------------------------');

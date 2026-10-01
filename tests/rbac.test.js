@@ -155,9 +155,9 @@ it('Admin user passes page guard and accesses scoring console', () => {
 });
 
 it('Logging in as team captain saves session with captain role and teamId', () => {
-  const cap = RBAC.login('captain.stme@nmims.edu.in', 'captain', true, 'Vikramaditya', 'team-nmims-cricket');
+  const cap = RBAC.login('captain.stme@nmims.edu.in', 'captain', true, 'Krishna Patil', 'team-csk');
   assert.strictEqual(cap.role, 'captain');
-  assert.strictEqual(cap.teamId, 'team-nmims-cricket');
+  assert.strictEqual(cap.teamId, 'team-csk');
   assert.strictEqual(RBAC.hasPermission('wallet:view'), true);
   assert.strictEqual(RBAC.hasPermission('cricket:score'), false);
 });
@@ -170,7 +170,7 @@ it('setRole dynamically switches captain role and franchise identity', () => {
 });
 
 it('Team Captain is guarded from official match scoring console', () => {
-  RBAC.setRole('captain', 'team-nmims-cricket');
+  RBAC.setRole('captain', 'team-csk');
   assert.strictEqual(RBAC.isAuthenticated(), true);
   const allowed = RBAC.enforcePageGuard();
   assert.strictEqual(allowed, false, 'Captain must be blocked from admin scoring console');

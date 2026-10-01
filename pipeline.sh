@@ -43,6 +43,10 @@ if command -v node >/dev/null 2>&1; then
   echo "  ✓ js/legends-roster.js syntax verified"
   node -c js/legends-auction.js
   echo "  ✓ js/legends-auction.js syntax verified"
+  node -c js/legends-realtime.js
+  echo "  ✓ js/legends-realtime.js syntax verified"
+  node -c server.js
+  echo "  ✓ server.js syntax verified"
 fi
 
 # Verify required core files
@@ -58,10 +62,12 @@ REQUIRED_FILES=(
   "mobile-admin.html"
   "mph-screen.html"
   "captain-dashboard.html"
+  "server.js"
   "js/legends-core.js"
   "js/legends-rbac.js"
   "js/legends-roster.js"
   "js/legends-auction.js"
+  "js/legends-realtime.js"
   "assets/logo.png"
   "assets/hero-banner.png"
 )
@@ -76,12 +82,13 @@ for file in "${REQUIRED_FILES[@]}"; do
 done
 
 # STAGE 3: RUN RBAC, ROSTER, AUCTION & LOGIN AUTH TEST SUITES
-echo -e "\n🧪 [STAGE 3/5] Executing RBAC Security, Roster, Auction & Login Auth Test Suites..."
+echo -e "\n🧪 [STAGE 3/5] Executing RBAC Security, Roster, Auction, Login & Realtime Test Suites..."
 if command -v node >/dev/null 2>&1; then
   node tests/rbac.test.js
   node tests/roster.test.js
   node tests/auction.test.js
   node tests/login.test.js
+  node tests/realtime.test.js
 else
   echo "  ⚠ Skipping node tests (Node.js required)."
 fi
@@ -95,6 +102,8 @@ cp *.html dist/
 cp js/*.js dist/js/
 cp -r assets/* dist/assets/
 cp README.md dist/
+cp server.js dist/ 2>/dev/null || true
+cp package.json dist/ 2>/dev/null || true
 
 DIST_COUNT=$(find dist -type f | wc -l | tr -d ' ')
 echo "  ✓ Created dist/ artifact with $DIST_COUNT bundled files"
@@ -127,6 +136,7 @@ if command -v python3 >/dev/null 2>&1; then
     "js/legends-rbac.js"
     "js/legends-roster.js"
     "js/legends-auction.js"
+    "js/legends-realtime.js"
   )
 
   ALL_SUCCESS=true

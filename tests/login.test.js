@@ -146,8 +146,8 @@ it('6b. Team Captain authenticates with captain credentials and receives captain
   const res = RBAC.verifyCredentials('captain@nmims.edu.in', 'captain2026', 'captain');
   assert.strictEqual(res.success, true);
   assert.strictEqual(res.account.role, 'captain');
-  assert(res.account.name.includes('Vikramaditya'));
-  assert.strictEqual(res.account.teamId, 'team-nmims-cricket');
+  assert(res.account.name.includes('Krishna Patil'));
+  assert.strictEqual(res.account.teamId, 'team-csk');
 });
 
 it('7. Rejects invalid password for registered official', () => {

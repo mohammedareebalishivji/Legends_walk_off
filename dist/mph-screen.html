@@ -38,6 +38,27 @@
   50% { box-shadow: 0 0 50px rgba(130, 162, 225, 0.85); }
 }
 .bid-glow { animation: pulseGlow 1.2s infinite ease-in-out; }
+/* All Teams wall: each card scales its text with its own width */
+.wall-card { container-type: inline-size; }
+.wall-chip { width: clamp(30px, 15cqw, 58px); height: clamp(30px, 15cqw, 58px); font-size: clamp(10px, 5.2cqw, 19px); }
+.wall-name { font-size: clamp(13px, 7cqw, 28px); }
+.wall-captain { font-size: clamp(10px, 4.4cqw, 15px); }
+.wall-purse { font-size: clamp(18px, 12cqw, 46px); }
+.wall-meta { font-size: clamp(9px, 3.8cqw, 13px); }
+.wall-members { font-size: max(10px, calc(clamp(10px, 4.4cqw, 15px) * var(--member-scale, 1))); }
+.wall-members.two-col { columns: 2; column-gap: 0.9em; }
+.wall-members.two-col .member-price { display: none; } /* narrow columns: names only, purse totals cover the money */
+.wall-members > li { break-inside: avoid; }
+/* When the wall is fitted to the screen, short cards drop the purse bar and label to give the squad more room */
+.wall-fit .wall-card { container-type: size; }
+@container (max-height: 340px) {
+  .wall-progress, .wall-purse-label { display: none; }
+}
+/* Dual view: the spotlight copy shares the screen with the wall, so it is laid out side by side at a smaller size */
+#splitSpotlightContainer .spot-photo { min-height: 0; aspect-ratio: auto; }
+#splitSpotlightContainer #mphPlayerName { font-size: clamp(2rem, 3.4vw, 4.5rem); }
+#splitSpotlightContainer #mphCurrentBid { font-size: clamp(2.25rem, 3.6vw, 5rem); }
+#splitSpotlightContainer #mphLeaderTeam { font-size: clamp(1.25rem, 1.9vw, 2.5rem); }
 </style>
 <script src="https://cdn.tailwindcss.com"></script>
 <script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{
@@ -124,25 +145,30 @@
     <div class="flex items-center gap-1.5 bg-surface-container-lowest/80 p-1 rounded-lg border border-outline-variant/40">
       <button onclick="setScreenView('spotlight')" id="viewBtnSpotlight" class="px-3 py-1.5 rounded font-headline-sm uppercase text-xs tracking-wider transition-all flex items-center gap-1.5 bg-primary-container text-on-primary-container shadow-md">
         <span class="material-symbols-outlined text-sm">gavel</span>
-        <span>Live Hammer Spotlight</span>
+        <span class="whitespace-nowrap">Spotlight</span>
       </button>
 
       <button onclick="setScreenView('master-wall')" id="viewBtnMasterWall" class="px-3 py-1.5 rounded font-headline-sm uppercase text-xs tracking-wider transition-all flex items-center gap-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high">
         <span class="material-symbols-outlined text-sm">grid_view</span>
-        <span>All Teams Master Wall</span>
+        <span class="whitespace-nowrap">All Teams</span>
       </button>
 
       <button onclick="setScreenView('split')" id="viewBtnSplit" class="hidden md:flex px-3 py-1.5 rounded font-headline-sm uppercase text-xs tracking-wider transition-all items-center gap-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high">
         <span class="material-symbols-outlined text-sm">splitscreen</span>
-        <span>Dual Stage View</span>
+        <span class="whitespace-nowrap">Dual View</span>
       </button>
     </div>
 
     <!-- Quick Links & Fullscreen -->
     <div class="flex items-center gap-2 shrink-0">
+      <div data-sport-switch></div>
+      <a href="auction.html" class="inline-flex items-center gap-1 px-3 py-1.5 bg-surface-container-high hover:bg-primary-container hover:text-on-primary-container text-primary text-xs font-headline-sm uppercase tracking-wider rounded border border-primary/30 transition-all" title="Return to Official Auctioneer Desk">
+        <span class="material-symbols-outlined text-[15px]">gavel</span>
+        <span class="hidden md:inline whitespace-nowrap">Auction Desk</span>
+      </a>
       <a href="captain-dashboard.html" class="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 bg-surface-container-high hover:bg-secondary-container hover:text-on-secondary text-secondary-container text-xs font-headline-sm uppercase tracking-wider rounded border border-secondary-container/30 transition-all">
         <span class="material-symbols-outlined text-[15px]">sports_cricket</span>
-        <span>Captains Console</span>
+        <span class="hidden xl:inline whitespace-nowrap">Captains Console</span>
       </a>
       
       <button onclick="toggleFullscreen()" class="p-1.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface border border-outline/30 transition-colors" title="Toggle Fullscreen Projector Mode">
@@ -152,167 +178,54 @@
   </header>
 
   <!-- MAIN STAGE DISPLAY VIEWPORT -->
-  <main class="flex-1 w-full max-w-[1720px] mx-auto p-3 lg:p-6 flex flex-col justify-center">
+  <main id="mphMain" class="flex-1 w-full max-w-[1720px] mx-auto p-3 lg:p-6 flex flex-col justify-center">
 
     <!-- ========================================================================= -->
     <!-- VIEW 1: LIVE HAMMER SPOTLIGHT (DEFAULT) -->
+    <!-- Shows only: player photo, name, role, current bid, and the team holding it -->
     <!-- ========================================================================= -->
-    <div id="viewSpotlight" class="w-full grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-      
-      <!-- LEFT: ACTIVE PLAYER SHOWCASE (COL-SPAN 7) -->
-      <div class="lg:col-span-7 bg-surface-container/90 rounded-2xl border-2 border-primary/30 p-5 lg:p-8 flex flex-col justify-between shadow-[0_12px_40px_rgba(0,0,0,0.9)] relative overflow-hidden">
-        <div class="absolute -top-24 -left-24 w-80 h-80 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div id="viewSpotlight" class="w-full grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 items-stretch">
 
-        <!-- Top Lot Status Bar -->
-        <div class="flex items-center justify-between border-b border-outline-variant/30 pb-3">
-          <div class="flex items-center gap-2">
-            <span class="px-3 py-1 rounded bg-secondary-container text-on-secondary font-headline-sm uppercase tracking-widest text-xs font-bold" id="mphLotBadge">
-              LOT #14 • ACTIVE ROUND 1
-            </span>
-            <span class="font-label-badge text-xs uppercase tracking-wider text-outline">• NMIMS HYDERABAD AUDITORIUM</span>
-          </div>
-
-          <!-- Broadcast Stage Timer (Stopwatch - No auto expiry) -->
-          <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-lowest border border-outline/20">
-            <span class="material-symbols-outlined text-secondary-container text-base">timer</span>
-            <span class="font-label-badge text-xs uppercase text-outline">STAGE CLOCK:</span>
-            <span id="mphTimerDisplay" class="font-label-numeric-lg text-lg font-bold text-secondary-container font-mono">00:45</span>
-          </div>
-        </div>
-
-        <!-- Spotlight Player Details -->
-        <div class="my-5 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
-          <!-- Big Portrait -->
-          <div class="relative w-48 h-60 lg:w-56 lg:h-72 rounded-xl overflow-hidden shrink-0 border-2 border-primary shadow-[0_0_35px_rgba(130,162,225,0.4)] bg-surface-container-lowest">
-            <img id="mphPlayerAvatar" class="w-full h-full object-cover object-center" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80" alt="Player on Stage"/>
-            <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/80 to-transparent p-3 text-center">
-              <span id="mphPlayerSport" class="font-label-badge text-xs text-primary uppercase font-bold tracking-widest">CRICKET • PACER</span>
-            </div>
-          </div>
-
-          <!-- Bio & Statistics -->
-          <div class="flex flex-col flex-1 w-full text-center sm:text-left">
-            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-2">
-              <span id="mphPlayerCategory" class="px-2.5 py-1 rounded bg-surface-container-high text-cream font-label-badge text-xs uppercase font-bold tracking-wider">
-                Express Fast Bowler
-              </span>
-              <span id="mphPlayerInstitution" class="px-2.5 py-1 rounded bg-secondary-container/20 text-secondary-container font-label-badge text-xs uppercase font-bold tracking-wider">
-                IIT Hyderabad
-              </span>
-            </div>
-
-            <h1 id="mphPlayerName" class="font-display-hero text-4xl sm:text-5xl lg:text-6xl uppercase tracking-wider text-on-surface transform -skew-x-3 drop-shadow-[0_8px_20px_rgba(0,0,0,0.8)] leading-none">
-              Kavish Malhotra
-            </h1>
-
-            <p id="mphPlayerSpecialism" class="font-body-lg text-base lg:text-lg text-on-surface-variant mt-2 max-w-xl leading-relaxed">
-              Right-arm Fast (144.2 km/h) • Death Over Yorker Specialist • Telangana State U-23 Representative
-            </p>
-
-            <!-- Key Performance Metrics Grid -->
-            <div id="mphPlayerStatsGrid" class="grid grid-cols-4 gap-3 mt-4 p-3 bg-surface-container-lowest/80 rounded-xl border border-outline-variant/30 text-center">
-              <div>
-                <span class="block font-label-numeric-lg text-2xl font-bold text-on-surface">18</span>
-                <span class="block font-label-badge text-[10px] uppercase text-outline">Matches</span>
-              </div>
-              <div>
-                <span class="block font-label-numeric-lg text-2xl font-bold text-primary">34</span>
-                <span class="block font-label-badge text-[10px] uppercase text-outline">Wickets</span>
-              </div>
-              <div>
-                <span class="block font-label-numeric-lg text-2xl font-bold text-secondary-container">6.12</span>
-                <span class="block font-label-badge text-[10px] uppercase text-outline">Economy</span>
-              </div>
-              <div>
-                <span class="block font-label-numeric-lg text-2xl font-bold text-on-surface">5/18</span>
-                <span class="block font-label-badge text-[10px] uppercase text-outline">Best Spell</span>
-              </div>
-            </div>
-
-            <!-- Extra Player Scouting & Style Details (Requested) -->
-            <div class="mt-3 p-3 rounded-xl bg-surface-container-lowest/60 border border-outline/20 flex flex-col gap-1.5 text-xs text-left">
-              <div class="flex flex-wrap items-center gap-3 text-on-surface">
-                <span>🏏 <strong>Batting:</strong> <span id="mphPlayerBatting" class="text-secondary-container">Right-Handed Lower Order</span></span>
-                <span>⚡ <strong>Bowling:</strong> <span id="mphPlayerBowling" class="text-primary">Right-Arm Express Fast (140-145 km/h)</span></span>
-              </div>
-              <div class="text-[11px] text-on-surface-variant font-body-sm italic" id="mphPlayerScoutingNotes">
-                "Terrific pace off the deck. Consistently hits 142+ km/h with an unplayable toe-crusher yorker in death overs."
-              </div>
-            </div>
-
-            <div class="mt-3 flex items-center justify-between text-xs font-label-badge uppercase tracking-wider text-outline border-t border-outline/10 pt-2">
-              <span>OFFICIAL BASE PRICE:</span>
-              <span id="mphBasePrice" class="font-label-numeric-md text-sm text-cream font-bold">₹10.00 Lakh</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Current Status Footer -->
-        <div class="border-t border-outline-variant/30 pt-3 flex items-center justify-between text-xs font-label-badge uppercase tracking-wider text-outline">
-          <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-secondary-container">campaign</span>
-            <span id="mphStageBroadcastAlert">Auctioneer gavel in progress • Waiting for final bids...</span>
-          </div>
-          <span class="font-mono text-primary font-bold">MPH-ARENA-STAGE</span>
-        </div>
+      <!-- LEFT: PLAYER PHOTO -->
+      <div class="spot-photo lg:col-span-5 relative rounded-2xl overflow-hidden border-2 border-primary/60 shadow-[0_0_45px_rgba(130,162,225,0.35)] bg-surface-container-lowest aspect-[4/5] lg:aspect-auto lg:min-h-[70vh]">
+        <img id="mphPlayerAvatar" class="absolute inset-0 w-full h-full object-cover object-top" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" alt="Player on stage"/>
       </div>
 
-      <!-- RIGHT: GIANT BID TELEMETRY & LIVE WAR LOG (COL-SPAN 5) -->
-      <div class="lg:col-span-5 flex flex-col gap-5 justify-between">
-        
-        <!-- MASSIVE CURRENT BID HERO BOX -->
-        <div class="bg-surface-container rounded-2xl border-2 border-secondary-container p-6 shadow-2xl flex flex-col justify-between relative overflow-hidden">
-          <div class="flex items-center justify-between mb-2">
-            <span class="font-label-badge text-xs uppercase tracking-widest text-outline">CURRENT HIGHEST BID</span>
-            <span id="mphBidTag" class="px-2.5 py-0.5 rounded bg-primary-container text-on-primary-container font-label-badge text-[11px] uppercase font-bold tracking-widest animate-pulse">
-              LIVE BIDDING
-            </span>
+      <!-- RIGHT: ROLE, NAME, CURRENT BID, BIDDING TEAM -->
+      <div class="lg:col-span-7 flex flex-col justify-center gap-6 lg:gap-8">
+        <div class="text-center lg:text-left">
+          <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-lg bg-primary/15 border border-primary/40 text-primary">
+            <span id="mphPlayerSportIcon" class="material-symbols-outlined text-2xl lg:text-4xl">sports_cricket</span>
+            <span id="mphPlayerRole" class="font-headline-sm text-xl lg:text-3xl uppercase tracking-wider">Express Fast Bowler</span>
           </div>
-
-          <div class="my-2">
-            <div id="mphCurrentBid" class="font-label-numeric-lg text-5xl lg:text-6xl font-extrabold text-primary tracking-tight drop-shadow-[0_0_25px_rgba(130,162,225,0.7)]">
-              ₹28.00 Lakh
-            </div>
-            <div class="font-label-badge text-xs text-cream uppercase tracking-wider mt-1">
-              Minimum Next Bid Step: <strong class="text-white" id="mphNextBidStep">+₹10.00 Lakh</strong>
-            </div>
-          </div>
-
-          <!-- Leading Franchise Big Banner -->
-          <div class="mt-4 p-4 rounded-xl bg-surface-container-lowest border border-outline-variant/30 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div id="mphLeaderColor" class="w-12 h-12 rounded-lg bg-primary flex items-center justify-center font-headline-sm text-lg font-bold text-black uppercase shadow-lg">
-                STME
-              </div>
-              <div>
-                <span class="block font-label-badge text-[10px] uppercase text-outline">LEADING FRANCHISE BIDDER</span>
-                <h3 id="mphLeaderTeam" class="font-headline-sm text-lg lg:text-xl uppercase text-on-surface font-bold">
-                  NMIMS STME Strikers
-                </h3>
-                <span id="mphLeaderCaptain" class="text-xs text-secondary-container font-body-sm">
-                  Captain Vikramaditya
-                </span>
-              </div>
-            </div>
-            <span class="material-symbols-outlined text-secondary-container text-3xl">verified</span>
+          <h1 id="mphPlayerName" class="font-headline-xl text-5xl sm:text-6xl lg:text-8xl uppercase tracking-wide text-on-surface leading-none mt-4 drop-shadow-[0_8px_20px_rgba(0,0,0,0.8)]">
+            Kavish Malhotra
+          </h1>
+          <div id="mphPlayerMetaStrip" class="flex flex-wrap items-center gap-2 mt-3 text-xs font-mono text-outline justify-center lg:justify-start">
+            <span id="mphLotBadge" class="px-2 py-0.5 rounded bg-surface-container-high border border-outline/30 text-secondary-container font-bold uppercase">LOT #1</span>
+            <span id="mphPlayerInstitution" class="px-2 py-0.5 rounded bg-surface-container border border-outline/20 text-on-surface-variant">NMIMS Hyderabad STME</span>
+            <span id="mphPlayerStyle" class="px-2 py-0.5 rounded bg-surface-container border border-outline/20 text-on-surface-variant">Right-Handed</span>
           </div>
         </div>
 
-        <!-- RECENT BIDDING TELEMETRY STREAM -->
-        <div class="bg-surface-container rounded-2xl border border-outline-variant/30 p-5 flex flex-col flex-1 shadow-xl">
-          <div class="flex items-center justify-between border-b border-outline/10 pb-2 mb-3">
-            <div class="flex items-center gap-2">
-              <span class="material-symbols-outlined text-primary text-base">monitoring</span>
-              <h4 class="font-headline-sm text-sm uppercase tracking-wider text-on-surface">LIVE BIDDING WAR LOG</h4>
-            </div>
-            <span class="font-label-badge text-[10px] text-outline font-mono">REAL-TIME SYNC</span>
+        <div id="mphBidCard" class="rounded-2xl bg-surface-container border-2 border-secondary-container p-6 lg:p-8 shadow-2xl">
+          <span id="mphBidLabel" class="block font-label-badge text-sm lg:text-lg uppercase tracking-widest text-outline">Current Bid</span>
+          <div id="mphCurrentBid" class="font-label-numeric-lg text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-primary tracking-tight mt-1 drop-shadow-[0_0_25px_rgba(130,162,225,0.7)]">
+            ₹28.00 Lakh
           </div>
 
-          <div id="mphRecentBidsStream" class="flex flex-col gap-2 max-h-56 overflow-y-auto pr-1">
-            <!-- Dynamically populated -->
+          <div class="mt-6 pt-6 border-t border-outline-variant/40 flex items-center gap-4 lg:gap-5">
+            <div id="mphLeaderColor" class="min-w-[4rem] h-16 lg:min-w-[5rem] lg:h-20 px-3 rounded-xl shrink-0 flex items-center justify-center font-headline-sm text-xl lg:text-2xl uppercase text-black shadow-lg bg-primary">
+              STME
+            </div>
+            <div class="min-w-0">
+              <span id="mphLeaderLabel" class="block font-label-badge text-xs lg:text-base uppercase tracking-widest text-outline">Bid held by</span>
+              <h2 id="mphLeaderTeam" class="font-headline-sm text-3xl lg:text-5xl uppercase text-on-surface leading-tight">
+                NMIMS STME Strikers
+              </h2>
+            </div>
           </div>
         </div>
-
       </div>
 
     </div>
@@ -321,26 +234,21 @@
     <!-- VIEW 2: ALL TEAMS & MEMBERS MASTER WALL (SINGLE SCREEN OVERVIEW) -->
     <!-- (REQUESTED: "ek option rakh jisme ek single screen me at that current point saare teams ke detail ho like member") -->
     <!-- ========================================================================= -->
-    <div id="viewMasterWall" class="hidden w-full flex flex-col gap-4">
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-2 bg-surface-container/70 p-3 rounded-xl border border-outline-variant/30">
-        <div class="flex items-center gap-2.5">
-          <span class="material-symbols-outlined text-secondary-container text-2xl">table_chart</span>
-          <div>
-            <h2 class="font-headline-md text-lg uppercase text-on-surface tracking-wider">
-              ALL FRANCHISES MASTER AUDIT WALL
-            </h2>
-            <span class="text-xs text-on-surface-variant font-body-sm">
-              Live snapshot of all 6 teams' remaining purse wallets, total spent budgets, and complete current squad members.
-            </span>
-          </div>
+    <div id="viewMasterWall" class="hidden w-full flex flex-col gap-3">
+      <div class="flex items-center justify-between gap-3 px-1">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <span class="material-symbols-outlined text-secondary-container text-2xl">grid_view</span>
+          <h2 class="font-headline-md text-lg lg:text-xl uppercase text-on-surface tracking-wider truncate">
+            All Franchises • Live Purse &amp; Squads
+          </h2>
         </div>
-        <span class="px-3 py-1 rounded bg-secondary-container/20 text-secondary-container font-label-badge text-xs uppercase font-bold">
-          SALARY CAP: ₹1.00 CR PER TEAM
+        <span id="mphWallSummary" class="shrink-0 px-3 py-1 rounded bg-secondary-container/20 text-secondary-container font-label-badge text-xs uppercase font-bold">
+          10 Teams
         </span>
       </div>
 
-      <!-- 6-FRANCHISE COMPLETE MASTER WALL GRID -->
-      <div id="mphMasterWallGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- Every team on one screen: columns / rows are chosen by fitTeamGrid() for the current screen size -->
+      <div id="mphMasterWallGrid" data-team-grid class="grid gap-3 lg:gap-4">
         <!-- Dynamically rendered via renderMasterWall -->
       </div>
     </div>
@@ -349,19 +257,19 @@
     <!-- VIEW 3: SPLIT STAGE MODE (BOTH SPOTLIGHT + MINI WALL) -->
     <!-- ========================================================================= -->
     <div id="viewSplit" class="hidden w-full grid grid-cols-1 lg:grid-cols-12 gap-4">
-      <div class="lg:col-span-6 flex flex-col gap-4" id="splitSpotlightContainer">
+      <div class="lg:col-span-6 grid grid-cols-12 gap-4 content-start" id="splitSpotlightContainer">
         <!-- Cloned or dynamically mounted spotlight -->
       </div>
-      <div class="lg:col-span-6 flex flex-col gap-4 overflow-y-auto max-h-[750px] pr-1" id="splitWallContainer">
+      <div class="lg:col-span-6 flex flex-col gap-4" id="splitWallContainer">
         <!-- Cloned or dynamically mounted master wall -->
       </div>
     </div>
 
   </main>
 
-  <!-- PERSISTENT BOTTOM WALLET TICKER (MPH AUDITORIUM STRIP) -->
-  <!-- Always shows each team's remaining amount for the auditorium crowd -->
-  <footer class="w-full bg-surface-container/95 border-t border-outline-variant/40 px-4 lg:px-8 py-2.5 shadow-2xl z-40">
+  <!-- BOTTOM WALLET TICKER (MPH AUDITORIUM STRIP) -->
+  <!-- Shows each team's remaining amount in the Dual view (Spotlight hides it; the Master Wall already shows every purse) -->
+  <footer id="mphPurseTicker" class="hidden w-full bg-surface-container/95 border-t border-outline-variant/40 px-4 lg:px-8 py-2.5 shadow-2xl z-40">
     <div class="max-w-[1720px] mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
       <div class="flex items-center gap-2 shrink-0">
         <span class="w-2.5 h-2.5 rounded-full bg-primary-container animate-ping"></span>
@@ -419,6 +327,7 @@
   <script src="js/legends-core.js"></script>
   <script src="js/legends-rbac.js"></script>
   <script src="js/legends-auction.js"></script>
+  <script src="js/legends-realtime.js"></script>
 
   <script>
     let currentViewMode = 'spotlight';
@@ -432,20 +341,13 @@
         handleStateUpdate(state);
       });
 
-      // Local elapsed stopwatch loop (No auto lock - Admin controls end/next)
-      let elapsedSeconds = 45;
-      setInterval(() => {
-        const lot = window.LegendsAuction.getActiveLot();
-        if (!lot || lot.status !== 'active') return;
-
-        elapsedSeconds += 1;
-        const mins = String(Math.floor(elapsedSeconds / 60)).padStart(2, '0');
-        const secs = String(elapsedSeconds % 60).padStart(2, '0');
-        const tDisplay = document.getElementById('mphTimerDisplay');
-        if (tDisplay) {
-          tDisplay.textContent = `${mins}:${secs}`;
-        }
-      }, 1000);
+      // Re-fit the team wall when the window changes size (incl. projector fullscreen) or fonts finish loading
+      let fitFrame = null;
+      window.addEventListener('resize', () => {
+        cancelAnimationFrame(fitFrame);
+        fitFrame = requestAnimationFrame(fitVisibleWall);
+      });
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitVisibleWall);
     });
 
     // View Mode Switcher: Spotlight vs Master Wall vs Split
@@ -468,6 +370,10 @@
       vSpotlight.classList.add('hidden');
       vWall.classList.add('hidden');
       vSplit.classList.add('hidden');
+      // The purse strip only adds value next to the spotlight in Dual view (the wall already shows every purse)
+      document.getElementById('mphPurseTicker').classList.toggle('hidden', mode !== 'split');
+      // The team wall uses the full screen width; the spotlight stays centred
+      document.getElementById('mphMain').classList.toggle('max-w-[1720px]', mode === 'spotlight');
 
       if (mode === 'spotlight') {
         vSpotlight.classList.remove('hidden');
@@ -483,89 +389,65 @@
       renderMphScreen();
     }
 
+    // Role without the sport prefix: "Cricket • Express Fast Bowler" -> "Express Fast Bowler"
+    function getPlayerRole(lot) {
+      const category = lot.category || '';
+      return category.includes('•') ? category.split('•').slice(1).join('•').trim() : category;
+    }
+
     function renderMphScreen() {
-      const state = window.LegendsAuction.getState();
       const lot = window.LegendsAuction.getActiveLot();
       const teams = window.LegendsAuction.getTeams();
 
-      // 1. Render Spotlight Lot
+      // 1. Render Spotlight Lot: photo, name, role, current bid, and the team holding it
       if (lot) {
-        document.getElementById('mphLotBadge').textContent = `${lot.lotNumber} • ${lot.status.toUpperCase()}`;
+        const isFootball = (lot.sport || '').toLowerCase() === 'football';
         document.getElementById('mphPlayerAvatar').src = lot.avatar;
-        document.getElementById('mphPlayerSport').textContent = lot.category.toUpperCase();
-        document.getElementById('mphPlayerCategory').textContent = lot.badge || 'MARQUEE LOT';
-        document.getElementById('mphPlayerInstitution').textContent = lot.institution;
         document.getElementById('mphPlayerName').textContent = lot.name;
-        document.getElementById('mphPlayerSpecialism').textContent = `${lot.specialism} • ${lot.state}`;
-        document.getElementById('mphBasePrice').textContent = window.LegendsAuction.formatCurrency(lot.basePrice);
+        document.getElementById('mphPlayerRole').textContent = getPlayerRole(lot) || (isFootball ? 'Football Player' : 'Cricket Player');
+        document.getElementById('mphPlayerSportIcon').textContent = isFootball ? 'sports_soccer' : 'sports_cricket';
         document.getElementById('mphCurrentBid').textContent = window.LegendsAuction.formatCurrency(lot.currentBid);
 
-        // Batting, Bowling & Scouting Notes
-        const bEl = document.getElementById('mphPlayerBatting');
-        if (bEl) bEl.textContent = lot.battingStyle || 'Right-Handed Batsman';
-        const bowEl = document.getElementById('mphPlayerBowling');
-        if (bowEl) bowEl.textContent = lot.bowlingStyle || 'Right-Arm Pacer';
-        const scoutEl = document.getElementById('mphPlayerScoutingNotes');
-        if (scoutEl) scoutEl.textContent = `"${lot.scoutingNotes || 'High performance trial standout with strong match temperament.'}"`;
-
-        // Dynamic Next Bid Step (User Rule: 10L < 1Cr, 20L 1Cr-3Cr, 25L > 3Cr)
-        const dynInc = window.LegendsAuction.getDynamicIncrement(lot.currentBid);
-        const tierText = lot.currentBid < 10000000 ? '<1Cr' : (lot.currentBid < 30000000 ? '1Cr-3Cr' : '>3Cr');
-        const nextStepEl = document.getElementById('mphNextBidStep');
-        if (nextStepEl) {
-          nextStepEl.textContent = `+${window.LegendsAuction.formatCurrency(dynInc)} (${tierText} Tier)`;
-        }
-
-        document.getElementById('mphLeaderTeam').textContent = lot.highestBidderTeamName || 'Awaiting Opening Bid';
-        document.getElementById('mphLeaderCaptain').textContent = lot.highestBidderCaptain ? `Captain ${lot.highestBidderCaptain}` : 'No active bids';
-
         const leadTeam = teams.find(t => t.id === lot.highestBidderTeamId);
+        const isSold = lot.status === 'sold';
+        let bidLabel = 'Current Bid';
+        let leaderLabel = 'Bid held by';
+        let leaderText = leadTeam ? leadTeam.name : (lot.highestBidderTeamName || '');
+        if (isSold) {
+          bidLabel = 'Sold for';
+          leaderLabel = 'Sold to';
+        } else if (!leadTeam) {
+          bidLabel = 'Base Price';
+          leaderLabel = lot.status === 'unsold' ? 'Status' : 'Bid held by';
+          leaderText = lot.status === 'unsold' ? 'Unsold' : 'Awaiting first bid';
+        }
+        document.getElementById('mphBidLabel').textContent = bidLabel;
+        document.getElementById('mphLeaderLabel').textContent = leaderLabel;
+        document.getElementById('mphLeaderTeam').textContent = leaderText;
+
         const lColor = document.getElementById('mphLeaderColor');
-        if (lColor) {
-          lColor.style.backgroundColor = leadTeam ? leadTeam.color : '#24438c';
-          lColor.textContent = leadTeam ? leadTeam.shortCode : 'AUCT';
-        }
+        lColor.style.backgroundColor = leadTeam ? leadTeam.color : '#24438c';
+        lColor.textContent = leadTeam ? leadTeam.shortCode : '—';
 
-        // Stats grid
-        const sGrid = document.getElementById('mphPlayerStatsGrid');
-        if (sGrid && lot.stats) {
-          sGrid.innerHTML = Object.entries(lot.stats).map(([k, v]) => `
-            <div>
-              <span class="block font-label-numeric-lg text-2xl font-bold text-on-surface">${v}</span>
-              <span class="block font-label-badge text-[10px] uppercase text-outline">${k}</span>
-            </div>
-          `).join('');
+        // Extra Player Telemetry
+        const lotBadge = document.getElementById('mphLotBadge');
+        if (lotBadge) lotBadge.textContent = lot.lotNumber || 'ACTIVE LOT';
+        const instEl = document.getElementById('mphPlayerInstitution');
+        if (instEl) instEl.textContent = lot.institution || 'NMIMS Hyderabad STME';
+        const styleEl = document.getElementById('mphPlayerStyle');
+        if (styleEl) {
+          const style = isFootball ? (lot.category || 'Squad Player') : `${lot.battingStyle || 'Right-Hand'} • ${lot.bowlingStyle || 'Pacer'}`;
+          styleEl.textContent = style;
         }
       }
 
-      // 2. Render Recent Bid Stream
-      const stream = document.getElementById('mphRecentBidsStream');
-      if (stream) {
-        stream.innerHTML = state.bidLog.slice(0, 6).map((b, idx) => `
-          <div class="p-2 rounded-lg bg-surface-container-lowest border border-outline/10 flex items-center justify-between text-xs ${idx === 0 ? 'border-primary/40 bg-primary/5' : ''}">
-            <div class="flex items-center gap-2">
-              <span class="material-symbols-outlined text-sm ${b.type === 'sold' ? 'text-secondary-container' : 'text-primary'}">
-                ${b.type === 'sold' ? 'verified' : 'gavel'}
-              </span>
-              <div class="flex flex-col">
-                <span class="font-headline-sm uppercase text-on-surface">${b.team}</span>
-                <span class="text-[10px] text-outline">${b.captain} • ${b.time}</span>
-              </div>
-            </div>
-            <span class="font-label-numeric-md font-mono font-bold ${b.type === 'sold' ? 'text-secondary-container' : 'text-primary'}">
-              ${window.LegendsAuction.formatCurrency(b.amount)}
-            </span>
-          </div>
-        `).join('');
-      }
-
-      // 3. Render All Teams Master Wall Grid (Single Screen Overview)
+      // 2. Render All Teams Master Wall Grid (Single Screen Overview)
       renderMasterWall(teams);
 
-      // 4. Render Persistent Bottom Ticker
+      // 3. Render Bottom Purse Ticker
       renderBottomTicker(teams);
 
-      // 5. Mount Split View if active
+      // 4. Mount Split View if active
       if (currentViewMode === 'split') {
         const splitSpot = document.getElementById('splitSpotlightContainer');
         const splitWall = document.getElementById('splitWallContainer');
@@ -574,95 +456,169 @@
           splitWall.innerHTML = document.getElementById('viewMasterWall').innerHTML;
         }
       }
+
+      // 5. Fit the team wall to the screen (after it is visible, so it can be measured)
+      fitVisibleWall();
     }
 
-    // Render Master Wall: Shows all teams, remaining wallets, spent budgets, and their squad members on a single screen!
+    function escapeHtml(value) {
+      return String(value === undefined || value === null ? '' : value)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // Compact price for squad lists: ₹20L, ₹12.5L, ₹1.5Cr
+    function shortPrice(amount) {
+      const n = Number(amount) || 0;
+      if (!n) return '₹0';
+      const trim = v => String(Number(v.toFixed(2)));
+      return n >= 10000000 ? `₹${trim(n / 10000000)}Cr` : `₹${trim(n / 100000)}L`;
+    }
+
+    // Render Master Wall: every team's remaining purse, spend, and squad members on a single screen
     function renderMasterWall(teams) {
       const grid = document.getElementById('mphMasterWallGrid');
       if (!grid) return;
 
+      const summary = document.getElementById('mphWallSummary');
+      if (summary) {
+        const purses = [...new Set(teams.map(t => t.totalPurse))];
+        summary.textContent = `${teams.length} Teams` + (purses.length === 1 ? ` • ${window.LegendsAuction.formatCurrency(purses[0])} Purse Each` : '');
+      }
+
+      if (!teams.length) {
+        grid.innerHTML = '<div class="col-span-full p-6 text-center text-on-surface-variant">No teams registered yet.</div>';
+        return;
+      }
+
+      const lot = window.LegendsAuction.getActiveLot();
+      const leaderId = lot && lot.status === 'active' ? lot.highestBidderTeamId : null;
+
       grid.innerHTML = teams.map(t => {
-        const allMembers = window.LegendsAuction.getTeamAllMembers(t.id);
-        const isCritical = t.remainingPurse < 3000000;
+        const members = window.LegendsAuction.getTeamAllMembers(t.id);
+        const isCritical = t.remainingPurse < t.totalPurse * 0.3; // under 30% of the starting purse
+        const isLeader = t.id === leaderId;
+        const color = escapeHtml(t.color || '#82a2e1');
 
         return `
-          <div class="bg-surface-container rounded-2xl p-4 lg:p-5 border-2 border-outline-variant/40 flex flex-col justify-between shadow-xl relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-24 h-24 rounded-bl-full opacity-15 pointer-events-none" style="background-color: ${t.color}"></div>
+          <div class="wall-card relative flex flex-col gap-2 min-h-0 overflow-hidden rounded-2xl bg-surface-container border-2 ${isLeader ? '' : 'border-outline-variant/40'} p-3 lg:p-4 shadow-xl"
+               style="${isLeader ? `border-color: ${color}; box-shadow: 0 0 30px ${color}80;` : ''}">
+            <div class="absolute top-0 inset-x-0 h-1" style="background-color: ${color}"></div>
 
-            <!-- Team Header -->
-            <div>
-              <div class="flex items-center justify-between pb-2 border-b border-outline/10">
-                <div class="flex items-center gap-2.5">
-                  <div class="w-10 h-10 rounded-lg flex items-center justify-center font-headline-sm text-sm uppercase font-bold text-black shadow-md" style="background-color: ${t.color}">
-                    ${t.shortCode}
-                  </div>
-                  <div>
-                    <h3 class="font-headline-sm text-base uppercase text-on-surface font-bold leading-tight">${t.name}</h3>
-                    <span class="text-xs text-secondary-container font-body-sm flex items-center gap-1">
-                      <span class="material-symbols-outlined text-[13px]">shield_person</span>
-                      Captain ${t.captain}
-                    </span>
-                  </div>
-                </div>
-                <span class="font-label-badge text-[10px] uppercase px-2 py-0.5 rounded bg-surface-container-high text-outline">
-                  ${t.sport.toUpperCase()}
-                </span>
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="wall-chip shrink-0 rounded-lg flex items-center justify-center font-headline-sm uppercase text-black shadow-md" style="background-color: ${color}">
+                ${escapeHtml(t.shortCode)}
               </div>
-
-              <!-- Remaining Wallet Card (Big High-Impact Figure) -->
-              <div class="my-3 p-3 rounded-xl bg-surface-container-lowest border border-outline-variant/30">
-                <div class="flex items-center justify-between text-xs font-label-badge uppercase tracking-wider mb-1">
-                  <span class="text-outline">REMAINING PURSE</span>
-                  <span class="font-bold ${isCritical ? 'text-error' : 'text-primary'}">${t.pctRemaining}% Balance</span>
-                </div>
-                <div class="flex items-baseline justify-between">
-                  <span class="font-label-numeric-lg text-2xl lg:text-3xl font-extrabold ${isCritical ? 'text-error' : 'text-primary'}">
-                    ${window.LegendsAuction.formatCurrency(t.remainingPurse)}
-                  </span>
-                  <span class="text-xs text-outline font-body-sm">
-                    of ${window.LegendsAuction.formatCurrency(t.totalPurse)}
-                  </span>
-                </div>
-
-                <div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden mt-2">
-                  <div class="h-full rounded-full transition-all duration-500" style="width: ${t.pctRemaining}%; background-color: ${t.color};"></div>
-                </div>
-
-                <div class="flex items-center justify-between text-[11px] text-on-surface-variant pt-2 mt-2 border-t border-outline/10 font-body-sm">
-                  <span>Spent: <strong class="text-white">${window.LegendsAuction.formatCurrency(t.spentPurse)}</strong></span>
-                  <span>Draft Slots: <strong class="text-secondary-container">${allMembers.length} / ${t.squadLimit}</strong></span>
-                </div>
-              </div>
-
-              <!-- CURRENT SQUAD MEMBERS LIST (SINGLE-SCREEN DETAIL) -->
-              <div class="mt-2">
-                <div class="flex items-center justify-between text-xs font-label-badge uppercase tracking-wider text-outline mb-1.5">
-                  <span class="flex items-center gap-1">
-                    <span class="material-symbols-outlined text-xs text-secondary-container">groups</span>
-                    Current Squad Members (${allMembers.length})
-                  </span>
-                  <span class="text-[10px] text-cream">Auction Price</span>
-                </div>
-
-                <div class="flex flex-col gap-1.5 max-h-44 overflow-y-auto pr-1">
-                  ${allMembers.map(m => `
-                    <div class="flex items-center justify-between p-1.5 rounded bg-surface-container-high/60 text-xs border border-outline/10">
-                      <div class="flex items-center gap-1.5 truncate">
-                        <span class="w-1.5 h-1.5 rounded-full ${m.isRetained ? 'bg-secondary-container' : 'bg-primary'} shrink-0"></span>
-                        <span class="font-headline-sm uppercase text-white truncate text-[11px]">${m.name}</span>
-                        <span class="text-[9px] text-outline truncate hidden sm:inline">(${m.role})</span>
-                      </div>
-                      <span class="font-mono text-[11px] font-bold ${m.isRetained ? 'text-outline italic' : 'text-primary'}">
-                        ${m.isRetained ? 'Retained' : window.LegendsAuction.formatCurrency(m.price)}
-                      </span>
-                    </div>
-                  `).join('')}
-                </div>
+              <div class="min-w-0 flex-1">
+                <h3 class="wall-name font-headline-sm uppercase text-on-surface leading-tight line-clamp-2">${escapeHtml(t.name)}</h3>
+                <span class="wall-captain block truncate text-secondary-container font-body-sm">👑 ${escapeHtml(t.captain)}</span>
               </div>
             </div>
+
+            <div>
+              <div class="wall-meta flex items-center justify-between gap-2 font-label-badge uppercase tracking-wider text-outline">
+                <span class="wall-purse-label">Remaining Purse</span>
+                ${isLeader ? '<span class="shrink-0 px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container font-bold animate-pulse">Bid Leader</span>' : ''}
+              </div>
+              <div class="wall-purse font-label-numeric-lg font-extrabold leading-none ${isCritical ? 'text-error' : 'text-primary'}">
+                ${window.LegendsAuction.formatCurrency(t.remainingPurse)}
+              </div>
+              <div class="wall-progress w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden mt-2">
+                <div class="h-full rounded-full transition-all duration-500" style="width: ${t.pctRemaining}%; background-color: ${color};"></div>
+              </div>
+              <div class="wall-meta flex items-center justify-between gap-2 mt-1.5 text-on-surface-variant font-body-sm">
+                <span>Spent <strong class="text-white">${shortPrice(t.spentPurse)}</strong></span>
+                <span><strong class="text-secondary-container">${members.length}</strong> / ${t.squadLimit} players</span>
+              </div>
+            </div>
+
+            <ul class="wall-members flex-1 min-h-0 overflow-hidden border-t border-outline/10 pt-1.5 leading-snug">
+              ${members.map(m => `
+                <li class="flex items-baseline justify-between gap-2 py-[0.12em]">
+                  <span class="truncate ${m.type === 'Captain' ? 'text-secondary-container' : 'text-white'} font-semibold">${escapeHtml(m.name)}</span>
+                  <span class="member-price shrink-0 font-mono ${m.isRetained ? 'text-outline italic' : 'text-primary font-bold'}">${m.type === 'Captain' ? 'C' : (m.isRetained ? 'Ret.' : shortPrice(m.price))}</span>
+                </li>
+              `).join('')}
+            </ul>
           </div>
         `;
       }).join('');
+    }
+
+    // Choose columns x rows so every team card fits on one screen, with cards a little taller than wide.
+    // Phones and tiny windows fall back to a normal scrolling grid.
+    function fitTeamGrid(grid, availableHeight) {
+      grid.style.gridTemplateColumns = '';
+      grid.style.gridTemplateRows = '';
+      grid.style.height = '';
+      const cardCount = grid.querySelectorAll('.wall-card').length;
+      if (!cardCount) return;
+
+      const gap = parseFloat(getComputedStyle(grid).rowGap) || 0;
+      const width = grid.clientWidth;
+      let best = null;
+      for (let cols = 1; cols <= cardCount; cols++) {
+        const rows = Math.ceil(cardCount / cols);
+        const cardW = (width - gap * (cols - 1)) / cols;
+        const cardH = (availableHeight - gap * (rows - 1)) / rows;
+        const score = Math.min(cardW, cardH / 1.1);
+        if (!best || score > best.score) best = { cols, rows, cardW, cardH, score };
+      }
+
+      const fitsOnScreen = window.innerWidth >= 768 && best.cardW >= 190 && best.cardH >= 200;
+      grid.classList.toggle('wall-fit', fitsOnScreen);
+      if (fitsOnScreen) {
+        grid.style.gridTemplateColumns = `repeat(${best.cols}, minmax(0, 1fr))`;
+        grid.style.gridTemplateRows = `repeat(${best.rows}, minmax(0, 1fr))`;
+        grid.style.height = `${availableHeight}px`;
+      } else {
+        grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(260px, 1fr))';
+      }
+      grid.querySelectorAll('.wall-members').forEach(list => fitMemberList(list, fitsOnScreen));
+    }
+
+    // Keep every squad member visible inside a fixed-height card:
+    // slightly smaller text first (keeps full names), then two columns, then smaller two-column text
+    function fitMemberList(list, constrained) {
+      list.classList.remove('two-col');
+      list.style.removeProperty('--member-scale');
+      list.style.overflowY = 'hidden';
+      if (!constrained) return;
+
+      const overflows = () => list.scrollHeight > list.clientHeight + 1 || list.scrollWidth > list.clientWidth + 1;
+      const shrinkTo = minScale => {
+        for (let scale = 0.94; overflows() && scale >= minScale; scale -= 0.06) {
+          list.style.setProperty('--member-scale', scale.toFixed(2));
+        }
+      };
+
+      shrinkTo(0.72);
+      if (!overflows()) return;
+      if (list.children.length > 4 && list.clientWidth >= 150) {
+        list.style.removeProperty('--member-scale');
+        list.classList.add('two-col');
+        shrinkTo(0.64);
+      }
+      if (overflows()) {
+        list.classList.remove('two-col');
+        list.style.overflowY = 'auto';
+      }
+    }
+
+    // Height left for the team grid between its top edge and the bottom of the window
+    function wallAvailableHeight(grid) {
+      const main = grid.closest('main');
+      const bottomPad = main ? parseFloat(getComputedStyle(main).paddingBottom) : 0;
+      const ticker = document.getElementById('mphPurseTicker');
+      const tickerHeight = ticker && !ticker.classList.contains('hidden') ? ticker.offsetHeight : 0;
+      const top = grid.getBoundingClientRect().top + window.scrollY;
+      return Math.max(0, window.innerHeight - top - bottomPad - tickerHeight);
+    }
+
+    function fitVisibleWall() {
+      const grid = currentViewMode === 'master-wall'
+        ? document.getElementById('mphMasterWallGrid')
+        : (currentViewMode === 'split' ? document.querySelector('#splitWallContainer [data-team-grid]') : null);
+      if (grid) fitTeamGrid(grid, wallAvailableHeight(grid));
     }
 
     // Render Bottom Wallet Ticker for the entire hall
@@ -689,7 +645,7 @@
       // Check if new bid was placed (play pulse glow)
       const lot = window.LegendsAuction.getActiveLot();
       if (lot && prevHighestBid !== null && lot.currentBid > prevHighestBid) {
-        const bidElem = document.getElementById('mphCurrentBid');
+        const bidElem = document.getElementById('mphBidCard');
         if (bidElem) {
           bidElem.classList.add('bid-glow');
           setTimeout(() => bidElem.classList.remove('bid-glow'), 1500);
@@ -709,7 +665,7 @@
       if (!modal) return;
 
       document.getElementById('soldPlayerName').textContent = soldInfo.player;
-      document.getElementById('soldPlayerRole').textContent = soldInfo.category || 'Drafted Squad Player';
+      document.getElementById('soldPlayerRole').textContent = getPlayerRole(soldInfo) || 'Drafted Squad Player';
       document.getElementById('soldTeamName').textContent = soldInfo.team;
       document.getElementById('soldFinalPrice').textContent = window.LegendsAuction.formatCurrency(soldInfo.price);
 

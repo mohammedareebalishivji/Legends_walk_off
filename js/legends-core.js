@@ -43,6 +43,9 @@
       try {
         localStorage.setItem('legends_cricket_match', JSON.stringify(state));
         window.dispatchEvent(new CustomEvent('legends_state_changed', { detail: state }));
+        if (typeof window !== 'undefined' && window.LegendsRealtime && typeof window.LegendsRealtime.broadcast === 'function') {
+          window.LegendsRealtime.broadcast('SCORE_UPDATED', { state: state });
+        }
       } catch (e) {
         console.error('Failed to save state:', e);
       }

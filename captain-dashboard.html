@@ -144,6 +144,7 @@
 
       <!-- Navigation & Action Links -->
       <div class="flex items-center gap-3">
+        <div data-sport-switch></div>
         <div class="hidden sm:flex items-center gap-2">
           <a href="mph-screen.html" target="_blank" class="px-3 py-1.5 bg-surface-container-high hover:bg-secondary-container hover:text-on-secondary text-secondary-container text-xs font-headline-sm uppercase tracking-wider rounded border border-secondary-container/30 transition-all flex items-center gap-1.5 shadow-sm">
             <span class="material-symbols-outlined text-[16px]">tv</span>
@@ -240,7 +241,7 @@
             ₹71.50 Lakh
           </div>
           <div class="flex items-center justify-between text-xs font-label-badge text-on-surface-variant uppercase mt-1">
-            <span>Total Purse: <strong>₹1.00 Crore</strong></span>
+            <span>Total Purse: <strong id="myTotalPurse">₹50.00 Crore</strong></span>
             <span>Spent Budget: <strong id="mySpentPurse" class="text-secondary-container">₹28.50 Lakh</strong></span>
           </div>
 
@@ -356,7 +357,7 @@
             </p>
 
             <!-- Extra Player Attributes (Requested) -->
-            <div class="mt-2 text-[11px] text-on-surface flex flex-col gap-0.5 border-t border-outline/10 pt-1.5">
+            <div id="activeCaptainStylesRow" class="mt-2 text-[11px] text-on-surface flex flex-col gap-0.5 border-t border-outline/10 pt-1.5">
               <div>🏏 <strong>Bat:</strong> <span id="activeCaptainBatting" class="text-secondary-container">Right-Handed</span></div>
               <div>⚡ <strong>Bowl:</strong> <span id="activeCaptainBowling" class="text-primary">Right-Arm Express (140+ km/h)</span></div>
             </div>
@@ -421,6 +422,42 @@
 
       </div>
 
+      <!-- ADMIN: LOG BIDS ON BEHALF OF CAPTAINS (only visible to signed-in admins) -->
+      <div id="adminBehalfBidPanel" class="hidden rounded-xl border-2 border-secondary-container/60 bg-surface-container-lowest p-4 flex flex-col gap-3">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary-container text-2xl">front_hand</span>
+            <div>
+              <h4 class="font-headline-sm text-sm uppercase tracking-wider text-on-surface">Admin • Log Bid on Behalf of a Captain</h4>
+              <span class="text-[11px] text-on-surface-variant font-body-sm">Pick the team whose captain raised the paddle, then log the bid.</span>
+            </div>
+          </div>
+          <span id="behalfLotStatus" class="font-label-badge text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-primary-container text-on-primary-container">Bidding open</span>
+        </div>
+
+        <div id="behalfTeamPills" class="flex flex-wrap gap-1.5">
+          <!-- Filled by renderAdminBehalfPanel -->
+        </div>
+
+        <div class="flex flex-col lg:flex-row lg:items-stretch gap-2">
+          <button id="behalfNextBidBtn" onclick="handleBehalfNextBid()" class="flex-1 px-4 py-3 rounded-lg bg-secondary-container hover:brightness-110 text-on-secondary font-headline-sm uppercase tracking-wider text-sm shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">
+            <span class="material-symbols-outlined text-lg">gavel</span>
+            <span id="behalfNextBidText">Log next bid</span>
+          </button>
+          <div class="flex items-stretch gap-2">
+            <input id="behalfCustomAmount" type="text" inputmode="decimal" placeholder="Custom: 75L / 1.2Cr" onkeydown="if (event.key === 'Enter') handleBehalfCustomBid()" class="w-40 bg-surface-container text-on-surface px-3 py-2 text-sm font-mono rounded-lg border border-outline/30 focus:border-secondary-container focus:outline-none"/>
+            <button id="behalfCustomBidBtn" onclick="handleBehalfCustomBid()" class="px-4 py-2 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-headline-sm uppercase text-xs tracking-wider border border-outline/30 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+              Set Bid
+            </button>
+          </div>
+          <button id="behalfUndoBtn" onclick="handleBehalfUndo()" class="px-4 py-2 rounded-lg bg-surface-container hover:bg-error hover:text-white text-on-surface-variant font-headline-sm uppercase text-xs tracking-wider border border-outline/30 transition-all flex items-center justify-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed">
+            <span class="material-symbols-outlined text-sm">undo</span>Undo Last Bid
+          </button>
+        </div>
+      </div>
+
+      <div id="bidFeedbackMessage" class="hidden text-xs px-3 py-2 rounded-lg"></div>
+
     </div>
 
     <!-- ========================================================================= -->
@@ -475,38 +512,29 @@
   <script src="js/legends-core.js"></script>
   <script src="js/legends-rbac.js"></script>
   <script src="js/legends-auction.js"></script>
+  <script src="js/legends-realtime.js"></script>
 
   <script>
-    // Active Captain Team Selection (Default to NMIMS STME Strikers)
-    let currentCaptainTeamId = 'team-nmims-cricket';
+    // Active Captain Team Selection (defaults to the first registered team)
+    let currentCaptainTeamId = '';
 
     document.addEventListener('DOMContentLoaded', () => {
       // 1. Session & franchise initialization
       const authedUser = window.LegendsRBAC && window.LegendsRBAC.getCurrentUser();
       const isAuthed = window.LegendsRBAC && window.LegendsRBAC.isAuthenticated();
 
-      if (isAuthed && authedUser) {
-        if (authedUser.role === 'captain' && authedUser.teamId) {
-          currentCaptainTeamId = authedUser.teamId;
-        } else {
-          const urlParams = new URLSearchParams(window.location.search);
-          const teamParam = urlParams.get('team');
-          if (teamParam) {
-            currentCaptainTeamId = teamParam;
-          } else {
-            const savedTeam = localStorage.getItem('legends_active_captain_team');
-            if (savedTeam) currentCaptainTeamId = savedTeam;
-          }
-        }
+      const myTeamId = isAuthed && authedUser ? signedInCaptainTeamId() : null;
+      if (myTeamId) {
+        currentCaptainTeamId = myTeamId;
       } else {
-        const urlParams = new URLSearchParams(window.location.search);
-        const teamParam = urlParams.get('team');
-        if (teamParam) {
-          currentCaptainTeamId = teamParam;
-        } else {
-          const savedTeam = localStorage.getItem('legends_active_captain_team');
-          if (savedTeam) currentCaptainTeamId = savedTeam;
-        }
+        const teamParam = new URLSearchParams(window.location.search).get('team');
+        currentCaptainTeamId = teamParam || localStorage.getItem('legends_active_captain_team') || '';
+      }
+
+      // Saved / linked team may have been deleted by the admin: fall back to the first registered team
+      if (!window.LegendsAuction.getTeam(currentCaptainTeamId)) {
+        const firstTeam = window.LegendsAuction.getTeams()[0];
+        currentCaptainTeamId = firstTeam ? firstTeam.id : '';
       }
 
       // 2. Render all sections & auth chip
@@ -607,8 +635,9 @@
       const user = window.LegendsRBAC && window.LegendsRBAC.getCurrentUser();
       const isAuthed = window.LegendsRBAC && window.LegendsRBAC.isAuthenticated();
 
-      if (isAuthed && user && user.role === 'captain' && user.teamId && user.teamId !== teamId) {
-        showBidFeedback(`Audit Note: You are logged in as Captain of ${window.LegendsAuction.getTeam(user.teamId)?.name}. Inspecting ${window.LegendsAuction.getTeam(teamId)?.name}.`, 'info');
+      const myTeamId = isAuthed && user ? signedInCaptainTeamId() : null;
+      if (myTeamId && myTeamId !== teamId) {
+        showBidFeedback(`Audit Note: You are logged in as Captain of ${window.LegendsAuction.getTeam(myTeamId)?.name}. Inspecting ${window.LegendsAuction.getTeam(teamId)?.name}.`, 'info');
       }
 
       currentCaptainTeamId = teamId;
@@ -619,10 +648,17 @@
       renderCaptainAuthChip();
     }
 
+    // Team the signed-in captain leads in this sport (null for admins, guests, or captains without a team here)
+    function signedInCaptainTeamId() {
+      const role = window.LegendsAuction.getActiveRole();
+      return role.role === 'captain' ? role.teamId : null;
+    }
+
     // Main Render Function for Captain Console
     function renderCaptainDashboard() {
       const state = window.LegendsAuction.getState();
       const myTeam = window.LegendsAuction.getTeam(currentCaptainTeamId);
+      renderAdminBehalfPanel();
       if (!myTeam) return;
 
       // -------------------------------------------------------------
@@ -632,9 +668,12 @@
       const myPct = Math.max(0, Math.min(100, (myRemaining / myTeam.totalPurse) * 100));
       const allMyMembers = window.LegendsAuction.getTeamAllMembers(currentCaptainTeamId);
 
+      const myTotalPurse = document.getElementById('myTotalPurse');
+      if (myTotalPurse) myTotalPurse.textContent = window.LegendsAuction.formatCurrency(myTeam.totalPurse);
+
       const myTeamColorBadge = document.getElementById('myTeamColorBadge');
       if (myTeamColorBadge) {
-        myTeamColorBadge.textContent = myTeam.name.substring(0, 4);
+        myTeamColorBadge.textContent = myTeam.shortCode || myTeam.name.substring(0, 4);
         myTeamColorBadge.style.backgroundColor = myTeam.color || '#82a2e1';
       }
 
@@ -730,7 +769,7 @@
         if (sportEl) sportEl.textContent = lot.sport || 'CRICKET';
 
         const lotNumEl = document.getElementById('activePlayerLotNum');
-        if (lotNumEl) lotNumEl.textContent = `LOT #${lot.id}`;
+        if (lotNumEl) lotNumEl.textContent = lot.lotNumber || `LOT #${lot.id}`;
 
         const roleEl = document.getElementById('activePlayerRole');
         if (roleEl) roleEl.textContent = lot.category;
@@ -739,16 +778,19 @@
         if (nameEl) nameEl.textContent = lot.name;
 
         const instEl = document.getElementById('activePlayerInstitution');
-        if (instEl) instEl.textContent = `${lot.institution} • ${lot.specialism}`;
+        if (instEl) instEl.textContent = [lot.institution, lot.specialism].filter(Boolean).join(' • ');
 
         const basePriceEl = document.getElementById('activePlayerBasePrice');
         if (basePriceEl) basePriceEl.textContent = window.LegendsAuction.formatCurrency(lot.basePrice);
 
         const battingEl = document.getElementById('activeCaptainBatting');
-        if (battingEl) battingEl.textContent = lot.battingStyle || 'Right-Handed';
+        if (battingEl) battingEl.textContent = lot.battingStyle || '—';
 
         const bowlingEl = document.getElementById('activeCaptainBowling');
-        if (bowlingEl) bowlingEl.textContent = lot.bowlingStyle || 'Right-Arm Pacer';
+        if (bowlingEl) bowlingEl.textContent = lot.bowlingStyle || '—';
+
+        const stylesRow = document.getElementById('activeCaptainStylesRow');
+        if (stylesRow) stylesRow.classList.toggle('hidden', !lot.battingStyle && !lot.bowlingStyle);
 
         const currentBidEl = document.getElementById('activeCurrentBidAmount');
         if (currentBidEl) currentBidEl.textContent = window.LegendsAuction.formatCurrency(lot.currentBid);
@@ -885,7 +927,7 @@
             <!-- Opponent Footer Status -->
             <div class="border-t border-outline-variant/20 pt-2.5 mt-3 flex items-center justify-between text-[10px] font-label-badge uppercase text-outline">
               <span>Status: Active In Auction</span>
-              <span class="text-primary font-bold">Cap ₹1.00 Cr</span>
+              <span class="text-primary font-bold">Cap ${window.LegendsAuction.formatCurrency(opp.totalPurse)}</span>
             </div>
 
           </div>
@@ -898,7 +940,7 @@
       if (!window.LegendsRBAC || !window.LegendsRBAC.isAuthenticated()) {
         showBidFeedback('Authentication Required: Please log in as a verified Team Captain to place official bids.', 'error');
         setTimeout(() => {
-          window.location.href = 'login.html?redirect=captain-dashboard.html';
+          window.location.href = window.LegendsAuction.withSport('login.html?redirect=captain-dashboard.html');
         }, 1500);
         return;
       }
@@ -922,6 +964,96 @@
         renderCaptainDashboard();
       } else {
         showBidFeedback(res.message, 'error');
+      }
+    }
+
+    // -------------------------------------------------------------
+    // ADMIN: LOG BIDS ON BEHALF OF CAPTAINS
+    // The team being bid for is the dashboard's selected franchise (currentCaptainTeamId).
+    // -------------------------------------------------------------
+    function renderAdminBehalfPanel() {
+      const panel = document.getElementById('adminBehalfBidPanel');
+      if (!panel) return;
+      const A = window.LegendsAuction;
+      if (!A.canAdmin()) {
+        panel.classList.add('hidden');
+        return;
+      }
+      panel.classList.remove('hidden');
+
+      const lot = A.getActiveLot();
+      const isOpen = !!lot && lot.status === 'active';
+      const nextBid = lot ? Number(lot.currentBid) + A.getDynamicIncrement(lot.currentBid) : 0;
+      const teams = A.getTeams();
+
+      const status = document.getElementById('behalfLotStatus');
+      status.textContent = isOpen ? `Bidding open • ${lot.name}` : (lot ? `${lot.name} is ${lot.status} — nominate the next player on the Auction page` : 'No player on the hammer');
+      status.className = `font-label-badge text-[10px] uppercase font-bold px-2 py-0.5 rounded ${isOpen ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container-high text-outline'}`;
+
+      document.getElementById('behalfTeamPills').innerHTML = teams.map(t => {
+        const isSelected = t.id === currentCaptainTeamId;
+        const holdsBid = isOpen && lot.highestBidderTeamId === t.id;
+        const cantAfford = isOpen && !holdsBid && nextBid > t.remainingPurse;
+        const dim = holdsBid || cantAfford ? 'opacity-50' : '';
+        const note = holdsBid ? 'Holds bid' : (cantAfford ? 'Low purse' : A.formatCurrency(t.remainingPurse));
+        return `
+          <button onclick="selectCaptainTeam('${t.id}')" class="px-2.5 py-1.5 rounded-lg border text-left transition-all flex items-center gap-2 ${dim} ${isSelected ? 'border-secondary-container bg-secondary-container/15 ring-1 ring-secondary-container' : 'border-outline/20 bg-surface-container hover:bg-surface-container-high'}">
+            <span class="w-6 h-6 rounded flex items-center justify-center font-headline-sm text-[9px] uppercase text-black shrink-0" style="background-color: ${t.color}">${t.shortCode}</span>
+            <span class="flex flex-col leading-tight">
+              <span class="text-[11px] font-semibold text-on-surface">${t.captain}</span>
+              <span class="text-[10px] font-mono ${holdsBid ? 'text-secondary-container' : 'text-outline'}">${note}</span>
+            </span>
+          </button>
+        `;
+      }).join('');
+
+      const team = A.getTeam(currentCaptainTeamId);
+      const holdsBid = isOpen && team && lot.highestBidderTeamId === team.id;
+      document.getElementById('behalfNextBidText').textContent = !team
+        ? 'Pick a team'
+        : (holdsBid ? `${team.shortCode} already holds the bid` : `Log ${A.formatCurrency(nextBid)} for ${team.shortCode} (${team.captain})`);
+      document.getElementById('behalfNextBidBtn').disabled = !isOpen || !team || holdsBid;
+      document.getElementById('behalfCustomBidBtn').disabled = !isOpen || !team;
+      document.getElementById('behalfUndoBtn').disabled = !isOpen;
+    }
+
+    function logBehalfBid(placeBid) {
+      try {
+        const res = placeBid();
+        showBidFeedback(`Logged ${window.LegendsAuction.formatCurrency(res.newBid)} for ${res.team.name} (Capt. ${res.team.captain})`, 'success');
+        renderCaptainDashboard();
+        return true;
+      } catch (err) {
+        showBidFeedback(err.message, 'error');
+        return false;
+      }
+    }
+
+    function handleBehalfNextBid() {
+      logBehalfBid(() => window.LegendsAuction.placeAdminBid(currentCaptainTeamId));
+    }
+
+    function handleBehalfCustomBid() {
+      const input = document.getElementById('behalfCustomAmount');
+      const amount = window.LegendsAuction.parsePriceInput(input.value);
+      if (!amount) {
+        showBidFeedback('Enter an amount like 75L, 1.2Cr or 7500000.', 'error');
+        return;
+      }
+      if (logBehalfBid(() => window.LegendsAuction.placeAdminBid(currentCaptainTeamId, amount, true))) {
+        input.value = '';
+      }
+    }
+
+    function handleBehalfUndo() {
+      try {
+        const res = window.LegendsAuction.undoLastBid();
+        const amount = window.LegendsAuction.formatCurrency(res.revertedBid !== undefined ? res.revertedBid : res.currentBid);
+        const holder = res.revertedTeam && res.revertedTeam !== 'No Active Bid' ? ` by ${res.revertedTeam}` : '';
+        showBidFeedback(`Last bid undone. Highest is now ${amount}${holder}.`, 'info');
+        renderCaptainDashboard();
+      } catch (err) {
+        showBidFeedback(err.message, 'error');
       }
     }
 

@@ -1,0 +1,7 @@
+{
+  "cleanUrls": false,
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/:page([a-z0-9-]+)", "destination": "/:page.html" }
+  ]
+}

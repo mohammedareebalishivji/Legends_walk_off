@@ -20,325 +20,450 @@
 (function () {
   'use strict';
 
-  const STORAGE_KEY_AUCTION = 'legends_auction_state_v1';
+  // Which auction this page runs: cricket (default) or football (?sport=football).
+  // Each sport keeps its own teams' wallets, squads, player pool and bids.
+  const SPORT = (function () {
+    try {
+      const fromUrl = new URLSearchParams(window.location.search).get('sport');
+      return (fromUrl || window.LEGENDS_AUCTION_SPORT || '').toLowerCase() === 'football' ? 'football' : 'cricket';
+    } catch (e) {
+      return 'cricket';
+    }
+  })();
+
+  // Bumping a sport's key gives every browser that sport's new teams (cricket v2: League 2.0 franchises,
+  // football v2: League 2.0 football clubs)
+  const STORAGE_KEYS = { cricket: 'legends_auction_state_v2', football: 'legends_football_auction_state_v2' };
+  const STORAGE_KEY_AUCTION = STORAGE_KEYS[SPORT];
   const STORAGE_KEY_ROLE = 'legends_auction_active_role_v1';
 
   let syncChannel = null;
   try {
     if (typeof BroadcastChannel !== 'undefined') {
-      syncChannel = new BroadcastChannel('legends_auction_sync_channel');
+      syncChannel = new BroadcastChannel(SPORT === 'football' ? 'legends_football_auction_sync_channel' : 'legends_auction_sync_channel');
     }
   } catch (e) {}
 
-  // 1. DEFAULT TEAMS & SALARY CAPS (Can be edited or entered fresh by Admin)
-  const INITIAL_TEAMS = [
-    {
-      id: 'team-nmims-cricket',
-      name: 'NMIMS STME Strikers',
-      shortCode: 'STME',
-      institution: 'School of Technology Management & Engineering, NMIMS Hyderabad',
-      sport: 'cricket',
-      captain: 'Vikramaditya',
-      captainId: 'cap-stme',
-      color: '#82a2e1',
-      totalPurse: 10000000, // ₹1,00,00,000 (1.00 Crore)
-      spentPurse: 2850000,  // ₹28.50 L
-      remainingPurse: 7150000, // ₹71.50 L
+  // 1. DEFAULT TEAMS & SALARY CAPS — Legends Walk Off League 2.0
+  // Cricket and football have their own teams, wallets and squads.
+  // (Admin can still edit, delete, or clear these from "Setup Teams & Purses")
+  const DEFAULT_TEAM_PURSE = 500000000; // ₹50,00,00,000 (50.00 Crore) per team
+  const PREVIOUS_DEFAULT_PURSE = 10000000; // ₹1.00 Crore — upgraded to 50 Cr on load (see getState)
+
+  function leagueTeam(key, shortCode, name, captain, color, sport) {
+    return {
+      id: 'team-' + key,
+      name: name,
+      shortCode: shortCode,
+      institution: 'Legends Walk Off League 2.0',
+      sport: sport,
+      captain: captain,
+      captainId: 'cap-' + key,
+      color: color,
+      totalPurse: DEFAULT_TEAM_PURSE,
+      spentPurse: 0,
+      remainingPurse: DEFAULT_TEAM_PURSE,
       squadLimit: 15,
       retainedMembers: [
-        { name: 'Vikramaditya', role: 'Captain & Top-Order Batsman', type: 'Captain', jersey: 7 },
-        { name: 'Rohan Verma', role: 'Wicket-Keeper Batsman', type: 'Retained Squad', jersey: 45 },
-        { name: 'Siddharth Nair', role: 'Fast-Bowling All-Rounder', type: 'Retained Squad', jersey: 12 },
-        { name: 'Dhruv Rao', role: 'Spin Bowler (Left-Arm)', type: 'Retained Squad', jersey: 24 }
+        { name: captain, role: 'Captain', type: 'Captain', jersey: 1 }
       ],
-      acquiredPlayers: [
-        { id: 'sold-1', name: 'Arjun Sharma', role: 'Opening Batsman', price: 1850000, time: '10:14 AM' },
-        { id: 'sold-2', name: 'K. Reddy', role: 'Pace Bowler', price: 1000000, time: '10:32 AM' }
-      ]
-    },
-    {
-      id: 'team-cbit-cricket',
-      name: 'CBIT Thunder',
-      shortCode: 'CBIT',
-      institution: 'Chaitanya Bharathi Institute of Technology, Gandipet',
-      sport: 'cricket',
-      captain: 'Pranav K.',
-      captainId: 'cap-cbit',
-      color: '#a87559',
-      totalPurse: 10000000,
-      spentPurse: 3400000, // ₹34.00 L
-      remainingPurse: 6600000, // ₹66.00 L
-      squadLimit: 15,
-      retainedMembers: [
-        { name: 'Pranav K.', role: 'Captain & Middle-Order Batsman', type: 'Captain', jersey: 10 },
-        { name: 'Nikhil Kumar', role: 'Pace Bowler (Right-Arm Fast)', type: 'Retained Squad', jersey: 17 }
-      ],
-      acquiredPlayers: [
-        { id: 'sold-3', name: 'Abhishek Roy', role: 'All-Rounder', price: 2200000, time: '10:45 AM' },
-        { id: 'sold-4', name: 'Varun Teja', role: 'Opening Batsman', price: 1200000, time: '11:02 AM' }
-      ]
-    },
-    {
-      id: 'team-vnr-cricket',
-      name: 'VNR VJIET Warriors',
-      shortCode: 'VNR',
-      institution: 'VNR Vignana Jyothi Institute, Bachupally',
-      sport: 'cricket',
-      captain: 'Rahul Sen',
-      captainId: 'cap-vnr',
-      color: '#d1b3a1',
-      totalPurse: 10000000,
-      spentPurse: 1900000, // ₹19.00 L
-      remainingPurse: 8100000, // ₹81.00 L
-      squadLimit: 15,
-      retainedMembers: [
-        { name: 'Rahul Sen', role: 'Captain & Fast Bowler', type: 'Captain', jersey: 1 },
-        { name: 'Manish V.', role: 'Slow Left-Arm All-Rounder', type: 'Retained Squad', jersey: 5 }
-      ],
-      acquiredPlayers: [
-        { id: 'sold-5', name: 'Karthik Rao', role: 'Top-order Batsman', price: 1900000, time: '11:20 AM' }
-      ]
-    },
-    {
-      id: 'team-bits-cricket',
-      name: 'BITS Hyderabad Titans',
-      shortCode: 'BITS',
-      institution: 'BITS Pilani Hyderabad Campus, Shamirpet',
-      sport: 'cricket',
-      captain: 'Anish Mathur',
-      captainId: 'cap-bits',
-      color: '#24438c',
-      totalPurse: 10000000,
-      spentPurse: 4200000, // ₹42.00 L
-      remainingPurse: 5800000, // ₹58.00 L
-      squadLimit: 15,
-      retainedMembers: [
-        { name: 'Anish Mathur', role: 'Captain & Top-Order Batsman', type: 'Captain', jersey: 9 }
-      ],
-      acquiredPlayers: [
-        { id: 'sold-6', name: 'Sameer Jha', role: 'Wicket-keeper Batsman', price: 2600000, time: '11:35 AM' },
-        { id: 'sold-7', name: 'Tanmay Saxena', role: 'Pace Bowler', price: 1600000, time: '11:48 AM' }
-      ]
-    },
-    {
-      id: 'team-nmims-football',
-      name: 'NMIMS Impulse FC',
-      shortCode: 'STME-FC',
-      institution: 'NMIMS Hyderabad STME',
-      sport: 'football',
-      captain: 'Farhan Shaikh',
-      captainId: 'cap-stme-fc',
-      color: '#82a2e1',
-      totalPurse: 10000000,
-      spentPurse: 2500000,
-      remainingPurse: 7500000,
-      squadLimit: 18,
-      retainedMembers: [
-        { name: 'Farhan Shaikh', role: 'Captain & Left Winger (LW)', type: 'Captain', jersey: 7 },
-        { name: 'Surya Teja', role: 'Goalkeeper (GK)', type: 'Retained Squad', jersey: 1 }
-      ],
-      acquiredPlayers: [
-        { id: 'sold-8', name: 'Neil Mukherjee', role: 'Right Winger (RW)', price: 2500000, time: '12:05 PM' }
-      ]
-    },
-    {
-      id: 'team-bits-football',
-      name: 'BITS Hyderabad Rovers',
-      shortCode: 'BITS-FC',
-      institution: 'BITS Pilani Hyderabad Campus',
-      sport: 'football',
-      captain: 'Zeeshan Ali',
-      captainId: 'cap-bits-fc',
-      color: '#24438c',
-      totalPurse: 10000000,
-      spentPurse: 3100000,
-      remainingPurse: 6900000,
-      squadLimit: 18,
-      retainedMembers: [
-        { name: 'Zeeshan Ali', role: 'Captain & Centre Forward (ST)', type: 'Captain', jersey: 10 },
-        { name: 'Aditya Pillai', role: 'Centre-Back (CB)', type: 'Retained Squad', jersey: 4 },
-        { name: 'Rishi Paul', role: 'Central Midfielder (CM)', type: 'Retained Squad', jersey: 8 }
-      ],
-      acquiredPlayers: [
-        { id: 'sold-9', name: 'Kabir Das', role: 'Goalkeeper (GK)', price: 3100000, time: '12:22 PM' }
-      ]
-    }
+      acquiredPlayers: []
+    };
+  }
+
+  const CRICKET_TEAMS = [
+    leagueTeam('csk', 'CSK', 'Claude Super Kings', 'Krishna Patil', '#facc15', 'cricket'),
+    leagueTeam('gt', 'GT', 'GitHub Titans', 'Anoushka Sarkar', '#d4a373', 'cricket'),
+    leagueTeam('rcb', 'RCB', 'Royal Challengers Blockchain', 'Abhishek Rajput', '#ef4444', 'cricket'),
+    leagueTeam('srh', 'SRH', 'Sunrisers Hotspot', 'Tanish Tiwari', '#fb923c', 'cricket'),
+    leagueTeam('lsg', 'LSG', 'Linux Super Giants', 'Abhi Gupta', '#2dd4bf', 'cricket'),
+    leagueTeam('dc', 'DC', 'Docker Capitals', 'Pranshu Sharma', '#3b82f6', 'cricket'),
+    leagueTeam('pbks', 'PBKS', 'Power BI Kings', 'Yash Kavar', '#cbd5e1', 'cricket'),
+    leagueTeam('rr', 'RR', 'React Royals', 'Vedanth Raj', '#f472b6', 'cricket'),
+    leagueTeam('kkr', 'KKR', 'Kotlin Knight Riders', 'Ayaan Patel', '#a78bfa', 'cricket'),
+    leagueTeam('mi', 'MI', 'Meta Indians', 'Yash Somwanshi', '#38bdf8', 'cricket'),
   ];
 
-  // 2. DEFAULT PLAYER LOTS WITH RICH EXTRA DETAILS (Base Price: ₹10.00 Lakhs default)
-  const INITIAL_LOTS = [
-    {
-      id: 'lot-101',
-      lotNumber: 'LOT #14',
-      name: 'Kavish Malhotra',
-      nickname: 'The Express Train',
-      jersey: 18,
-      sport: 'cricket',
-      badge: 'MARQUEE PACER',
-      category: 'Cricket • Express Fast Bowler',
-      specialism: 'Right-arm Fast (144.2 km/h) • Death Over Yorker Specialist',
-      battingStyle: 'Right-Handed Lower Order',
-      bowlingStyle: 'Right-Arm Express Fast (140-145 km/h)',
-      institution: 'IIT Hyderabad (Kandi Campus)',
-      state: 'Telangana State U-23 Represent',
-      tournamentExp: 'Varsity Premier League 2025, All-India Inter-University',
-      scoutingNotes: 'Terrific pace off the deck. Consistently hits 142+ km/h with an unplayable toe-crusher yorker in death overs. Clean fielder at long-on.',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
-      stats: {
-        matches: 18,
-        wickets: 34,
-        economy: '6.12',
-        best: '5/18',
-        strikeRate: '14.2',
-        dotBallPct: '58.4%'
-      },
-      basePrice: 1000000, // ₹10.00 L
-      currentBid: 2800000, // ₹28.00 L
-      highestBidderTeamId: 'team-nmims-cricket',
-      highestBidderTeamName: 'NMIMS STME Strikers',
-      highestBidderCaptain: 'Vikramaditya',
-      status: 'active'
-    },
-    {
-      id: 'lot-102',
-      lotNumber: 'LOT #15',
-      name: 'Devansh Singhal',
-      nickname: 'Pocket Dynamo',
-      jersey: 7,
-      sport: 'cricket',
-      badge: 'EXPLOSIVE OPENER & KEEPER',
-      category: 'Cricket • Explosive Opener & Wicket-Keeper',
-      specialism: 'Left-hand Wicket-keeper Batsman • 360° Powerplay Striker',
-      battingStyle: 'Left-Handed Aggressive Opener',
-      bowlingStyle: 'Wicket-Keeper (Right-Arm Off-Break part-time)',
-      institution: 'Chaitanya Bharathi Institute of Technology (CBIT)',
-      state: 'Hyderabad District League Div A',
-      tournamentExp: 'HCA League 2024-25, State T20 Championship',
-      scoutingNotes: 'Left-handed dasher who destroys pace bowling in first 6 overs. Quick reflexes behind the stumps with 19 dismissals last season.',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80',
-      stats: {
-        matches: 22,
-        runs: 840,
-        average: '46.6',
-        strikeRate: '168.4',
-        catches: 19,
-        fifties: 6
-      },
-      basePrice: 1000000, // ₹10.00 L
-      currentBid: 1000000,
-      highestBidderTeamId: null,
-      highestBidderTeamName: 'No Active Bid',
-      highestBidderCaptain: '-',
-      status: 'upcoming'
-    },
-    {
-      id: 'lot-103',
-      lotNumber: 'LOT #16',
-      name: 'Tariq Mansoor',
-      nickname: 'The Target Man',
-      jersey: 9,
-      sport: 'football',
-      badge: 'GOLDEN BOOT CONTENDER',
-      category: 'Football • Centre Forward / Striker',
-      specialism: 'Clinical Finisher • Aerial Target Man • Top Speed 33.8 km/h',
-      battingStyle: 'Striker / Centre-Forward',
-      bowlingStyle: 'Strong Both Feet • High Aerial Dominance',
-      institution: 'Osmania University, Hyderabad',
-      state: 'South Zone Inter-University Finalist',
-      tournamentExp: 'Telangana Football League, Reliance Foundation Youth Championship',
-      scoutingNotes: 'Unstoppable in the 18-yard box. 21 goals in 16 appearances. Lethal header conversion on corner kicks.',
-      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80',
-      stats: {
-        matches: 16,
-        goals: 21,
-        assists: 8,
-        conversionRate: '28.4%',
-        minutesPerGoal: '68 min',
-        shotsOnTarget: '74%'
-      },
-      basePrice: 1000000, // ₹10.00 L
-      currentBid: 1000000,
-      highestBidderTeamId: null,
-      highestBidderTeamName: 'No Active Bid',
-      highestBidderCaptain: '-',
-      status: 'upcoming'
-    },
-    {
-      id: 'lot-104',
-      lotNumber: 'LOT #17',
-      name: 'Harshith Reddy',
-      nickname: 'The Professor',
-      jersey: 11,
-      sport: 'cricket',
-      badge: 'SPIN ALL-ROUNDER',
-      category: 'Cricket • Spin All-Rounder',
-      specialism: 'Left-arm Orthodox & Middle Order Finisher (Death Over SR 182)',
-      battingStyle: 'Right-Handed Finisher',
-      bowlingStyle: 'Slow Left-Arm Orthodox (Arm ball & Slider)',
-      institution: 'VNR Vignana Jyothi Institute of Engineering (VNR VJIET)',
-      state: 'Varsity Premier League MVP 2025',
-      tournamentExp: 'Inter-College Cup Gold Medalist, Hyderabad Club League',
-      scoutingNotes: 'Complete package. Economic bowling in middle overs (5.88 rpo) combined with power hitting in final 4 overs.',
-      avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=600&q=80',
-      stats: {
-        matches: 15,
-        wickets: 22,
-        runs: 310,
-        economy: '5.88',
-        average: '38.7',
-        strikeRate: '154.2'
-      },
-      basePrice: 1000000, // ₹10.00 L
-      currentBid: 1000000,
-      highestBidderTeamId: null,
-      highestBidderTeamName: 'No Active Bid',
-      highestBidderCaptain: '-',
-      status: 'upcoming'
-    },
-    {
-      id: 'lot-105',
-      lotNumber: 'LOT #18',
-      name: 'Amanpreet Singh',
-      nickname: 'Maestro #10',
-      jersey: 10,
-      sport: 'football',
-      badge: 'PLAYMAKER #10',
-      category: 'Football • Central Midfield Playmaker',
-      specialism: 'Deep-lying Playmaker • Set-Piece Maestro • 91.2% Pass Accuracy',
-      battingStyle: 'Central Midfielder / Attacking Midfield',
-      bowlingStyle: 'Right-Footed Curler • Free-Kick Specialist',
-      institution: 'BITS Pilani Hyderabad Campus',
-      state: 'All-India Inter-Engineering Tournament Best Midfielder',
-      tournamentExp: 'BITS Arena Champion 2025, All-India Invitational Trophy',
-      scoutingNotes: 'Incredible vision and passing range. Controls the tempo of the game. Scored 4 direct free kicks last season.',
-      avatar: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=600&q=80',
-      stats: {
-        matches: 19,
-        assists: 17,
-        keyPasses: 44,
-        tacklesWon: '78%',
-        interceptions: 36,
-        goals: 6
-      },
-      basePrice: 1000000, // ₹10.00 L
-      currentBid: 1000000,
-      highestBidderTeamId: null,
-      highestBidderTeamName: 'No Active Bid',
-      highestBidderCaptain: '-',
-      status: 'upcoming'
-    }
+  const FOOTBALL_TEAMS = [
+    leagueTeam('mun', 'MUN', 'Metaverse United', 'Krishna Patil', '#ef4444', 'football'),
+    leagueTeam('atm', 'ATM', 'Atlético de Matlab', 'Vedant Raj', '#f472b6', 'football'),
+    leagueTeam('mci', 'MCI', 'Manus City', 'Tanish Tiwari', '#7dd3fc', 'football'),
+    leagueTeam('fcb', 'FCB', 'FC Backend', 'Abhi Gupta', '#a78bfa', 'football'),
+    leagueTeam('psg', 'PSG', 'Python Saint-Germain', 'Utsav Baradwaj', '#3b82f6', 'football'),
+    leagueTeam('rma', 'RMA', 'Real Mistral', 'Karnika Gupta', '#e2e8f0', 'football'),
   ];
+
+  const DEFAULT_TEAMS = { cricket: CRICKET_TEAMS, football: FOOTBALL_TEAMS };
+  const INITIAL_TEAMS = DEFAULT_TEAMS[SPORT];
+
+
+  // 2c. CRICKET PLAYER POOL — League 2.0 registrations: [name, gender, year, role]
+  const CRICKET_PLAYERS = [
+    ["Tusshhar", 'Male', '3rd Year', 'Batsman'],
+    ["Akhila", 'Female', '3rd Year', 'Bowler'],
+    ["Anant", 'Male', '1st Year', 'Batsman'],
+    ["Rishit Srivastava", 'Male', '2nd Year', 'Batsman'],
+    ["Sri Vardhan", 'Male', '1st Year', 'Bowler'],
+    ["Ujjwal Singh", 'Male', '2nd Year', 'Batsman'],
+    ["Aditya Gupta", 'Male', '2nd Year', 'Bowler'],
+    ["Prayag Garg", 'Male', '1st Year', 'Batsman'],
+    ["Karnika Gupta", 'Female', '3rd Year', 'Batsman'],
+    ["Harshitha", 'Female', '3rd Year', 'Batsman'],
+    ["Jaami Haider", 'Male', '3rd Year', 'Batsman'],
+    ["Zaid Ahmad", 'Male', '3rd Year', 'Bowler'],
+    ["Ojas", 'Male', '3rd Year', 'Bowler'],
+    ["Ayushman Padhy", 'Male', '3rd Year', 'Batsman'],
+    ["Sachin", 'Male', '2nd Year', 'Batsman'],
+    ["Harshit Rishabh", 'Male', '1st Year', 'Batsman'],
+    ["Swapnil Patil", 'Male', '2nd Year', 'Batsman'],
+    ["Manyaa", 'Female', '2nd Year', 'Batsman'],
+    ["Kriday Mishra", 'Male', '2nd Year', 'Bowler'],
+    ["Kavya Agrawal", 'Female', '1st Year', 'Bowler'],
+    ["Arman Khan", 'Male', '1st Year', 'Batsman'],
+    ["Almas Mandlik", 'Male', '2nd Year', 'Batsman'],
+    ["Aditya Peddinty", 'Male', '2nd Year', 'Batsman'],
+    ["Karthikeya Avasarala", 'Male', '2nd Year', 'Bowler'],
+    ["Anubrat", 'Male', '2nd Year', 'Batsman'],
+    ["Aman", 'Male', '3rd Year', 'Batsman'],
+    ["Rishika Dhakate", 'Female', '2nd Year', 'Bowler'],
+    ["Aditya Sinha", 'Male', '2nd Year', 'Batsman'],
+    ["Harshavardhan Adelly", 'Male', '1st Year', 'Bowler'],
+    ["Adarsh Mishra", 'Male', '1st Year', 'Batsman'],
+    ["Ujjwal Anand", 'Male', '1st Year', 'Batsman'],
+    ["Divyaraj", 'Male', '1st Year', 'Bowler'],
+    ["Purushottam Jha", 'Male', '2nd Year', 'Batsman'],
+    ["Karthik Suhaas", 'Male', '2nd Year', 'Batsman'],
+    ["Akanksha Patil", 'Female', '3rd Year', 'Batsman'],
+    ["Ananya Kolluru", 'Female', '3rd Year', 'Batsman'],
+    ["Shreyansh Chatterjee", 'Male', '1st Year', 'Batsman'],
+    ["Paridhi Talreja", 'Female', '3rd Year', 'Bowler'],
+    ["Sahiti", 'Female', '2nd Year', 'Batsman'],
+    ["Ampolu Utsav Baradwaj", 'Male', '2nd Year', 'Bowler'],
+    ["Suhani Srivastava", 'Female', '2nd Year', 'Batsman'],
+    ["Tanishq Prajapati", 'Male', '3rd Year', 'Bowler'],
+    ["Tejas Srivastava", 'Male', '2nd Year', 'Batsman'],
+    ["Soham Pawar", 'Male', '2nd Year', 'Batsman'],
+    ["Harshit Singh", 'Male', '1st Year', 'Batsman'],
+    ["Anaaya Akhlaque", 'Female', '3rd Year', 'Batsman'],
+    ["Ranveersingh", 'Male', '1st Year', 'Bowler'],
+    ["Kevindeep Singh Pannu", 'Male', '3rd Year', 'Bowler'],
+    ["Rishab Sarda", 'Male', '3rd Year', 'Batsman'],
+    ["Shalini Singare", 'Female', '2nd Year', 'Bowler'],
+    ["Gurmehar Singh", 'Male', '1st Year', 'Bowler'],
+    ["Jayesh Gupta", 'Male', '1st Year', 'Batsman'],
+    ["Shanmukesh", 'Male', '1st Year', 'Bowler'],
+    ["Saamarth Dev", 'Male', '1st Year', 'Batsman'],
+    ["Riddhima Garg", 'Female', '2nd Year', 'Batsman'],
+    ["THAKUR ANIRUDH SINGH", 'Male', '1st Year', 'Batsman'],
+    ["V Sanjay Sai", 'Male', '2nd Year', 'Bowler'],
+    ["Tirth", 'Male', '1st Year', 'Batsman'],
+    ["Krishn Kumar Poddar", 'Male', '1st Year', 'Batsman'],
+    ["Pinnamaraju Kaushik Varma", 'Male', '2nd Year', 'Bowler'],
+    ["Manali Shailendra Patankar", 'Female', '1st Year', 'Bowler'],
+    ["Lakshya Sharma", 'Male', '1st Year', 'Batsman'],
+    ["Vishist Agrahari", 'Male', '2nd Year', 'Batsman'],
+    ["Sukanya", 'Female', '2nd Year', 'Batsman'],
+    ["Smriti Patel", 'Female', '1st Year', 'Batsman'],
+    ["Shourya Singh", 'Male', '1st Year', 'Batsman'],
+    ["Harshith Kadiveti", 'Male', '1st Year', 'Bowler'],
+    ["Karan Singh Choudhary", 'Male', '1st Year', 'Bowler'],
+    ["Amar Nath Ojha", 'Male', '1st Year', 'Batsman'],
+    ["Daler", 'Male', '1st Year', 'Batsman'],
+    ["Harshith Reddy P", 'Male', '1st Year', 'Batsman'],
+    ["Yug Kant Singh", 'Male', '1st Year', 'Bowler'],
+    ["Yutika Agarwal", 'Female', '1st Year', 'Batsman'],
+    ["Tanmay", 'Male', '2nd Year', 'Batsman'],
+    ["Aadi Srivastava", 'Male', '2nd Year', 'Bowler'],
+    ["Syed Daniyal", 'Male', '2nd Year', 'Batsman'],
+    ["Ryan Manvar", 'Male', '3rd Year', 'Bowler'],
+    ["Vraddhi", 'Female', '2nd Year', 'Bowler'],
+    ["Aryan Singh", 'Male', '2nd Year', 'Batsman'],
+    ["Ashwin Shukla", 'Male', '2nd Year', 'Bowler'],
+    ["Sanidhya Pandey", 'Male', '2nd Year', 'Batsman'],
+    ["Sruthi Patro", 'Female', '3rd Year', 'Batsman'],
+    ["Krishna", 'Male', '1st Year', 'Batsman'],
+    ["Omkar Khandeparkar", 'Male', '3rd Year', 'Bowler'],
+    ["Atharv Mahajan", 'Male', '1st Year', 'Batsman'],
+    ["Drishti Shankar", 'Female', '2nd Year', 'Bowler'],
+    ["Tejas Srivastav", 'Male', '1st Year', 'Batsman'],
+    ["Shanmukhi Balakuntla", 'Female', '2nd Year', 'Bowler'],
+    ["Harshith Reddy", 'Male', '2nd Year', 'Batsman'],
+    ["Samya", 'Female', '2nd Year', 'Batsman'],
+    ["Anju Jaslin", 'Female', '2nd Year', 'Bowler'],
+    ["Aryan Kumar", 'Male', '2nd Year', 'Batsman'],
+    ["Akhil Goud", 'Male', '3rd Year', 'Batsman'],
+    ["Aarush Chaudhary", 'Male', '3rd Year', 'Batsman'],
+    ["Sulakshana Sonavane", 'Female', '3rd Year', 'Batsman'],
+    ["Nandini Devnani", 'Female', '3rd Year', 'Batsman'],
+    ["Madhur Waghmare", 'Male', '3rd Year', 'Bowler'],
+  ];
+
+  // 2b. FOOTBALL PLAYER POOL — League 2.0 registrations: [name, gender, year, position]
+  const FOOTBALL_PLAYERS = [
+    ["Akhila", 'Female', '3rd Year', 'Midfielder'],
+    ["Anant", 'Male', '1st Year', 'Goalkeeper'],
+    ["Tejas Srivastava", 'Male', '2nd Year', 'Midfielder'],
+    ["Ayush Yadav", 'Male', '2nd Year', 'Midfielder'],
+    ["Ayushman Datta", 'Male', '1st Year', 'Forward'],
+    ["Jaami Haider", 'Male', '3rd Year', 'Midfielder'],
+    ["Rishit Srivastava", 'Male', '2nd Year', 'Midfielder'],
+    ["Ayushman Padhy", 'Male', '3rd Year', 'Forward'],
+    ["Swapnil Patil", 'Male', '2nd Year', 'Forward'],
+    ["Kriday Mishra", 'Male', '2nd Year', 'Defender'],
+    ["Tanishi Shukla", 'Female', '3rd Year', 'Midfielder'],
+    ["Arman Khan", 'Male', '1st Year', 'Defender'],
+    ["Almas Mandlik", 'Male', '2nd Year', 'Defender'],
+    ["Riddhima Garg", 'Female', '2nd Year', 'Forward'],
+    ["Kavya Agrawal", 'Female', '1st Year', 'Midfielder'],
+    ["Aadi Srivastava", 'Male', '2nd Year', 'Midfielder'],
+    ["Adarsh Mishra", 'Male', '1st Year', 'Midfielder'],
+    ["Shalini", 'Female', '2nd Year', 'Defender'],
+    ["Pinnamaraju Kaushik Varma", 'Male', '2nd Year', 'Midfielder'],
+    ["Abhishek Rajput", 'Male', '2nd Year', 'Defender'],
+    ["Purushottam Jha", 'Male', '2nd Year', 'Midfielder'],
+    ["Harshitha", 'Female', '3rd Year', 'Goalkeeper'],
+    ["Harshith Kadiveti", 'Male', '1st Year', 'Forward'],
+    ["Soham Pawar", 'Male', '2nd Year', 'Defender'],
+    ["Kevindeep Singh Pannu", 'Male', '3rd Year', 'Goalkeeper'],
+    ["Zaid Ahmad", 'Male', '3rd Year', 'Defender'],
+    ["Aditya Peddinty", 'Male', '2nd Year', 'Defender'],
+    ["Aadit Animesh", 'Male', '1st Year', 'Midfielder'],
+    ["Gurmehar Singh", 'Male', '1st Year', 'Defender'],
+    ["Thakur Anirudh Singh", 'Male', '1st Year', 'Defender'],
+    ["Smriti Patel", 'Female', '1st Year', 'Midfielder'],
+    ["Bhavya Sharma", 'Female', '2nd Year', 'Defender'],
+    ["Kunal Yadav", 'Male', '1st Year', 'Defender'],
+    ["Shreyansh Chatterjee", 'Male', '1st Year', 'Defender'],
+    ["Amar Nath Ojha", 'Male', '1st Year', 'Forward'],
+    ["Sachin", 'Male', '2nd Year', 'Forward'],
+    ["Daler", 'Male', '1st Year', 'Forward'],
+    ["Ujjwal Singh", 'Male', '2nd Year', 'Defender'],
+    ["T.Sri Vardhan", 'Male', '1st Year', 'Midfielder'],
+    ["Harshith Reddy P", 'Male', '1st Year', 'Defender'],
+    ["Harshavardhan Adelly", 'Male', '1st Year', 'Midfielder'],
+    ["Tusshhar", 'Male', '3rd Year', 'Defender'],
+    ["Tanmay Anand", 'Male', '2nd Year', 'Defender'],
+    ["Divyaraj", 'Male', '1st Year', 'Midfielder'],
+    ["Karan Singh Choudhary", 'Male', '1st Year', 'Midfielder'],
+    ["Prayag Garg", 'Male', '1st Year', 'Midfielder'],
+    ["Ujjwal Anand", 'Male', '1st Year', 'Midfielder'],
+    ["Yug Kant Singh", 'Male', '1st Year', 'Defender'],
+    ["Aditya Gupta", 'Male', '2nd Year', 'Goalkeeper'],
+    ["Yutika Agarwal", 'Female', '1st Year', 'Midfielder'],
+    ["Ranveer", 'Male', '1st Year', 'Forward'],
+    ["Aman", 'Male', '3rd Year', 'Midfielder'],
+    ["Pranshu Sharma", 'Male', '2nd Year', 'Defender'],
+    ["Navneet Roy", 'Male', '1st Year', 'Forward'],
+    ["Syed Daniyal", 'Male', '2nd Year', 'Forward'],
+    ["Harshit Singh", 'Male', '1st Year', 'Midfielder'],
+    ["Aryan Singh", 'Male', '2nd Year', 'Goalkeeper'],
+    ["Ashwin Shukla", 'Male', '2nd Year', 'Defender'],
+    ["Sruthi Patro", 'Female', '3rd Year', 'Defender'],
+    ["Anumeet Prakash", 'Male', '2nd Year', 'Defender'],
+    ["Manyaa", 'Female', '2nd Year', 'Forward'],
+    ["Shanmukesh", 'Male', '1st Year', 'Defender'],
+    ["Suhani Srivastava", 'Female', '2nd Year', 'Defender'],
+    ["Krishna", 'Male', '1st Year', 'Defender'],
+    ["Aryan Kumar", 'Male', '2nd Year', 'Midfielder'],
+    ["Ryan", 'Male', '3rd Year', 'Midfielder'],
+    ["Rishit Paitandy", 'Male', '1st Year', 'Defender'],
+    ["Rajveer", 'Male', '1st Year', 'Goalkeeper'],
+    ["Ekansh Bansal", 'Male', '2nd Year', 'Goalkeeper'],
+    ["Karthikeya Avasarala", 'Male', '2nd Year', 'Midfielder'],
+    ["Pranjal Pathak", 'Male', '2nd Year', 'Midfielder'],
+    ["Yash Kavar", 'Male', '3rd Year', 'Forward'],
+    ["Aarav Shah", 'Male', '2nd Year', 'Defender'],
+    ["Sourya Singh", 'Male', '1st Year', 'Midfielder'],
+    ["Krishn Kumar Poddar", 'Male', '1st Year', 'Forward'],
+    ["Sulakshana Sonavane", 'Female', '3rd Year', 'Defender'],
+    ["Ayaan Patel", 'Male', '2nd Year', 'Forward']
+  ];
+
+  function cricketLot(player, index) {
+    const [name, gender, year, role] = player;
+    return {
+      id: 'lot-' + String(index + 201),
+      lotNumber: 'LOT #' + (index + 1),
+      name: name,
+      nickname: name.split(' ')[0],
+      jersey: null,
+      sport: 'cricket',
+      badge: role,
+      category: 'Cricket \u2022 ' + role,
+      specialism: role,
+      gender: gender,
+      year: year,
+      battingStyle: role === 'Batsman' ? 'Right-Handed Batter' : 'Right-Handed Tail-End Batter',
+      bowlingStyle: role === 'Bowler' ? 'Right-Arm Fast-Medium' : 'Right-Arm Part-Time Off-Break',
+      institution: year + ' \u2022 ' + gender,
+      state: '',
+      tournamentExp: '',
+      scoutingNotes: '',
+      avatar: initialsAvatar(name),
+      stats: {},
+      basePrice: 1000000, // ₹10.00 Lakh
+      currentBid: 1000000,
+      highestBidderTeamId: null,
+      highestBidderTeamName: 'No Active Bid',
+      highestBidderCaptain: '-',
+      status: index === 0 ? 'active' : 'upcoming'
+    };
+  }
+
+  function footballLot(player, index) {
+    const [name, gender, year, position] = player;
+    return {
+      id: 'fb-' + String(index + 1).padStart(3, '0'),
+      lotNumber: 'LOT #' + (index + 1),
+      name: name,
+      nickname: name.split(' ')[0],
+      jersey: null,
+      sport: 'football',
+      badge: position,
+      category: 'Football • ' + position,
+      specialism: position,
+      gender: gender,
+      year: year,
+      battingStyle: '',
+      bowlingStyle: '',
+      institution: year + ' • ' + gender,
+      state: '',
+      tournamentExp: '',
+      scoutingNotes: '',
+      avatar: initialsAvatar(name),
+      stats: {},
+      basePrice: 1000000, // ₹10.00 Lakh, same as cricket
+      currentBid: 1000000,
+      highestBidderTeamId: null,
+      highestBidderTeamName: 'No Active Bid',
+      highestBidderCaptain: '-',
+      status: index === 0 ? 'active' : 'upcoming'
+    };
+  }
+
+  // Starting player pool for this page's sport
+  const SEED_LOTS = SPORT === 'football'
+    ? FOOTBALL_PLAYERS.map(footballLot)
+    : CRICKET_PLAYERS.map(cricketLot);
+
+  // Seed lots are the official League 2.0 registrations — the import modal uses this
+  // to pre-tick \'replace\' only while the pool holds nothing beyond official entries.
+  const SEED_LOT_IDS = SEED_LOTS.map(l => l.id);
 
   // 3. INITIAL BID LOG
-  const INITIAL_BID_LOG = [
-    { time: '11:42:10 AM', team: 'CBIT Thunder', captain: 'Pranav K.', amount: 1000000, type: 'bid' },
-    { time: '11:42:25 AM', team: 'NMIMS STME Strikers', captain: 'Vikramaditya', amount: 1500000, type: 'bid' },
-    { time: '11:42:48 AM', team: 'BITS Hyderabad Titans', captain: 'Anish Mathur', amount: 2000000, type: 'bid' },
-    { time: '11:43:15 AM', team: 'NMIMS STME Strikers', captain: 'Vikramaditya', amount: 2800000, type: 'bid' }
-  ];
+  const INITIAL_BID_LOG = [];
 
-  // 4. AUCTION ENGINE CORE
+  // 4. PLAYER POOL HELPERS (manual add + mass import)
+  const DEFAULT_BASE_PRICE = 1000000; // ₹10.00 Lakh
+
+  // Spreadsheet header names we recognise for each player field (compared lowercase, punctuation stripped)
+  const IMPORT_COLUMNS = {
+    name: ['name', 'player', 'player name', 'full name', 'athlete'],
+    sport: ['sport', 'game', 'discipline'],
+    role: ['role', 'playing role', 'category', 'position', 'type', 'skill', 'speciality', 'specialty', 'specialization', 'specialisation'],
+    basePrice: ['base price', 'baseprice', 'base', 'price', 'base amount'],
+    institution: ['institution', 'college', 'university', 'school', 'branch', 'department'],
+    photo: ['photo', 'photo url', 'photo link', 'image', 'image url', 'picture', 'pic', 'avatar'],
+    batting: ['batting', 'batting style', 'batting hand'],
+    bowling: ['bowling', 'bowling style', 'bowling type'],
+    notes: ['notes', 'scouting notes', 'bio', 'remarks', 'about', 'achievements']
+  };
+  // When no header matches exactly, the more specific fields claim a column first
+  // (so "College Name" becomes the college, not the player name).
+  const IMPORT_FUZZY_ORDER = ['photo', 'institution', 'basePrice', 'batting', 'bowling', 'sport', 'role', 'notes', 'name'];
+
+  function matchImportColumns(headerRow) {
+    const headers = headerRow.map(h => h.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim());
+    const columns = {};
+    const claimed = new Set();
+    Object.keys(IMPORT_COLUMNS).forEach(field => {
+      const idx = headers.findIndex((h, i) => !claimed.has(i) && IMPORT_COLUMNS[field].includes(h));
+      if (idx !== -1) { columns[field] = idx; claimed.add(idx); }
+    });
+    IMPORT_FUZZY_ORDER.forEach(field => {
+      if (columns[field] !== undefined) return;
+      const idx = headers.findIndex((h, i) => !claimed.has(i) && IMPORT_COLUMNS[field].some(alias => h.includes(alias)));
+      if (idx !== -1) { columns[field] = idx; claimed.add(idx); }
+    });
+    return columns;
+  }
+
+  function normalizeSport(sportText, roleText) {
+    const sport = (sportText || '').toLowerCase();
+    if (sport.includes('foot') || sport.includes('soccer')) return 'football';
+    if (sport.includes('cric')) return 'cricket';
+    return /goal ?keeper|\bgk\b|striker|defender|midfield|winger|forward|centre.?back|full.?back/i.test(roleText || '')
+      ? 'football'
+      : 'cricket';
+  }
+
+  // Accept direct image links, and turn Google Drive share links (e.g. Google Form uploads) into viewable images.
+  // Drive files must be shared as "Anyone with the link" for the image to load.
+  function normalizePhotoUrl(url) {
+    const clean = (url || '').trim();
+    const driveMatch = clean.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:export=\w+&)?id=|thumbnail\?id=)([\w-]+)/);
+    if (driveMatch) return `https://drive.google.com/thumbnail?id=${driveMatch[1]}&sz=w800`;
+    if (/^https?:\/\//i.test(clean) || /^data:image\//i.test(clean)) return clean;
+    if (/\.(png|jpe?g|webp|gif|avif)$/i.test(clean)) return clean; // relative path, e.g. assets/players/x.jpg
+    return '';
+  }
+
+  // Team a signed-in captain leads in this sport: by team id, or by captain name when the same person
+  // captains in both sports (e.g. Krishna Patil: CSK in cricket, MUN in football)
+  function findCaptainTeam(teams, auth) {
+    const byId = teams.find(t => t.id === auth.teamId);
+    if (byId) return byId;
+    const normalize = value => String(value || '').replace(/\(captain\)/i, '').toLowerCase().replace(/[^a-z]/g, '');
+    const captainName = normalize(auth.name);
+    return captainName ? (teams.find(t => normalize(t.captain) === captainName) || null) : null;
+  }
+
+  // Neutral placeholder portrait showing the player's initials (used when no photo is given)
+  function initialsAvatar(name) {
+    const initials = (name || '?').split(/\s+/).filter(Boolean).slice(0, 2)
+      .map(word => word[0].toUpperCase()).join('').replace(/[<>&"']/g, '');
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500"><rect width="400" height="500" fill="#1d2541"/><text x="50%" y="52%" text-anchor="middle" dominant-baseline="middle" font-family="Anton, Impact, sans-serif" font-size="170" fill="#82a2e1">${initials}</text></svg>`;
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  }
+
+  // Build a new upcoming lot. Fields that are passed in (even as empty strings) are kept as given,
+  // so imported players never get made-up styles or notes.
+  function buildLot(playerData, state) {
+    const pick = (value, fallback) => (value !== undefined && value !== null ? value : fallback);
+    const lastLotNum = state.lots.reduce((max, l) => Math.max(max, parseInt(String(l.lotNumber).replace(/\D/g, ''), 10) || 0), 0);
+    const name = playerData.name.trim();
+    const basePrice = Number(playerData.basePrice) || DEFAULT_BASE_PRICE;
+    return {
+      id: 'lot-' + Date.now() + '-' + Math.random().toString(36).substring(2, 8),
+      lotNumber: 'LOT #' + (lastLotNum + 1),
+      name: name,
+      nickname: playerData.nickname || name.split(' ')[0],
+      jersey: playerData.jersey || (state.lots.length + 1),
+      sport: playerData.sport || 'cricket',
+      badge: playerData.badge || 'AUCTION SQUAD DRAFT',
+      category: playerData.category || 'Cricket • Squad Player',
+      specialism: playerData.specialism || 'Varsity Player',
+      battingStyle: pick(playerData.battingStyle, 'Right-Handed'),
+      bowlingStyle: pick(playerData.bowlingStyle, 'Right-Arm Medium'),
+      institution: pick(playerData.institution, 'NMIMS Hyderabad STME'),
+      state: pick(playerData.state, 'Telangana Collegiate Circuit'),
+      tournamentExp: pick(playerData.tournamentExp, 'College Premier League'),
+      scoutingNotes: pick(playerData.scoutingNotes, 'Impressive performance in collegiate trials.'),
+      avatar: playerData.avatar || initialsAvatar(name),
+      stats: playerData.stats || {},
+      basePrice: basePrice,
+      currentBid: basePrice,
+      highestBidderTeamId: null,
+      highestBidderTeamName: 'No Active Bid',
+      highestBidderCaptain: '-',
+      status: 'upcoming'
+    };
+  }
+
+  // 5. AUCTION ENGINE CORE
   window.LegendsAuction = {
+    sport: SPORT,
+
     // -------------------------------------------------------------
     // CURRENCY & FORMATTING
     // -------------------------------------------------------------
@@ -398,6 +523,19 @@
             if (!Array.isArray(parsed.bidHistory)) parsed.bidHistory = [];
             if (!Array.isArray(parsed.actionHistory)) parsed.actionHistory = [];
             if (typeof parsed.elapsedSeconds !== 'number') parsed.elapsedSeconds = 0;
+
+            // One-time upgrade: team purses went from ₹1 Cr to ₹50 Cr. Keeps players, bids and spend;
+            // purses the admin set to anything other than the old default are left alone.
+            if (!parsed.purse50CrApplied) {
+              parsed.teams.forEach(t => {
+                if (t.totalPurse === PREVIOUS_DEFAULT_PURSE) {
+                  t.totalPurse = DEFAULT_TEAM_PURSE;
+                  t.remainingPurse = Math.max(0, t.totalPurse - t.spentPurse);
+                }
+              });
+              parsed.purse50CrApplied = true;
+              this.saveState(parsed);
+            }
             return parsed;
           }
         }
@@ -407,24 +545,19 @@
 
       const baseline = {
         teams: JSON.parse(JSON.stringify(INITIAL_TEAMS)),
-        lots: JSON.parse(JSON.stringify(INITIAL_LOTS)),
-        activeLotId: 'lot-101',
+        lots: JSON.parse(JSON.stringify(SEED_LOTS)),
+        activeLotId: SEED_LOTS[0].id,
         bidLog: JSON.parse(JSON.stringify(INITIAL_BID_LOG)),
         timerSeconds: 0,
         elapsedSeconds: 45,
         isTimerRunning: true,
         lastSold: null,
-        bidHistory: [
-          { amount: 1000000, teamId: 'team-cbit-cricket', teamName: 'CBIT Thunder' },
-          { amount: 1500000, teamId: 'team-nmims-cricket', teamName: 'NMIMS STME Strikers' },
-          { amount: 2000000, teamId: 'team-bits-cricket', teamName: 'BITS Hyderabad Titans' },
-          { amount: 2800000, teamId: 'team-nmims-cricket', teamName: 'NMIMS STME Strikers' }
-        ],
+        bidHistory: [],
         actionHistory: [],
         adminOnlyBidding: true,
+        purse50CrApplied: true,
         recentAnnouncements: [
-          'Hammer active for LOT #14: Kavish Malhotra (Base: ₹10.0L)',
-          'High bid: ₹28.00 Lakhs by NMIMS STME Strikers (Vikramaditya)'
+          `Legends Walk Off League 2.0 ${SPORT} auction room is ready`
         ]
       };
       this.saveState(baseline);
@@ -439,6 +572,9 @@
         }
         if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
           window.dispatchEvent(new CustomEvent('legends_auction_updated', { detail: state }));
+        }
+        if (typeof window !== 'undefined' && window.LegendsRealtime && typeof window.LegendsRealtime.broadcast === 'function') {
+          window.LegendsRealtime.broadcast('AUCTION_STATE_UPDATED', { sport: SPORT, state: state });
         }
       } catch (e) {
         console.error('Error saving auction state', e);
@@ -472,16 +608,20 @@
               email: auth.email
             };
           } else if (auth && auth.role === 'captain') {
-            const team = state.teams.find(t => t.id === auth.teamId) || state.teams[0];
-            return {
-              role: 'captain',
-              title: `${team.captain} (Captain • ${team.shortCode})`,
-              teamId: team.id,
-              teamName: team.name,
-              captainName: team.captain,
-              isLoggedIn: true,
-              email: auth.email
-            };
+            const team = findCaptainTeam(state.teams, auth);
+            if (team) {
+              return {
+                role: 'captain',
+                title: `${team.captain} (Captain • ${team.shortCode})`,
+                teamId: team.id,
+                teamName: team.name,
+                captainName: team.captain,
+                isLoggedIn: true,
+                email: auth.email
+              };
+            }
+            // Captain with no team in this sport's auction (e.g. a cricket-only captain on the football page): view-only
+            return { role: 'guest', title: 'Guest Spectator (View-Only)', teamId: null, isLoggedIn: false };
           }
         }
       } catch (e) {}
@@ -491,7 +631,8 @@
         const customRole = localStorage.getItem(STORAGE_KEY_ROLE);
         if (customRole) {
           const parsed = JSON.parse(customRole);
-          if (parsed && parsed.role !== 'guest') {
+          const teamExists = parsed && (parsed.role !== 'captain' || state.teams.some(t => t.id === parsed.teamId));
+          if (parsed && parsed.role !== 'guest' && teamExists) {
             return { ...parsed, isLoggedIn: true };
           }
         }
@@ -507,6 +648,11 @@
     },
 
     setActiveRole: function (roleType, teamId) {
+      // Scorer / referee logins keep the session LegendsRBAC just created (getActiveRole already treats them as admin)
+      if (roleType && !['admin', 'captain', 'guest'].includes(roleType)) {
+        return this.getActiveRole();
+      }
+
       let roleObj = { role: 'guest', title: 'Guest Spectator (View-Only)', teamId: null, isLoggedIn: false };
       const state = this.getState();
 
@@ -528,7 +674,11 @@
         localStorage.setItem('legends_admin_logged_in', 'true');
         localStorage.setItem('legends_admin_email', session.email);
       } else if (roleType === 'captain') {
-        const team = state.teams.find(t => t.id === teamId) || state.teams[0];
+        // The team may belong to the other sport (e.g. signing in as a football captain on a cricket page)
+        const team = state.teams.find(t => t.id === teamId)
+          || ['cricket', 'football'].map(sport => this.getTeamsForSport(sport).find(t => t.id === teamId)).find(Boolean)
+          || state.teams[0];
+        if (!team) throw new Error('No teams are registered yet, so there is no captain to sign in as.');
         roleObj = {
           role: 'captain',
           title: `${team.captain} (Captain • ${team.shortCode})`,
@@ -580,7 +730,14 @@
     // -------------------------------------------------------------
     getActiveLot: function () {
       const state = this.getState();
-      return state.lots.find(l => l.id === state.activeLotId) || state.lots[0];
+      const active = state.lots.find(l => l.id === state.activeLotId);
+      if (active) return active;
+      // Safety net for a stale activeLotId: never put an already-sold player back on the hammer
+      return state.lots.find(l => l.status !== 'sold') || null;
+    },
+
+    getSeedLotIds: function () {
+      return SEED_LOT_IDS.slice();
     },
 
     getLots: function () {
@@ -664,7 +821,7 @@
       }
       const state = this.getState();
       const id = 'team-' + Date.now() + '-' + Math.random().toString(36).substring(2, 6);
-      const totalPurse = Number(teamData.totalPurse) || 10000000; // default 1 Cr
+      const totalPurse = Number(teamData.totalPurse) || DEFAULT_TEAM_PURSE; // default 50 Cr
       const newTeam = {
         id: id,
         name: teamData.name.trim(),
@@ -727,6 +884,53 @@
       state.teams = [];
       this.saveState(state);
       return true;
+    },
+
+    // Admin empties the player pool so nothing is left to bid on.
+    // options.keepSold (default true): players already sold stay with the franchises that bought them,
+    //                            pass { keepSold: false } to wipe those records too.
+    // The removed lots are pushed onto the hammer action history, so "Undo Hammer" brings them all back.
+    clearPlayerPool: function (options) {
+      const role = this.getActiveRole();
+      if (role.role !== 'admin') {
+        throw new Error('PERMISSION DENIED: Only the official Committee Auctioneer / Admin can empty the player pool.');
+      }
+
+      const keepSold = !(options && options.keepSold === false);
+      const state = this.getState();
+
+      const kept = [];
+      const removed = [];
+      state.lots.forEach(lot => (keepSold && lot.status === 'sold' ? kept : removed).push(lot));
+
+      if (!removed.length) {
+        throw new Error('The player pool is already empty — there is nothing to clear.');
+      }
+
+      state.lots = kept;
+      if (!Array.isArray(state.actionHistory)) state.actionHistory = [];
+      state.actionHistory.push({
+        action: 'clear_pool',
+        removedLots: removed,
+        previousActiveLotId: state.activeLotId,
+        keptSold: keepSold
+      });
+
+      // Put the next lot that can still be bid on under the hammer, or leave the board empty
+      const nextUp = state.lots.find(l => l.status !== 'sold') || null;
+      state.activeLotId = nextUp ? nextUp.id : null;
+      if (nextUp) nextUp.status = 'active';
+      state.bidHistory = [];
+      state.elapsedSeconds = 0;
+      state.lastSold = null;
+
+      this.saveState(state);
+      return {
+        success: true,
+        removed: removed.length,
+        keptSold: kept.length,
+        message: `Pool cleared: ${removed.length} player lot(s) removed from bidding. Use "Undo Hammer" to bring them back.`
+      };
     },
 
     // -------------------------------------------------------------
@@ -835,6 +1039,18 @@
       if (state.bidLog.length > 50) state.bidLog = state.bidLog.slice(0, 50);
 
       this.saveState(state);
+      if (typeof window !== 'undefined' && window.LegendsRealtime && typeof window.LegendsRealtime.broadcast === 'function') {
+        window.LegendsRealtime.broadcast('BID_PLACED', {
+          lotId: lot.id,
+          playerName: lot.name,
+          teamId: team.id,
+          teamName: team.name,
+          shortCode: team.shortCode,
+          amount: nextBidAmount,
+          amountFormatted: this.formatCurrency(nextBidAmount),
+          sport: SPORT
+        });
+      }
       return {
         success: true,
         newBid: nextBidAmount,
@@ -908,6 +1124,18 @@
       if (state.bidLog.length > 50) state.bidLog = state.bidLog.slice(0, 50);
 
       this.saveState(state);
+      if (typeof window !== 'undefined' && window.LegendsRealtime && typeof window.LegendsRealtime.broadcast === 'function') {
+        window.LegendsRealtime.broadcast('BID_PLACED', {
+          lotId: lot.id,
+          playerName: lot.name,
+          teamId: team.id,
+          teamName: team.name,
+          shortCode: team.shortCode,
+          amount: nextBidAmount,
+          amountFormatted: this.formatCurrency(nextBidAmount),
+          sport: SPORT
+        });
+      }
       return {
         success: true,
         newBid: nextBidAmount,
@@ -961,7 +1189,7 @@
     // -------------------------------------------------------------
     // HAMMER CONTROLS: SOLD, UNSOLD, NEXT & PREV LOTS
     // -------------------------------------------------------------
-    hammerSold: function () {
+    hammerSold: function (options) {
       const role = this.getActiveRole();
       if (role.role !== 'admin') {
         throw new Error('PERMISSION DENIED: Only the official Committee Auctioneer / Admin can strike the hammer.');
@@ -1022,16 +1250,54 @@
         player: lot.name
       });
 
+      // 5. If autoAdvance is enabled, automatically nominate and bring the next player to hammer
+      let nextLot = null;
+      if (options && (options.autoAdvance || options.next)) {
+        const currIdx = state.lots.findIndex(l => l.id === lot.id);
+        for (let i = currIdx + 1; i < state.lots.length; i++) {
+          if (state.lots[i].status !== 'sold') {
+            nextLot = state.lots[i];
+            break;
+          }
+        }
+        if (!nextLot) {
+          nextLot = state.lots.find(l => l.id !== lot.id && l.status !== 'sold');
+        }
+        if (nextLot) {
+          state.activeLotId = nextLot.id;
+          nextLot.status = 'active';
+          state.elapsedSeconds = 0;
+          state.bidHistory = [];
+        }
+      }
+
       this.saveState(state);
+      if (typeof window !== 'undefined' && window.LegendsRealtime && typeof window.LegendsRealtime.broadcast === 'function') {
+        window.LegendsRealtime.broadcast('HAMMER_ACTION', {
+          action: 'sold',
+          playerName: lot.name,
+          teamName: team.name,
+          shortCode: team.shortCode,
+          price: lot.currentBid,
+          priceFormatted: this.formatCurrency(lot.currentBid),
+          sport: SPORT,
+          nextLot: nextLot ? { id: nextLot.id, name: nextLot.name } : null
+        });
+      }
       return {
         success: true,
         lot: lot,
         team: team,
-        price: lot.currentBid
+        price: lot.currentBid,
+        nextLot: nextLot
       };
     },
 
-    hammerUnsold: function () {
+    hammerSoldAndNext: function () {
+      return this.hammerSold({ autoAdvance: true });
+    },
+
+    hammerUnsold: function (options) {
       const role = this.getActiveRole();
       if (role.role !== 'admin') {
         throw new Error('PERMISSION DENIED: Only the official Committee Auctioneer / Admin can strike the hammer.');
@@ -1060,11 +1326,44 @@
         player: lot.name
       });
 
+      let nextLot = null;
+      if (options && (options.autoAdvance || options.next)) {
+        const currIdx = state.lots.findIndex(l => l.id === lot.id);
+        for (let i = currIdx + 1; i < state.lots.length; i++) {
+          if (state.lots[i].status !== 'sold') {
+            nextLot = state.lots[i];
+            break;
+          }
+        }
+        if (!nextLot) {
+          nextLot = state.lots.find(l => l.id !== lot.id && l.status !== 'sold');
+        }
+        if (nextLot) {
+          state.activeLotId = nextLot.id;
+          if (nextLot.status !== 'sold') nextLot.status = 'active';
+          state.elapsedSeconds = 0;
+          state.bidHistory = [];
+        }
+      }
+
       this.saveState(state);
+      if (typeof window !== 'undefined' && window.LegendsRealtime && typeof window.LegendsRealtime.broadcast === 'function') {
+        window.LegendsRealtime.broadcast('HAMMER_ACTION', {
+          action: 'unsold',
+          playerName: lot.name,
+          sport: SPORT,
+          nextLot: nextLot ? { id: nextLot.id, name: nextLot.name } : null
+        });
+      }
       return {
         success: true,
-        lot: lot
+        lot: lot,
+        nextLot: nextLot
       };
+    },
+
+    hammerUnsoldAndNext: function () {
+      return this.hammerUnsold({ autoAdvance: true });
     },
 
     // Admin directly puts a player into a franchise squad and deducts amount from their wallet
@@ -1243,6 +1542,21 @@
         }
         this.saveState(state);
         return { success: true, message: `Reverted direct assignment of ${last.playerName || 'player'} and refunded ${this.formatCurrency(last.price)} to ${team ? team.name : 'team'}.` };
+      } else if (last.action === 'clear_pool') {
+        const restored = Array.isArray(last.removedLots) ? last.removedLots : [];
+        state.lots = restored.concat(state.lots);
+        const previous = last.previousActiveLotId
+          ? state.lots.find(l => l.id === last.previousActiveLotId)
+          : null;
+        const restoreTo = previous || state.lots.find(l => l.status !== 'sold') || state.lots[0] || null;
+        if (restoreTo) {
+          restoreTo.status = 'active';
+          state.activeLotId = restoreTo.id;
+        }
+        state.bidHistory = [];
+        state.elapsedSeconds = 0;
+        this.saveState(state);
+        return { success: true, message: `Pool restored: ${restored.length} player lot(s) are back on the board.` };
       }
 
       this.saveState(state);
@@ -1323,36 +1637,7 @@
 
       if (!playerData.name) throw new Error('Player name is required.');
       const state = this.getState();
-      const newLotId = 'lot-' + Date.now();
-      const nextLotNum = 'LOT #' + (state.lots.length + 14);
-
-      // Default base price: ₹10.00 Lakhs (1000000)
-      const basePrice = Number(playerData.basePrice) || 1000000;
-      const newLot = {
-        id: newLotId,
-        lotNumber: nextLotNum,
-        name: playerData.name.trim(),
-        nickname: playerData.nickname || playerData.name.split(' ')[0],
-        jersey: playerData.jersey || (state.lots.length + 1),
-        sport: playerData.sport || 'cricket',
-        badge: playerData.badge || 'AUCTION SQUAD DRAFT',
-        category: playerData.category || 'Cricket • Squad Player',
-        specialism: playerData.specialism || 'Varsity Player',
-        battingStyle: playerData.battingStyle || 'Right-Handed',
-        bowlingStyle: playerData.bowlingStyle || 'Right-Arm Medium',
-        institution: playerData.institution || 'NMIMS Hyderabad STME',
-        state: playerData.state || 'Telangana Collegiate Circuit',
-        tournamentExp: playerData.tournamentExp || 'College Premier League',
-        scoutingNotes: playerData.scoutingNotes || 'Impressive performance in collegiate trials.',
-        avatar: playerData.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=600&q=80',
-        stats: playerData.stats || { matches: 10, runs: 180, wickets: 8, strikeRate: '135.0' },
-        basePrice: basePrice,
-        currentBid: basePrice,
-        highestBidderTeamId: null,
-        highestBidderTeamName: 'No Active Bid',
-        highestBidderCaptain: '-',
-        status: 'upcoming'
-      };
+      const newLot = buildLot(playerData, state);
 
       state.lots.push(newLot);
       this.saveState(state);
@@ -1420,46 +1705,240 @@
       URL.revokeObjectURL(url);
     },
 
-    // Import players from CSV text
+    // Parse a price typed by a human: 1000000, "10L", "10 Lakh", "1.5 Cr", "₹12,00,000".
+    // Bare numbers under 1000 are read as lakhs ("10" -> ₹10.00 Lakh).
+    parsePriceInput: function (value) {
+      const raw = String(value === undefined || value === null ? '' : value)
+        .toLowerCase()
+        .replace(/₹|rs\.?|inr|,|\s/g, '');
+      const num = parseFloat(raw);
+      if (!isFinite(num) || num <= 0) return null;
+      if (raw.includes('cr')) return Math.round(num * 10000000);
+      if (/l(akh|ac)?s?$/.test(raw)) return Math.round(num * 100000);
+      return num < 1000 ? Math.round(num * 100000) : Math.round(num);
+    },
+
+    // Split CSV / TSV / semicolon text into rows of cells.
+    // Handles quoted cells containing delimiters, doubled quotes and line breaks.
+    parseSpreadsheetText: function (text) {
+      const firstLine = text.split(/\r?\n/, 1)[0] || '';
+      const delimiter = firstLine.includes('\t')
+        ? '\t'
+        : (firstLine.split(';').length > firstLine.split(',').length ? ';' : ',');
+
+      const rows = [];
+      let row = [];
+      let cell = '';
+      let inQuotes = false;
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (inQuotes) {
+          if (ch === '"' && text[i + 1] === '"') { cell += '"'; i++; }
+          else if (ch === '"') inQuotes = false;
+          else cell += ch;
+        } else if (ch === '"' && cell.trim() === '') {
+          inQuotes = true;
+          cell = '';
+        } else if (ch === delimiter) {
+          row.push(cell.trim());
+          cell = '';
+        } else if (ch === '\n' || ch === '\r') {
+          if (ch === '\r' && text[i + 1] === '\n') i++;
+          row.push(cell.trim());
+          rows.push(row);
+          row = [];
+          cell = '';
+        } else {
+          cell += ch;
+        }
+      }
+      row.push(cell.trim());
+      rows.push(row);
+      return rows.filter(r => r.some(c => c !== ''));
+    },
+
+    // Read-only look at pasted / uploaded rows: how many players and which columns were recognised
+    previewImport: function (text) {
+      const rows = this.parseSpreadsheetText(String(text || ''));
+      if (!rows.length) return { playerRows: 0, columns: {} };
+      const matched = matchImportColumns(rows[0]);
+      const columns = {};
+      Object.keys(matched).forEach(field => { columns[field] = rows[0][matched[field]]; });
+      return { playerRows: Math.max(0, rows.length - 1), columns: columns };
+    },
+
+    // Admin Action: Mass import players from spreadsheet text (CSV, TSV, or rows pasted from Excel / Google Sheets).
+    // The first row must be headers. Recognised columns: Name, Role, Sport, Base Price, Photo, College,
+    // Batting, Bowling, Notes. Only Name is required.
+    // options.replacePool: remove every unsold / upcoming player first (sold players stay with their teams).
+    importPlayers: function (text, options) {
+      const role = this.getActiveRole();
+      if (role.role !== 'admin') {
+        throw new Error('PERMISSION DENIED: Only the official Committee Auctioneer / Admin can import players.');
+      }
+      if (!text || !String(text).trim()) {
+        throw new Error('Nothing to import. Upload a file or paste player rows first.');
+      }
+
+      const rows = this.parseSpreadsheetText(String(text));
+      if (rows.length < 2) {
+        throw new Error('Add a header row (e.g. Name, Role, Base Price, Photo) and at least one player row.');
+      }
+      const columns = matchImportColumns(rows[0]);
+      if (columns.name === undefined) {
+        throw new Error('Could not find a "Name" column. The first row must be headers such as: Name, Role, Base Price, Photo.');
+      }
+
+      const replacePool = !!(options && options.replacePool);
+      const state = this.getState();
+      if (replacePool) {
+        state.lots = state.lots.filter(l => l.status === 'sold');
+      }
+
+      const seenNames = new Set(state.lots.map(l => l.name.trim().toLowerCase()));
+      const added = [];
+      const skipped = [];
+
+      rows.slice(1).forEach((row, idx) => {
+        const rowNumber = idx + 2;
+        const get = key => (columns[key] === undefined ? '' : (row[columns[key]] || '').trim());
+
+        const name = get('name');
+        if (!name) {
+          skipped.push({ row: rowNumber, name: '', reason: 'Missing name' });
+          return;
+        }
+        if (seenNames.has(name.toLowerCase())) {
+          skipped.push({ row: rowNumber, name: name, reason: 'Already in the player pool' });
+          return;
+        }
+
+        const priceText = get('basePrice');
+        const basePrice = priceText ? this.parsePriceInput(priceText) : DEFAULT_BASE_PRICE;
+        if (!basePrice) {
+          skipped.push({ row: rowNumber, name: name, reason: `Base price "${priceText}" not understood` });
+          return;
+        }
+
+        const playerRole = get('role');
+        const sport = normalizeSport(get('sport'), playerRole);
+        const sportLabel = sport === 'football' ? 'Football' : 'Cricket';
+        const lot = buildLot({
+          name: name,
+          sport: sport,
+          badge: playerRole || 'Auction Pool',
+          category: playerRole.includes('•') ? playerRole : `${sportLabel} • ${playerRole || 'Player'}`,
+          specialism: playerRole || `${sportLabel} Player`,
+          battingStyle: get('batting'),
+          bowlingStyle: get('bowling'),
+          institution: get('institution'),
+          scoutingNotes: get('notes'),
+          avatar: normalizePhotoUrl(get('photo')),
+          basePrice: basePrice
+        }, state);
+
+        state.lots.push(lot);
+        seenNames.add(name.toLowerCase());
+        added.push(lot);
+      });
+
+      if (!added.length) {
+        const reason = skipped.length ? ` First problem: row ${skipped[0].row} — ${skipped[0].reason}.` : '';
+        throw new Error(`No players were imported, so nothing was changed.${reason}`);
+      }
+
+      // Put the first imported player on the hammer if the previous active lot was removed
+      if (!state.lots.some(l => l.id === state.activeLotId)) {
+        state.activeLotId = added[0].id;
+        added[0].status = 'active';
+        state.bidHistory = [];
+        state.elapsedSeconds = 0;
+      }
+
+      this.saveState(state);
+      return { added: added.length, skipped: skipped, players: added };
+    },
+
+    // Import players from CSV text (kept for existing callers; see importPlayers)
     importPlayersFromCSV: function (csvContent) {
       if (!csvContent || typeof csvContent !== 'string') {
         throw new Error('Invalid CSV file content.');
       }
-      const lines = csvContent.split(/\r?\n/).filter(line => line.trim().length > 0);
-      if (lines.length < 2) throw new Error('CSV must contain header and at least one data row.');
-
-      const headers = lines[0].split(',').map(h => h.trim().replace(/^["']|["']$/g, '').toLowerCase());
-      const addedLots = [];
-
-      for (let i = 1; i < lines.length; i++) {
-        const row = lines[i].split(',').map(c => c.trim().replace(/^["']|["']$/g, ''));
-        if (row.length === 0 || !row[0]) continue;
-
-        // Try mapping common column names
-        const nameIdx = headers.findIndex(h => h.includes('name'));
-        const sportIdx = headers.findIndex(h => h.includes('sport'));
-        const catIdx = headers.findIndex(h => h.includes('category') || h.includes('role'));
-        const priceIdx = headers.findIndex(h => h.includes('price') || h.includes('base'));
-        const instIdx = headers.findIndex(h => h.includes('institution') || h.includes('college'));
-
-        const name = nameIdx >= 0 ? row[nameIdx] : row[0];
-        if (!name) continue;
-
-        const lotData = {
-          name: name,
-          sport: sportIdx >= 0 ? row[sportIdx] : 'cricket',
-          category: catIdx >= 0 ? row[catIdx] : 'Cricket • Player',
-          basePrice: priceIdx >= 0 ? Number(row[priceIdx]) : 1000000,
-          institution: instIdx >= 0 ? row[instIdx] : 'NMIMS Hyderabad'
-        };
-
-        const created = this.addPlayerLot(lotData);
-        addedLots.push(created);
-      }
-
-      return addedLots;
+      return this.importPlayers(csvContent).players;
     }
   };
+
+  // 6. SPORT-AWARE LINKS & CRICKET / FOOTBALL SWITCH
+  // Moving between the auction page, MPH screen and captain dashboard keeps the current sport.
+  // Football links use clean URLs (auction?sport=football, not auction.html?...): the dev server used to
+  // 301-redirect *.html and drop the query string, and browsers cache those redirects.
+  const SPORT_PAGES = /^(auction|mph-screen|captain-dashboard)(\.html)?$/;
+
+  function linkForSport(href, sport) {
+    try {
+      const url = new URL(href, window.location.href);
+      if (url.origin !== window.location.origin) return href;
+      const page = url.pathname.split('/').pop();
+      if (SPORT_PAGES.test(page)) {
+        if (sport === 'football') url.searchParams.set('sport', 'football');
+        else url.searchParams.delete('sport');
+      } else if (/^login(\.html)?$/.test(page) && url.searchParams.get('redirect')) {
+        url.searchParams.set('redirect', linkForSport(url.searchParams.get('redirect'), sport));
+      } else {
+        return href;
+      }
+      const target = sport === 'football' ? page.replace(/\.html$/, '') : page;
+      return target + url.search + url.hash;
+    } catch (e) {
+      return href;
+    }
+  }
+
+  // Teams of either sport as saved in this browser (defaults if that auction hasn't been opened here yet).
+  // Used by the login page, which lists cricket and football captains together.
+  window.LegendsAuction.getTeamsForSport = function (sport) {
+    const key = STORAGE_KEYS[sport];
+    if (!key) return [];
+    try {
+      const saved = JSON.parse(localStorage.getItem(key) || 'null');
+      if (saved && Array.isArray(saved.teams)) return saved.teams;
+    } catch (e) {}
+    return JSON.parse(JSON.stringify(DEFAULT_TEAMS[sport]));
+  };
+
+  window.LegendsAuction.withSport = function (href) {
+    return linkForSport(href, SPORT);
+  };
+
+  // Fills every <div data-sport-switch></div> with a 🏏 Cricket / ⚽ Football toggle for the current page
+  function renderSportSwitch(container) {
+    const page = window.location.pathname.split('/').pop() || 'auction.html';
+    const option = (sport, label) => {
+      const active = sport === SPORT;
+      return `<a href="${linkForSport(page, sport)}" data-sport-target="${sport}" class="px-2.5 py-1 rounded font-headline-sm uppercase text-xs tracking-wider transition-all ${active ? 'bg-secondary-container text-on-secondary shadow-md' : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'}">${label}</a>`;
+    };
+    container.innerHTML = `<div class="inline-flex items-center gap-1 p-1 rounded-lg bg-surface-container-lowest/80 border border-outline-variant/40" title="Switch auction">${option('cricket', '🏏 Cricket')}${option('football', '⚽ Football')}</div>`;
+  }
+
+  if (typeof document !== 'undefined' && typeof document.addEventListener === 'function') {
+    // Rewrite links as they are clicked, so links rendered later (role panels, modals) are covered too
+    document.addEventListener('click', (e) => {
+      const link = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+      if (link && SPORT === 'football' && !link.hasAttribute('data-sport-target')) {
+        link.setAttribute('href', linkForSport(link.getAttribute('href'), SPORT));
+      }
+    }, true);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('[data-sport-switch]').forEach(renderSportSwitch);
+      if (SPORT === 'football') {
+        document.querySelectorAll('a[href]:not([data-sport-target])').forEach(link => {
+          link.setAttribute('href', linkForSport(link.getAttribute('href'), SPORT));
+        });
+        if (!/football/i.test(document.title)) document.title = 'Football • ' + document.title;
+      }
+    });
+  }
 
   // Auto-initialize state on script load
   window.LegendsAuction.getState();

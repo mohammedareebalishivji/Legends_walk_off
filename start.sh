@@ -113,19 +113,21 @@ launch_browser_when_ready &
 # 5. Display Local and Network Connection Links
 echo ""
 echo "======================================================================"
-echo "⚡ LEGENDS WALK OFF WEB PORTAL IS READY"
+echo "⚡ LEGENDS WALK OFF REALTIME MESH WEB PORTAL IS READY"
 echo "======================================================================"
 echo -e "  ➜  Local:   http://localhost:$PORT/"
 if [ -n "$NETWORK_IP" ]; then
   echo -e "  ➜  Network: http://$NETWORK_IP:$PORT/"
   echo ""
-  echo "📱 Connect from Mobile / Tablet / Other Devices on Same Wi-Fi:"
-  echo "   • Tournament Home:     http://$NETWORK_IP:$PORT/"
-  echo "   • MPH Stage Screen:    http://$NETWORK_IP:$PORT/mph-screen.html"
-  echo "   • Captains Console:    http://$NETWORK_IP:$PORT/captain-dashboard.html"
-  echo "   • Player Auction Hub:  http://$NETWORK_IP:$PORT/auction.html"
-  echo "   • Live Score Broadcast:http://$NETWORK_IP:$PORT/live-scores.html"
-  echo "   • Mobile Live Scores:  http://$NETWORK_IP:$PORT/mobile-live.html"
+  echo "📱 Connect from Mobile / Projector / Other Devices on Same Wi-Fi:"
+  echo "   • Auditorium MPH Projector: http://$NETWORK_IP:$PORT/mph-screen.html"
+  echo "   • Admin Auctioneer Desk:    http://$NETWORK_IP:$PORT/auction.html"
+  echo "   • Captains Console:         http://$NETWORK_IP:$PORT/captain-dashboard.html"
+  echo "   • Official Scorer Console:  http://$NETWORK_IP:$PORT/admin-console.html"
+  echo "   • Live Match Spectators:    http://$NETWORK_IP:$PORT/live-scores.html"
+  echo "   • Tournament Home:          http://$NETWORK_IP:$PORT/"
+  echo "   • Football Auction:         http://$NETWORK_IP:$PORT/auction?sport=football"
+  echo "   • Football MPH Screen:      http://$NETWORK_IP:$PORT/mph-screen?sport=football"
 else
   echo -e "  ➜  Network: (Connect to Wi-Fi to generate network link)"
 fi
@@ -134,12 +136,15 @@ echo "Press Ctrl+C to stop the server."
 echo "======================================================================"
 echo ""
 
-# 6. Start HTTP Server listening on all network interfaces (0.0.0.0)
-if command -v python3 >/dev/null 2>&1; then
+# 6. Start HTTP + SSE Realtime Server
+if command -v node >/dev/null 2>&1; then
+  exec node server.js "$PORT"
+elif command -v python3 >/dev/null 2>&1; then
+  echo "⚠️  Node.js not detected; falling back to python3 static server (local broadcast only)."
   exec python3 -m http.server --bind 0.0.0.0 "$PORT"
 elif command -v npx >/dev/null 2>&1; then
   exec npx serve -l "$PORT" .
 else
-  echo "❌ Neither python3 nor npx was found. Opening index.html directly..."
+  echo "❌ Neither node, python3, nor npx was found. Opening index.html directly..."
   open "$DIR/index.html"
 fi
